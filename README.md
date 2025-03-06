@@ -11,7 +11,7 @@ If everyone will push to test, the remote server will not last.
 Please consult the Sonar guide at []()
 
 ## Client
-In order to help you along with planning, we've provided a client roadmap []()
+In order to help you along with planning, we've provided a client roadmap [https://gitlab.ti.howest.be/ti/2024-2025/s2/programming-project/documentation/splendor-documentation/-/blob/main/roadmaps/client-roadmap.md](https://gitlab.ti.howest.be/ti/2024-2025/s2/programming-project/documentation/splendor-documentation/-/blob/main/roadmaps/client-roadmap.md?ref_type=heads)
 
 ## File structure
 All files should be placed in the `src` directory.
