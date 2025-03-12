@@ -1,6 +1,6 @@
 # Programming project web project group [XX]
 
-## Before you start 
+## Before you start
 * Go to file `sonar-project.properties` and replace "XX" with your **group number**.
 
 ## Instructions for local CI testing
