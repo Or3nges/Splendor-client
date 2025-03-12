@@ -38,4 +38,4 @@ deployment:
     year: 2024-2025
   script:
     - echo "Deploying to group directory"
-    - rsync -e "ssh" -r src/ gitlab-runner@project-1.ci.infra.lan:/opt/${year}/${CI_PROJECT_NAMESPACE##*/}/client
+    - rsync -e "ssh" -r src/ gitlab-runner@project-1.edu.technet.howest.be:/opt/${year}/${CI_PROJECT_NAMESPACE##*/}/client
