@@ -8,7 +8,7 @@ You can **run** the validator and Sonar with CSS and JS rules **locally.** There
 
 If everyone will push to test, the remote server will not last.
 
-Please consult the Sonar guide at []()
+Please consult the Sonar guide [here](https://gitlab.ti.howest.be/ti/2024-2025/s2/programming-project/documentation/splendor-documentation/-/blob/main/sonar-guide/Sonar%20guide.md?ref_type=heads)
 
 ## Client
 In order to help you along with planning, we've provided a client roadmap [https://gitlab.ti.howest.be/ti/2024-2025/s2/programming-project/documentation/splendor-documentation/-/blob/main/roadmaps/client-roadmap.md](https://gitlab.ti.howest.be/ti/2024-2025/s2/programming-project/documentation/splendor-documentation/-/blob/main/roadmaps/client-roadmap.md?ref_type=heads)
