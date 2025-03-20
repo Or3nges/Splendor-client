@@ -8,7 +8,7 @@ const DEPLOYEDSERVER = `https://project-1.ti.howest.be/2024-2025/splendor/api/`;
 const GROUPDEPLOYEDSERVER = `https://project-1.ti.howest.be/2024-2025/group-${GROUPNUMBER}/api`;
 
 function getAPIUrl() {
-  return LOCALSERVER;
+  return DEPLOYEDSERVER;
 }
 
 export { getAPIUrl, GROUPTOKEN, ERRORHANDLERSELECTOR };
