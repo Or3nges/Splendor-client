@@ -1,8 +1,5 @@
 # Programming project web project group [XX]
 
-## Before you start
-* Go to file `sonar-project.properties` and replace "XX" with your **group number**.
-
 ## Instructions for local CI testing
 You can **run** the validator and Sonar with CSS and JS rules **locally.** There is no need to push to the server to check if you are compliant with our rules. In the interest of sparing the server, please result to local testing as often as possible.
 
