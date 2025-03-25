@@ -1,4 +1,4 @@
-# Programming project web project group [XX]
+# Programming project web project group 10
 
 ## Instructions for local CI testing
 You can **run** the validator and Sonar with CSS and JS rules **locally.** There is no need to push to the server to check if you are compliant with our rules. In the interest of sparing the server, please result to local testing as often as possible.
