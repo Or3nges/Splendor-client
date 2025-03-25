@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Splendor</title>
+
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/screen.css">
+  <link rel="stylesheet" href="../assets/css/index.css">
+
+  <script src="../assets/js/index.js" type="module"></script>
+</head>
+<body>
+<section id="startScreen" class="hidden">
+  <header><h2>splendor</h2></header>
+  <form>
+    <div>
+      <label for="name">First name:</label><br>
+      <input type="text" id="name" name="name" maxlength="14"><br>
+    </div>
+    <div>
+      <button type="button" id="create" class="create" data-target="configuration">create game</button>
+      <button type="button" id="join" class="join" data-target="serverpage">join game</button>
+      <button type="button" id="rules" class="rules" data-target="ruleScreen">rules</button>
+
+    </div>
+  </form>
+</section>
+  <div class="errormessages">
+    <p></p>
+  </div>
+</body>
+</html>
