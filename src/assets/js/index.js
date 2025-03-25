@@ -8,6 +8,9 @@ function init() {
 function testConnection(){
   CommunicationAbstractor.fetchFromServer('/gems', 'GET').then(gems => console.log(gems)).catch(ErrorHandler.handleError);
 }
+document.querySelector("#join").addEventListener("click", () => {
+  window.location.href = "./html/joingame.html";
+});
 
 
 init();
