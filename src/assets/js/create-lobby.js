@@ -1,13 +1,14 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const leaveButton = document.getElementById('leaveButton');
-
+function handleLeaveButtonClick() {
+    const leaveButton = document.querySelector('#leaveButton');
     if (leaveButton) {
         leaveButton.addEventListener('click', () => {
             window.location.href = 'index.html';
         });
     }
+}
 
-    const gameConfigForm = document.getElementById('gameConfigForm');
+function handleGameConfigFormSubmit() {
+    const gameConfigForm = document.querySelector('#gameConfigForm');
     if (gameConfigForm) {
         gameConfigForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -40,4 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         });
     }
-});
+}
+
+handleLeaveButtonClick();
+handleGameConfigFormSubmit();
+
+export {handleLeaveButtonClick, handleGameConfigFormSubmit};
