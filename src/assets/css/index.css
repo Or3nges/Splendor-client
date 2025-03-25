@@ -1,6 +1,13 @@
-#startScreen{
+body {
+    background: url(../images/beforeGameBackground.png) center;
+    background-size: cover;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+#startScreen {
     background-position: center;
-    height: 30%;
     width: 45%;
     margin: 1rem auto;
     border-radius: 2rem;
@@ -13,6 +20,7 @@
     text-align: center;
     color: goldenrod;
     -webkit-text-stroke: .15rem darkgoldenrod;
+    margin-top: 3rem;
 }
 #startScreen input{
     width: 35rem;
@@ -48,9 +56,13 @@
     cursor: pointer;
     font-family: inherit;
     width: 50%;
-    height: 3rem;
-    font-size: 2rem;
-    margin-top: 2rem;
+    height: 4.5rem;
+    font-size: 3rem;
+    margin-top: 3rem;
+}
+
+#startScreen button:last-child{
+    margin-bottom: 3rem;
 }
 
 #startScreen button:hover{
