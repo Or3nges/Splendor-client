@@ -1,0 +1,8 @@
+@font-face {
+ font-family: 'MyCustomFont';
+ src: url('../fonts/Itim-Regular.ttf') format('truetype');
+}
+body {
+ font-family: MyCustomFont;
+ background-color: hotpink;
+}
