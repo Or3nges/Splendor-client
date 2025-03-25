@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Configure Your Game</title>
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/screen.css">
+    <link rel="stylesheet" href="assets/css/create%20lobby.css">
+    <script type="module" src="assets/js/create%20lobby.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Configure Your Game</h1>
+
+    <form id="gameConfigForm">
+
+        <div class="form-group">
+            <label for="playerAmount">Player amount</label>
+            <select id="playerAmount" name="playerAmount">
+                <option value="2">2 Players</option>
+                <option value="3">3 Players</option>
+                <option value="4">4 Players</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="treasurePerPlayer">Treasure per player</label>
+            <select id="treasurePerPlayer" name="treasurePerPlayer">
+                <option value="4">4 Treasures</option>
+                <option value="5">5 Treasures</option>
+                <option value="6">6 Treasures</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="gameName">How would you like to call the game?</label>
+            <input type="text" id="gameName" name="gameName" placeholder="Your game name..." required />
+        </div>
+
+        <div class="leave-game-button">
+            <button type="submit">Return</button>
+        </div>
+        <div class="create-game-button">
+            <button type="submit">Create Game</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
