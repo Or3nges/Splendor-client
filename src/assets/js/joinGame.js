@@ -3,7 +3,7 @@ function init() {
 }
 
 document.querySelector("#backButton").addEventListener("click", () => {
-    window.location.href = "../index.html";
+    window.location.href = "index.html";
 });
 
 init();
