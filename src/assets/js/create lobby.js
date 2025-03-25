@@ -7,17 +7,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const gameConfigForm = document.getElementById('createButton');
+    const gameConfigForm = document.getElementById('gameConfigForm');
     if (gameConfigForm) {
         gameConfigForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const formData = new FormData(gameConfigForm);
             const data = {
-                playerName: localStorage.get('playerName'),
+                playerName: localStorage.getItem('playerName'),
                 maxPlayers: formData.get('playerAmount'),
                 treasurePerPlayer: formData.get('treasurePerPlayer'),
                 gameName: formData.get('gameName'),
             };
+
             fetch(`/api/games`, {
                 method: 'POST',
                 headers: {
@@ -32,6 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         alert('Failed to create game');
                     }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Failed to connect to server.');
                 });
         });
     }
