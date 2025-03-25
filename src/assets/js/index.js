@@ -8,6 +8,14 @@ function init() {
 function testConnection(){
   CommunicationAbstractor.fetchFromServer('/gems', 'GET').then(gems => console.log(gems)).catch(ErrorHandler.handleError);
 }
-
+document.querySelector("#create").addEventListener("click", () => {
+  window.location.href = "createlobby.html";
+});
+document.querySelector("#join").addEventListener("click", () => {
+  window.location.href = "joingame.html";
+});
+document.querySelector("#rules").addEventListener("click", () => {
+  console.log("rules");
+});
 
 init();
