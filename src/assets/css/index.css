@@ -2,13 +2,13 @@ body {
     background: url(../images/beforeGameBackground.png) center;
     background-size: cover;
     min-height: 100vh;
+    max-height: 100vh;
     overflow: hidden;
 }
 
 #startScreen {
     background-position: center;
-    width: 90%;
-    max-width: 40%;
+    width: 45%;
     margin: 1rem auto;
     border-radius: 2rem;
     background-color: rgba(255,255,255,0.6);
@@ -20,24 +20,23 @@ body {
     text-align: center;
     color: goldenrod;
     -webkit-text-stroke: .15rem darkgoldenrod;
-    margin-top: 2rem;
+    margin-top: 3rem;
 }
-
 #startScreen input{
-    width: 90%;
-    max-width: 40%;
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
+    width: 35rem;
+    font-size: 2rem;
+    margin-bottom: 4rem;
     font-family: inherit;
     color: white;
     -webkit-text-stroke: .015rem black;
     background-color: goldenrod;
-    border: thick solid darkgoldenrod;
-    padding: 0.5rem;
+    border-color: darkgoldenrod;
+    border-width: thick;
 }
 
 #startScreen input:focus{
     border-color: black;
+    border-width: thick;
 }
 
 #startScreen form div{
@@ -51,20 +50,20 @@ body {
 #startScreen button {
     background-color: goldenrod;
     color: white;
-    border: .2rem solid darkgoldenrod;
+    border: .2rem darkgoldenrod solid;
     padding: 0 .4rem;
     border-radius: 1rem;
     cursor: pointer;
     font-family: inherit;
-    width: 90%;
-    max-width: 40%;
+    width: 50%;
     height: 4.5rem;
-    font-size: 2.5rem;
-    margin-top: 2rem;
+    font-size: 3rem;
+    margin-top: 3rem;
+    transition: 0.5s, background-color 0.5s;
 }
 
 #startScreen button:last-child{
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
 
 #startScreen button:hover{
@@ -72,11 +71,11 @@ body {
 }
 
 #startScreen header h2{
-    font-size: 3.5rem;
+    font-size: 5rem;
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
-    margin-top: 2rem;
+    margin-top: 3rem;
     padding-top: 1rem;
     color: goldenrod;
     -webkit-text-stroke: .25rem darkgoldenrod;
