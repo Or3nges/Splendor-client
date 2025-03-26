@@ -1,7 +1,5 @@
 const GROUPNUMBER = "10";
 const GROUPTOKEN = "Group10-4651-990";
-const WAITFORTIMEOUT = 5000;
-
 const ERRORHANDLERSELECTOR = ".errormessages p";
 
 const LOCALSERVER = `http://localhost:8001`;
@@ -12,4 +10,4 @@ function getAPIUrl() {
   return DEPLOYEDSERVER;
 }
 
-export { getAPIUrl, GROUPTOKEN, ERRORHANDLERSELECTOR, WAITFORTIMEOUT };
+export { getAPIUrl, GROUPTOKEN, ERRORHANDLERSELECTOR };
