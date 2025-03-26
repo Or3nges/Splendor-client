@@ -13,53 +13,82 @@
     <link rel="stylesheet" href="assets/css/reachedprestigepopup.css">
 </head>
 <body>
-<section>
-    <h1 class="hidden">players</h1>
+<div>
     <article class="players">
         <ul>
             <!--this is a hardcoded example of a player for the template-->
             <li class="player">
                 <div class="container">
-                <h2>name</h2>
-                <div class="prestige">
-                <img id="prestigestar" src="media/prestigestar.png" alt="prestige points">
-                <p>0</p>
+                    <h2>name</h2>
+                    <p class="prestige">0</p>
                 </div>
-                </div>
-                <ol class="container" id="cards">
-                    <li>
-                        <img src="media/rubycard.png" alt="rubycard" height="600" width="450">
-                        <p>0</p>
-                    </li>
-                    <li>
-                        <img src="media/emeraldcard.png" alt="emeraldcard" height="600" width="450">
-                        <p>0</p>
-                    </li>
-                    <li><img src="media/diamantcard.png" alt="diamantcard" height="600" width="450"></li>
-                    <li><img src="media/amethystrcard.png" alt="amethystcard" height="600" width="450"></li>
-                    <li><img src="media/onyxcard.png" alt="onyxtcard" height="600" width="450"></li>
-                    <li><img src="media/ambercard.png" alt="abmbercard" height="600" width="450"></li>
+                <ol class="container cards">
+                    <li><p class="rubycard">0</p></li>
+                    <li><p class="emeraldcard">0</p></li>
+                    <li><p class="diamantcard">0</p></li>
+                    <li><p class="amethystcard">0</p></li>
+                    <li><p class="onyxcard">0</p></li>
+                    <li><p class="ambercard">0</p></li>
                 </ol>
-                <ol class="container" id="tokens">
-                    <li>
-                        <img src="media/rubytoken.png" alt="rubytoken" height="506" width="494">
-                        <p>0</p>
-                    </li>
-                    <li>
-                        <img src="media/emeraldtoken.png" alt="emeraldtoken" height="506" width="494">
-                        <p>0</p>
-                    </li>
-                    <li><img src="media/diamanttoken.png" alt="diamanttoken" height="506" width="494"></li>
-                    <li><img src="media/amethysttoken.png" alt="amethysttoken" height="506" width="494"></li>
-                    <li><img src="media/onyxtoken.png" alt="onyxtoken" height="506" width="494"></li>
-                    <li><img src="media/ambertoken.png" alt="ambertoken" height="506" width="494"></li>
+                <ol class="container tokens">
+                    <li><p class="rubytoken">0</p></li>
+                    <li><p class="emeraldtoken">0</p></li>
+                    <li><p class="diamanttoken">0</p></li>
+                    <li><p class="amethysttoken">0</p></li>
+                    <li><p class="onyxtoken">0</p></li>
+                    <li><p class="ambertoken">0</p></li>
+                </ol>
+            </li>
+            <li class="player">
+                <div class="container">
+                    <h2>name</h2>
+                    <p class="prestige">0</p>
+                </div>
+                <ol class="container cards">
+                    <li><p class="rubycard">0</p></li>
+                    <li><p class="emeraldcard">0</p></li>
+                    <li><p class="diamantcard">0</p></li>
+                    <li><p class="amethystcard">0</p></li>
+                    <li><p class="onyxcard">0</p></li>
+                    <li><p class="ambercard">0</p></li>
+                </ol>
+                <ol class="container tokens">
+                    <li><p class="rubytoken">0</p></li>
+                    <li><p class="emeraldtoken">0</p></li>
+                    <li><p class="diamanttoken">0</p></li>
+                    <li><p class="amethysttoken">0</p></li>
+                    <li><p class="onyxtoken">0</p></li>
+                    <li><p class="ambertoken">0</p></li>
+                </ol>
+            </li>
+
+            <li class="player">
+                <div class="container">
+                    <h2>name</h2>
+                    <p class="prestige">0</p>
+                </div>
+                <ol class="container cards">
+                    <li><p class="rubycard">0</p></li>
+                    <li><p class="emeraldcard">0</p></li>
+                    <li><p class="diamantcard">0</p></li>
+                    <li><p class="amethystcard">0</p></li>
+                    <li><p class="onyxcard">0</p></li>
+                    <li><p class="ambercard">0</p></li>
+                </ol>
+                <ol class="container tokens">
+                    <li><p class="rubytoken">0</p></li>
+                    <li><p class="emeraldtoken">0</p></li>
+                    <li><p class="diamanttoken">0</p></li>
+                    <li><p class="amethysttoken">0</p></li>
+                    <li><p class="onyxtoken">0</p></li>
+                    <li><p class="ambertoken">0</p></li>
                 </ol>
             </li>
 
             <template>
                 <li>
                     <h1>name</h1>
-                    <img src="media/prestigestar.png" alt="prestige points">
+                    <img src="assets/images/prestigestar.png" alt="prestige points">
                     <ol id="cards">
 
                     </ol>
@@ -70,9 +99,41 @@
             </template>
         </ul>
     </article>
-</section>
+</div>
+<div class="container" id="bottomrow">
+    <article class="you" id="tokenselection">
+        <div class="container">
+            <h1>you</h1>
+            <p class="prestige2">0</p>
+        </div>
+        <div>
+            <img src="assets/images/grey_token.png" alt="grey token" height="306" width="306">
+            <img src="assets/images/grey_token.png" alt="grey token" height="306" width="306">
+            <img src="assets/images/grey_token.png" alt="grey token" height="306" width="306">
+        </div>
+    </article>
+    <div class="you" id="yourcards">
+        <ol class="container cards">
+            <li><p class="rubycard">0</p></li>
+            <li><p class="emeraldcard">0</p></li>
+            <li><p class="diamantcard">0</p></li>
+            <li><p class="amethystcard">0</p></li>
+            <li><p class="onyxcard">0</p></li>
+            <li><p class="ambercard">0</p></li>
+        </ol>
+        <ol class="container tokens">
+            <li><p class="rubytoken">0</p></li>
+            <li><p class="emeraldtoken">0</p></li>
+            <li><p class="diamanttoken">0</p></li>
+            <li><p class="amethysttoken">0</p></li>
+            <li><p class="onyxtoken">0</p></li>
+            <li><p class="ambertoken">0</p></li>
+        </ol>
+    </div>
+    <button id="endturn">end turn</button>
+</div>
 
-<section class="end-screen">
+<section class="hidden">
     <h1 class="game-over">Game over</h1>
 
     <img alt="Logo" src="favicon-16x16.png">
@@ -91,7 +152,7 @@
 </section>
 
 <section id="prestige-popup">
-    <p class="close">X</p>
+    <h1 class="close">X</h1>
     <p id=current-winner></p>
     <p>has reached the desired amount of prestige points</p>
 </section>

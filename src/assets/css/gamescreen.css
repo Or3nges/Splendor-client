@@ -5,6 +5,8 @@
 
 body {
     font-family: MyCustomFont, sans-serif;
+    color: white;
+    -webkit-text-stroke: .045rem black;
 }
 
 .hidden {
@@ -19,11 +21,6 @@ article.players {
     display: flex;
 }
 
-li.player h1{
-    margin-left: 1.5rem;
-    color: white;
-}
-
 article.players ul {
     display: inline-block;
     width: 20%;
@@ -32,12 +29,8 @@ article.players ul {
 }
 
 article.players ul li.player {
-    max-height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
     margin-left: 0.1rem;
     background-color: goldenrod;
     border-radius: 2rem;
@@ -52,62 +45,184 @@ article.players ul li.player {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+
 }
 
-article.players ul li.player p{
-    position: absolute;
-    top: 30%;
-    left: 48%;
+ol{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+p.prestige{
+    background-size: contain;
+    background-image: url("../../media/prestigestar.png");
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 4rem;
+}
+
+p.rubycard {
+    background: url("../../media/rubycard.png") no-repeat;
+    background-size: contain;
+}
+
+p.emeraldcard {
+    background: url("../../media/emeraldcard.png") no-repeat;
+    background-size: contain;
+}
+
+p.diamantcard {
+    background: url("../../media/diamantcard.png") no-repeat;
+    background-size: contain;
+}
+
+p.amethystcard {
+    background: url("../../media/amethystrcard.png")no-repeat;
+    background-size: contain;
+}
+
+p.onyxcard {
+    background: url("../../media/onyxcard.png") no-repeat;
+    background-size: contain;
+}
+
+p.ambercard {
+    background: url("../../media/ambercard.png") no-repeat;
+    background-size: contain;
+}
+
+ol.tokens li p, ol.cards li p {
     color: white;
     -webkit-text-stroke: .045rem black;
+    width : 2rem;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.3rem;
+    margin: 0.2rem;
 }
 
-article.players ul li.player div.prestige{
-    position: relative;
-    margin-left: 5rem;
+ol.cards li p {
+    height: 2.5rem;
 }
 
-article.players ul li > *:nth-child(n+3) {
-    flex-basis: 100%;
+ol.tokens li p {
+    height: 2rem;
 }
 
-article.players ul li img#prestigestar {
-    position: relative;
-    width: 5rem;
-    height: 5rem;
-    margin-left: 1rem;
+p.rubytoken {
+    background: url("../../media/rubytoken.png") no-repeat;
+    background-size: contain;
 }
 
-
-
-ol#cards li, ol#tokens li{
-    position: relative;
-}
-ol#cards li p, ol#tokens li p{
-    position: absolute;
-    top: 10%;
-    left: 35%;
-    -webkit-text-stroke: .045rem black;
-    font-size: 2rem;
+p.emeraldtoken {
+    background: url("../../media/emeraldtoken.png") no-repeat;
+    background-size: contain;
 }
 
-ol#cards li img, ol#tokens li img {
-    position: relative;
-    max-width: 100%;
-    height: auto;
-    margin-right:0.1rem;
+p.diamanttoken {
+    background: url("../../media/diamanttoken.png") no-repeat;
+    background-size: contain;
+}
+
+p.amethysttoken {
+    background: url("../../media/amethysttoken.png")no-repeat;
+    background-size: contain;
+}
+
+p.onyxtoken {
+    background: url("../../media/onyxtoken.png") no-repeat;
+    background-size: contain;
+}
+
+p.ambertoken {
+    background: url("../../media/ambertoken.png") no-repeat;
+    background-size: contain;
+}
+
+.you {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: goldenrod;
+    border-radius: 2rem;
+    border-color: darkgoldenrod;
+    border-style: solid;
+    border-width: 4px;
+    padding-left: 0.1rem;
+    margin-right: 1rem;
+    width: 30%;
+}
+
+#bottomrow {
+    width: 95%;
+    position: fixed;
+    bottom: 0;
+    justify-content: space-between;
+    margin-right: 2.5rem;
     margin-left: 0.1rem;
+    margin-bottom: 0.1rem;
 }
 
-ol#cards li img{
-    max-width: 90%;
+#tokenselection  h1{
+    font-size: 4rem;
+    margin-bottom: 1rem;
 }
 
-ol#cards li p {
-    top: 15%;
-    left: 28%;
-    -webkit-text-stroke: .045rem black;
-    font-size: 2rem;
+p.prestige2 {
+    background-size: contain;
+    background-image: url("../../media/prestigestar.png");
+    width: 6rem;
+    height: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8rem;
+    font-size: 2.5rem;
+}
+
+#tokenselection img {
+    margin-bottom: 0.1rem;
+}
+
+#yourcards {
+    width: 40%;
+}
+
+.you ol.tokens li p,.you ol.cards li p {
+    font-size: 3rem;
+}
+
+.you ol.cards li p {
+    height: 4rem;
+    width: 3rem;
+    margin-right: 0.5rem;
+    margin-left: 0.4rem;
+}
+
+.you ol.tokens li p {
+    height: 3.5rem;
+    width: 3.5rem;
+}
+
+button#endturn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    background-color: goldenrod;
+    border-radius: 2rem;
+    border-color: darkgoldenrod;
+    border-style: solid;
+    border-width: 4px;
+    width: 15%;
 }
 
 /* End screen
@@ -116,7 +231,6 @@ ol#cards li p {
  margin-left: auto;
  margin-right: auto;
  margin-top: 2.2rem;
- background-image:url("");
  background-color: rgba(255,255,255,0.6);
  box-shadow: 0 0.25rem 0.5rem 0 rgb(0 0 0 / 20%), 0 0.375rem 1.25rem 0 rgb(0 0 0 / 19%);
  border-radius: 12px;
