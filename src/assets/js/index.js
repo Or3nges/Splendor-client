@@ -15,7 +15,7 @@ document.querySelector("#join").addEventListener("click", () => {
   window.location.href = "joingame.html";
 });
 document.querySelector("#rules").addEventListener("click", () => {
-  console.log("rules");
+  window.open('../assets/rulebook/splendor-rulebook.pdf');
 });
 
 init();
