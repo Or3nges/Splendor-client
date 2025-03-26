@@ -9,23 +9,32 @@ function testConnection(){
   CommunicationAbstractor.fetchFromServer('/gems', 'GET').then(gems => console.log(gems)).catch(ErrorHandler.handleError);
 }
 
-function validateName(){
-  const name = document.querySelector("#name").value;
-  const pattern = /^[a-zA-Z]\w{2,15}$/;
-    if(pattern.test(name) === false){
-        alert("Invalid username. Username must be more than 3 characters long and cannot consist of special characters");
-        return false;
-    }
-    return true;
+function getPlayerName(){
+  return document.querySelector("#name").value;
 }
+
+function validateName(){
+  const playerName = getPlayerName();
+  const pattern = /^[a-zA-Z]\w{2,15}$/;
+  if(!pattern.test(playerName)){
+    alert("Invalid username. Username must be more than 3 characters long and cannot consist of special characters");
+    return false;
+  }
+  return true;
+}
+
 document.querySelector("#create").addEventListener("click", () => {
   if (!validateName()) return;
+  localStorage.setItem("playerName", getPlayerName());
   window.location.href = "html/createlobby.html";
 });
+
 document.querySelector("#join").addEventListener("click", () => {
   if (!validateName()) return;
+  localStorage.setItem("playerName", getPlayerName());
   window.location.href = "html/joingame.html";
 });
+
 document.querySelector("#rules").addEventListener("click", () => {
   window.open('assets/rulebook/splendor-rulebook.pdf');
 });
