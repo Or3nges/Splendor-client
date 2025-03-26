@@ -10,6 +10,9 @@
 
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/gamescreen.css">
+
+    <script src="assets/js/gamescreen/initgame.js" type="module"></script>
+
     <link rel="stylesheet" href="assets/css/reachedprestigepopup.css">
 </head>
 <body>
@@ -84,7 +87,6 @@
                     <li><p class="ambertoken">0</p></li>
                 </ol>
             </li>
-
             <template>
                 <li>
                     <h1>name</h1>
@@ -132,6 +134,17 @@
     </div>
     <button id="endturn">end turn</button>
 </div>
+
+<section id="gamescreen">
+        <template id="developmentCard">
+            <figure>
+                <img id="cardType" src="" alt="title" title="title">
+                <img id="cardToken" src="" alt="" title="">
+                <div id="cost">
+                </div>
+            </figure>
+        </template>
+</section>
 
 <section class="hidden">
     <h1 class="game-over">Game over</h1>
