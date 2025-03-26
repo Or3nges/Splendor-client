@@ -1,5 +1,6 @@
 import * as CommunicationAbstractor from "./data-connector/api-communication-abstractor.js";
 import * as ErrorHandler from "./data-connector/error-handler.js";
+import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js";
 
 function init() {
   testConnection();
@@ -17,7 +18,7 @@ function validateName(){
   const playerName = getPlayerName();
   const pattern = /^[a-zA-Z]\w{2,15}$/;
   if(!pattern.test(playerName)){
-    alert("Invalid username. Username must be more than 3 characters long and cannot consist of special characters");
+    alert("Invalid username. Username must be between 3 and 14 characters long and cannot consist of special characters");
     return false;
   }
   return true;
@@ -25,13 +26,13 @@ function validateName(){
 
 document.querySelector("#create").addEventListener("click", () => {
   if (!validateName()) return;
-  localStorage.setItem("playerName", getPlayerName());
+  StorageAbstractor.saveToStorage("playerName", getPlayerName());
   window.location.href = "html/createlobby.html";
 });
 
 document.querySelector("#join").addEventListener("click", () => {
   if (!validateName()) return;
-  localStorage.setItem("playerName", getPlayerName());
+  StorageAbstractor.saveToStorage("playerName", getPlayerName());
   window.location.href = "html/joingame.html";
 });
 
