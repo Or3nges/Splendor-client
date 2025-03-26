@@ -4,8 +4,11 @@
 }
 
 body {
-    font-family: MyCustomFont;
-    background-color: hotpink;
+    font-family: MyCustomFont, sans-serif;
+}
+
+.hidden {
+    display: none;
 }
 
 
@@ -82,7 +85,7 @@ ol#cards li, ol#tokens li{
 }
 ol#cards li p, ol#tokens li p{
     position: absolute;
-    top: 15%;
+    top: 10%;
     left: 35%;
     -webkit-text-stroke: .045rem black;
     font-size: 2rem;
@@ -101,7 +104,7 @@ ol#cards li img{
 }
 
 ol#cards li p {
-    top: 20%;
+    top: 15%;
     left: 28%;
     -webkit-text-stroke: .045rem black;
     font-size: 2rem;
