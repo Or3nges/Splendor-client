@@ -1,12 +1,19 @@
 body {
     max-width: 85%;
     margin: 0 auto;
+    background: url(../images/beforeGameBackground.png) center;
+    background-size: cover;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
 }
 
 h1 {
     text-align: center;
     font-weight: bold;
-    font-size: 3rem;
+    font-size: 5rem;
+    color: goldenrod;
+    -webkit-text-stroke: .25rem darkgoldenrod;
 }
 
 header {
@@ -15,6 +22,7 @@ header {
 }
 
 main {
+    background-color: #ffffff99;
     padding: 1rem;
     font-size: 1.5rem;
     display: flex;
@@ -31,21 +39,21 @@ main {
 }
 
 .nav-bar li button {
-    font-size: 2.5rem;
-    width: 20rem;
+    background-color: goldenrod;
+    color: white;
+    border: .2rem darkgoldenrod solid;
+    font-size: 2.25rem;
+    width: 17.5rem;
     margin: 2rem;
     padding: 1.5rem;
     text-align: center;
-    border: 0.1rem solid;
-    border-radius: 3rem;
+    border-radius: 2rem;
     cursor: pointer;
-    background-color: white;
     transition: 0.5s, background-color 0.5s;
 }
 
 .nav-bar li button:hover {
-    background-color: #a1a1a1;
-    color: white;
+    background-color: #005f73;
 }
 
 
@@ -56,8 +64,21 @@ main {
     font-size: 0.5rem;
 }
 
-.filter-menu {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
+main ul {
+    background-color: goldenrod;
+    display: grid;
+    grid-template-columns: 1.1fr 4fr 4fr 0.3fr auto;
+    padding: 0.6rem;
+    transition: 0.5s, background-color 0.5s;
+}
+
+main ul:hover {
+    background-color: #005f73;
+    cursor: pointer;
+    color: white;
+}
+
+.selected {
+    background-color: #005f73;
+    color: white;
 }
