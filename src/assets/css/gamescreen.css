@@ -1,11 +1,114 @@
 @font-face {
- font-family: 'MyCustomFont';
- src: url('../fonts/Itim-Regular.ttf') format('truetype');
-}
-body {
- font-family: MyCustomFont, serif;
+    font-family: 'MyCustomFont';
+    src: url('../fonts/Itim-Regular.ttf') format('truetype');
 }
 
+body {
+    font-family: MyCustomFont, sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+
+
+
+/* players
+-------------------------------------------------- */
+article.players {
+    display: flex;
+}
+
+li.player h1{
+    margin-left: 1.5rem;
+    color: white;
+}
+
+article.players ul {
+    display: inline-block;
+    width: 20%;
+    font-size: 2rem ;
+    max-height: 60%;
+}
+
+article.players ul li.player {
+    max-height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    margin-left: 0.1rem;
+    background-color: goldenrod;
+    border-radius: 2rem;
+    border-color: darkgoldenrod;
+    border-style: solid;
+    border-width: 4px;
+    padding-left: 0.1rem;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+article.players ul li.player p{
+    position: absolute;
+    top: 30%;
+    left: 48%;
+    color: white;
+    -webkit-text-stroke: .045rem black;
+}
+
+article.players ul li.player div.prestige{
+    position: relative;
+    margin-left: 5rem;
+}
+
+article.players ul li > *:nth-child(n+3) {
+    flex-basis: 100%;
+}
+
+article.players ul li img#prestigestar {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+    margin-left: 1rem;
+}
+
+
+
+ol#cards li, ol#tokens li{
+    position: relative;
+}
+ol#cards li p, ol#tokens li p{
+    position: absolute;
+    top: 10%;
+    left: 35%;
+    -webkit-text-stroke: .045rem black;
+    font-size: 2rem;
+}
+
+ol#cards li img, ol#tokens li img {
+    position: relative;
+    max-width: 100%;
+    height: auto;
+    margin-right:0.1rem;
+    margin-left: 0.1rem;
+}
+
+ol#cards li img{
+    max-width: 90%;
+}
+
+ol#cards li p {
+    top: 15%;
+    left: 28%;
+    -webkit-text-stroke: .045rem black;
+    font-size: 2rem;
+}
 
 /* End screen
 -----------------------------------------*/
