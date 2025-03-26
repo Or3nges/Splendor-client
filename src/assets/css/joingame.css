@@ -100,8 +100,43 @@ select#filter option {
     color: #fff;
 }
 
-.filter-menu {
+.search-filter-menu {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.search-filter-menu input,
+.search-filter-menu select {
+    width: 20rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: .2rem darkgoldenrod solid;
+    background-color: goldenrod;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.search-filter-menu input {
+    margin-right: 1rem;
+}
+
+#search {
+    width: 20rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: .2rem darkgoldenrod solid;
+    background-color: goldenrod;
+    color: white;
+    font-size: 1.5rem;
+}
+
+::placeholder{
+    color: white;
+}
+
+.search-menu {
+    display: flex;
+    justify-content: flex-start;
     margin-bottom: 1rem;
 }
