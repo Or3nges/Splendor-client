@@ -20,14 +20,14 @@ function validateName(){
 }
 document.querySelector("#create").addEventListener("click", () => {
   if (!validateName()) return;
-  window.location.href = "createlobby.html";
+  window.location.href = "html/createlobby.html";
 });
 document.querySelector("#join").addEventListener("click", () => {
   if (!validateName()) return;
-  window.location.href = "joingame.html";
+  window.location.href = "html/joingame.html";
 });
 document.querySelector("#rules").addEventListener("click", () => {
-  window.open('../assets/rulebook/splendor-rulebook.pdf');
+  window.open('assets/rulebook/splendor-rulebook.pdf');
 });
 
 init();
