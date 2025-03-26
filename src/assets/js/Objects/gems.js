@@ -1,7 +1,7 @@
 const allGems = [
     {
         "name": "amber",
-        "img": "media/ambertoken.png"
+        "img": "media/ambertoken1.png"
     }
 ]
 
