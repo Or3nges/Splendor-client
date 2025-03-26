@@ -3,19 +3,29 @@ import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js
 
 
 function init() {
+    document.querySelector("#filter").addEventListener("change", loadGames);
     loadGames();
 }
 
 document.querySelector("#backButton").addEventListener("click", () => {
     window.location.href = "../index.html";
 });
-function loadGames(){
-        CommunicationAbstractor.fetchFromServer(`/games?started=false`, 'GET')
+function loadGames() {
+    const filter = document.querySelector("#filter").value;
+    let apiPath = "/games";
+
+    if (filter === "Started") {
+        apiPath = "/games?started=true";
+    } else if (filter === "Waiting") {
+        apiPath = "/games?started=false";
+    }
+
+    CommunicationAbstractor.fetchFromServer(apiPath, 'GET')
         .then(data => {
             document.querySelector('main').innerHTML = "";
             const games = data.games;
 
-            games.forEach((game, index = 1) => {
+            games.forEach((game, index) => {
                 addGame(game, index + 1);
             });
             document.querySelectorAll("main ul").forEach(item => item.addEventListener('click', chooseGame));
@@ -27,13 +37,16 @@ function addGame(game, gameIdx) {
     const countOfPlayers = game.players.length;
     const $game = document.querySelector('template').content.firstElementChild.cloneNode(true);
     const $gameList = document.querySelector('main');
-    if (game.id === StorageAbstractor.loadFromStorage("selectedGame")) {
-        $game.classList.add("selected");
-    }
-    $game.setAttribute('id', game.gameId);
+    const selectedGameID = StorageAbstractor.loadFromStorage("selectedGame");
+
+    $game.setAttribute('id', `game-${gameIdx}`);
     $game.querySelector('#gameIdx').innerText = `Game ${gameIdx}:`;
     $game.querySelector('#gameName').innerText = game.gameName;
     $game.querySelector('#players').innerText = `${countOfPlayers}/${game.numberOfPlayers}`;
+
+    if (`game-${gameIdx}` === selectedGameID) {
+        $game.classList.add("selected");
+    }
 
     $gameList.insertAdjacentHTML("beforeend", $game.outerHTML);
 }
@@ -71,7 +84,7 @@ function joinGame() {
         .then(data => {
             StorageAbstractor.saveToStorage("playerToken", data.playerToken);
             StorageAbstractor.saveToStorage("gameId", data.gameId);
-            window.location.href = "gameLobby.html";
+            window.location.href = "gamelobby.html";
         })
         .catch(error => {
             alert(error.cause);
