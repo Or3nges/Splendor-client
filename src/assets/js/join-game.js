@@ -103,11 +103,7 @@ function searchGames() {
 
     games.forEach(game => {
         const gameName = game.querySelector("#gameName").innerText.toLowerCase();
-        if (gameName.includes(query)) {
-            game.style.display = "";
-        } else {
-            game.style.display = "none";
-        }
+        game.classList.toggle("hidden", !gameName.includes(query));
     });
 }
 

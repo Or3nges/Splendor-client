@@ -7,6 +7,10 @@ body {
     overflow: hidden;
 }
 
+.hidden{
+    display: none;
+}
+
 h1 {
     text-align: center;
     font-weight: bold;
@@ -28,7 +32,7 @@ main {
     flex-direction: column;
     justify-content: space-between;
     gap: 0.5rem;
-    border: solid 1px #000000;
+    border: solid 0.06rem #000000;
     max-height: 40vh;
     overflow-y: auto;
 }
@@ -86,8 +90,8 @@ main ul:hover {
 
 select#filter {
     width: 20rem;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 0.6rem;
+    border-radius: 0.3rem;
     border: .2rem darkgoldenrod solid;
     background-color: goldenrod;
     color: white;
@@ -109,8 +113,7 @@ select#filter option {
 .search-filter-menu input,
 .search-filter-menu select {
     width: 20rem;
-    padding: 10px;
-    border-radius: 5px;
+    border-radius: 0.3rem;
     border: .2rem darkgoldenrod solid;
     background-color: goldenrod;
     color: white;
@@ -123,8 +126,8 @@ select#filter option {
 
 #search {
     width: 20rem;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 0.6rem;
+    border-radius: 0.3rem;
     border: .2rem darkgoldenrod solid;
     background-color: goldenrod;
     color: white;
