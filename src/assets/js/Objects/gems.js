@@ -1,0 +1,7 @@
+const allGems = [
+    {
+        ""
+    }
+]
+
+export {allGems}
