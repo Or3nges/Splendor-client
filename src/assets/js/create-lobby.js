@@ -1,8 +1,11 @@
+import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js";
+import * as CommunicationAbstractor from "./data-connector/api-communication-abstractor.js";
+
 function handleLeaveButtonClick() {
     const leaveButton = document.querySelector('#leaveButton');
     if (leaveButton) {
         leaveButton.addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         });
     }
 }
@@ -14,26 +17,15 @@ function handleGameConfigFormSubmit() {
             e.preventDefault();
             const formData = new FormData(gameConfigForm);
             const data = {
-                playerName: localStorage.getItem('playerName'),
-                maxPlayers: formData.get('playerAmount'),
-                treasurePerPlayer: formData.get('treasurePerPlayer'),
+                playerName: StorageAbstractor.loadFromStorage('playerName'),
+                numberOfPlayers: parseInt(formData.get('playerAmount'), 10),
                 gameName: formData.get('gameName'),
             };
-
-            fetch(`/api/games`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-                .then((res) => res.json())
+            console.log(data);
+            CommunicationAbstractor.fetchFromServer('/games', 'POST', data)
                 .then((res) => {
-                    if (res.success) {
-                        window.location.href = 'lobby.html';
-                    } else {
-                        alert('Failed to create game');
-                    }
+                    console.log('API response:', res);
+                    window.location.href = '../html/lobby.html';
                 })
                 .catch((error) => {
                     console.error('Error:', error);
