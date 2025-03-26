@@ -2,7 +2,7 @@ function handleLeaveButtonClick() {
     const leaveButton = document.querySelector('#leaveButton');
     if (leaveButton) {
         leaveButton.addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         });
     }
 }
