@@ -1,5 +1,6 @@
 import * as CommunicationAbstractor from "./data-connector/api-communication-abstractor.js";
 import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js";
+import { WAITFORTIMEOUT } from "./config";
 
 
 function init() {
@@ -12,12 +13,14 @@ document.querySelector("#backButton").addEventListener("click", () => {
 });
 function loadGames() {
     const filter = document.querySelector("#filter").value;
-    let apiPath = "/games";
+    let apiPath;
 
     if (filter === "Started") {
         apiPath = "/games?started=true";
     } else if (filter === "Waiting") {
         apiPath = "/games?started=false";
+    } else {
+        apiPath = "/games";
     }
 
     CommunicationAbstractor.fetchFromServer(apiPath, 'GET')
@@ -29,7 +32,7 @@ function loadGames() {
                 addGame(game, index + 1);
             });
             document.querySelectorAll("main ul").forEach(item => item.addEventListener('click', chooseGame));
-            setTimeout(loadGames, 5000);
+            setTimeout(loadGames, WAITFORTIMEOUT);
         });
 }
 
