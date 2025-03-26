@@ -15,20 +15,95 @@
 
 </head>
 <body>
+<section>
+    <h1 class="hidden">players</h1>
+    <article class="players">
+        <ul>
+            <!--this is a hardcoded example of a player for the template-->
+            <li class="player">
+                <div class="container">
+                <h2>name</h2>
+                <div class="prestige">
+                <img id="prestigestar" src="assets/images/prestigestar.png" alt="prestige points">
+                <p>0</p>
+                </div>
+                </div>
+                <ol class="container" id="cards">
+                    <li>
+                        <img src="assets/images/rubycard.png" alt="rubycard" height="600" width="450">
+                        <p>0</p>
+                    </li>
+                    <li>
+                        <img src="assets/images/emeraldcard.png" alt="emeraldcard" height="600" width="450">
+                        <p>0</p>
+                    </li>
+                    <li><img src="assets/images/diamantcard.png" alt="diamantcard" height="600" width="450"></li>
+                    <li><img src="assets/images/amethystrcard.png" alt="amethystcard" height="600" width="450"></li>
+                    <li><img src="assets/images/onyxcard.png" alt="onyxtcard" height="600" width="450"></li>
+                    <li><img src="assets/images/ambercard.png" alt="abmbercard" height="600" width="450"></li>
+                </ol>
+                <ol class="container" id="tokens">
+                    <li>
+                        <img src="assets/images/rubytoken.png" alt="rubytoken" height="506" width="494">
+                        <p>0</p>
+                    </li>
+                    <li>
+                        <img src="assets/images/emeraldtoken.png" alt="emeraldtoken" height="506" width="494">
+                        <p>0</p>
+                    </li>
+                    <li><img src="assets/images/diamanttoken.png" alt="diamanttoken" height="506" width="494"></li>
+                    <li><img src="assets/images/amethysttoken.png" alt="amethysttoken" height="506" width="494"></li>
+                    <li><img src="assets/images/onyxtoken.png" alt="onyxtoken" height="506" width="494"></li>
+                    <li><img src="assets/images/ambertoken.png" alt="ambertoken" height="506" width="494"></li>
+                </ol>
+            </li>
+            <template>
+                <li>
+                    <h1>name</h1>
+                    <img src="assets/images/prestigestar.png" alt="prestige points">
+                    <ol id="cards">
 
-    <section id="gamescreen">
-        <article>
-            <template id="developmentCard">
-                <figure>
+                    </ol>
+                    <ol id="tokens">
+
+                    </ol>
+                </li>
+            </template>
+        </ul>
+    </article>
+</section>
+
+<section id="gamescreen">
+    <article>
+        <template id="developmentCard">
+            <figure>
                 <img id="cardType" src="" alt="title" title="title">
                 <img id="cardToken" src="" alt="" title="">
                 <!--<div class="cost">
 
                 </div>-->
-                </figure>
-            </template>
-        </article>
-    </section>
+            </figure>
+        </template>
+    </article>
+</section>
+
+<section class="end-screen">
+    <h1 class="game-over">Game over</h1>
+
+    <img alt="Logo" src="favicon-16x16.png">
+
+    <ul class="score-board">
+        <li class="score">Score:</li>
+        <li class="1st-place">1st:</li>
+        <li class="2nd-place">2nd:</li>
+        <li class="3rd-place">3rd:</li>
+        <li class="4th-place">4th:</li>
+    </ul>
+
+
+    <button class="play-again">Play again</button>
+    <button class="return">Return</button>
+</section>
 
 </body>
 </html>

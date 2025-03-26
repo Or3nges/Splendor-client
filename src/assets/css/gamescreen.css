@@ -1,6 +1,6 @@
 @font-face {
  font-family: 'MyCustomFont';
- src: url('../fonts/greek.ttf') format('truetype');
+ src: url('../fonts/Itim-Regular.ttf') format('truetype');
 }
 
 body {
@@ -55,3 +55,169 @@ body {
  right: 1%
 }*/
 
+
+
+.hidden {
+    display: none;
+}
+
+
+
+/* players
+-------------------------------------------------- */
+article.players {
+    display: flex;
+}
+
+li.player h1{
+    margin-left: 1.5rem;
+    color: white;
+}
+
+article.players ul {
+    display: inline-block;
+    width: 20%;
+    font-size: 2rem ;
+    max-height: 60%;
+}
+
+article.players ul li.player {
+    max-height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    margin-left: 0.1rem;
+    background-color: goldenrod;
+    border-radius: 2rem;
+    border-color: darkgoldenrod;
+    border-style: solid;
+    border-width: 4px;
+    padding-left: 0.1rem;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+article.players ul li.player p{
+    position: absolute;
+    top: 30%;
+    left: 48%;
+    color: white;
+    -webkit-text-stroke: .045rem black;
+}
+
+article.players ul li.player div.prestige{
+    position: relative;
+    margin-left: 5rem;
+}
+
+article.players ul li > *:nth-child(n+3) {
+    flex-basis: 100%;
+}
+
+article.players ul li img#prestigestar {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+    margin-left: 1rem;
+}
+
+
+
+ol#cards li, ol#tokens li{
+    position: relative;
+}
+ol#cards li p, ol#tokens li p{
+    position: absolute;
+    top: 10%;
+    left: 35%;
+    -webkit-text-stroke: .045rem black;
+    font-size: 2rem;
+}
+
+ol#cards li img, ol#tokens li img {
+    position: relative;
+    max-width: 100%;
+    height: auto;
+    margin-right:0.1rem;
+    margin-left: 0.1rem;
+}
+
+ol#cards li img{
+    max-width: 90%;
+}
+
+ol#cards li p {
+    top: 15%;
+    left: 28%;
+    -webkit-text-stroke: .045rem black;
+    font-size: 2rem;
+}
+
+/* End screen
+-----------------------------------------*/
+.end-screen {
+ margin-left: auto;
+ margin-right: auto;
+ margin-top: 2.2rem;
+ background-color: rgba(255,255,255,0.6);
+ box-shadow: 0 0.25rem 0.5rem 0 rgb(0 0 0 / 20%), 0 0.375rem 1.25rem 0 rgb(0 0 0 / 19%);
+ border-radius: 12px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ padding: 3rem;
+ text-align: center;
+ width: 30rem;
+}
+
+.game-over {
+ background-color: #D2A741;
+ border-radius: 12px;
+ padding: 2rem;
+ color: white;
+ font-size: 5rem;
+ margin-bottom: 2rem;
+}
+
+img {
+ margin-bottom: 2rem;
+ width: 6rem;
+ height: 6rem;
+}
+
+.score-board {
+ margin-bottom: 1rem;
+ padding: 1rem;
+ color: white;
+ font-size: 2.5rem;
+ background-color: #D2A741;
+ border-radius: 12px;
+}
+
+button {
+ background-color: #D2A741;
+ border-radius: 12px;
+ color: white;
+ padding: 1rem;
+ border: none;
+ margin-bottom: 1rem;
+}
+
+.play-again {
+ font-size: 4rem;
+}
+
+.return {
+ font-size: 1.5rem;
+}
+
+button:hover {
+ background-color: #5a5a5a;
+}

@@ -10,13 +10,26 @@
 
   <link rel="stylesheet" href="assets/css/reset.css">
   <link rel="stylesheet" href="assets/css/screen.css">
+  <link rel="stylesheet" href="assets/css/index.css">
 
   <script src="assets/js/index.js" type="module"></script>
 </head>
 <body>
-  <h1>Splendor  deployment test</h1>
-  <p>Create your amazing and wonderful interface here. Have fun!</p>
+<section id="startScreen" class="hidden">
+  <header><h2>splendor</h2></header>
+  <form>
+    <div>
+      <label for="name">First name:</label><br>
+      <input type="text" id="name" name="name" maxlength="14"><br>
+    </div>
+    <div>
+      <button type="button" id="create" class="create" data-target="configuration">create game</button>
+      <button type="button" id="join" class="join" data-target="serverpage">join game</button>
+      <button type="button" id="rules" class="rules" data-target="ruleScreen">rules</button>
 
+    </div>
+  </form>
+</section>
   <div class="errormessages">
     <p></p>
   </div>

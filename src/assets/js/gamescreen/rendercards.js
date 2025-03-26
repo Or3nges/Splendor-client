@@ -1,6 +1,7 @@
 import * as communicationAbstractor from "../data-connector/api-communication-abstractor.js";
 import * as storageAbstractor from "../data-connector/local-storage-abstractor.js";
 import {allDevelopmentCards} from "../Objects/developmentCards.js"
+import {allGems} from "../Objects/gems.js";
 
 const gameId = storageAbstractor.loadFromStorage("game id")
 
@@ -22,7 +23,8 @@ function displayDevelopmentCards(row) {
     const $gamescreenArticle = document.querySelector("#gamescreen article");
     const $template = document.querySelector('#developmentCard').content.firstElementChild.cloneNode(true);
     console.log($template);
-    $template.querySelector('img').setAttribute('src', allDevelopmentCards[row].img);
+    $template.querySelector('#cardType').setAttribute('src', allDevelopmentCards[row].img);
+    $template.querySelector('#cardToken').setAttribute('src', allGems[0].img);
     $gamescreenArticle.insertAdjacentHTML('beforeend', $template.outerHTML);
 }
 
