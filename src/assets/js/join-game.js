@@ -7,7 +7,7 @@ function init() {
 }
 
 document.querySelector("#backButton").addEventListener("click", () => {
-    window.location.href = "./index.html";
+    window.location.href = "../index.html";
 });
 function loadGames(){
         CommunicationAbstractor.fetchFromServer(`/games?started=false`, 'GET')
@@ -57,6 +57,7 @@ function chooseGame(e) {
         $joinButton.classList.add("active");
         $joinButton.addEventListener('click', joinGame);
     }
+
 }
 
 function joinGame() {

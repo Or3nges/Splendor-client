@@ -1,10 +1,9 @@
 body {
-    max-width: 85%;
+    max-width: 80%;
     margin: 0 auto;
     background: url(../images/beforeGameBackground.png) center;
     background-size: cover;
-    min-height: 100vh;
-    max-height: 100vh;
+    height: 100vh;
     overflow: hidden;
 }
 
@@ -67,7 +66,7 @@ main {
 main ul {
     background-color: goldenrod;
     display: grid;
-    grid-template-columns: 1.1fr 4fr 4fr 0.3fr auto;
+    grid-template-columns: 1.1fr 12fr 0.5fr 0.35fr auto;
     padding: 0.6rem;
     transition: 0.5s, background-color 0.5s;
 }
