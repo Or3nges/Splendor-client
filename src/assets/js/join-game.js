@@ -2,15 +2,16 @@ import * as CommunicationAbstractor from "./data-connector/api-communication-abs
 import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js";
 import { WAITFORTIMEOUT } from "./config";
 
-
 function init() {
     document.querySelector("#filter").addEventListener("change", loadGames);
+    document.querySelector("#search").addEventListener("input", searchGames);
     loadGames();
 }
 
 document.querySelector("#backButton").addEventListener("click", () => {
     window.location.href = "../index.html";
 });
+
 function loadGames() {
     const filter = document.querySelector("#filter").value;
     let apiPath;
@@ -73,7 +74,6 @@ function chooseGame(e) {
         $joinButton.classList.add("active");
         $joinButton.addEventListener('click', joinGame);
     }
-
 }
 
 function joinGame() {
@@ -94,5 +94,18 @@ function joinGame() {
         });
 }
 
+function searchGames() {
+    const query = document.querySelector("#search").value.toLowerCase();
+    const games = document.querySelectorAll("main ul");
+
+    games.forEach(game => {
+        const gameName = game.querySelector("#gameName").innerText.toLowerCase();
+        if (gameName.includes(query)) {
+            game.style.display = "";
+        } else {
+            game.style.display = "none";
+        }
+    });
+}
 
 init();
