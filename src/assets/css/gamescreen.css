@@ -100,7 +100,6 @@ article.players ul {
     display: inline-block;
     width: 20%;
     font-size: 2rem ;
-    max-height: 60%;
 }
 
 article.players ul li.player {
@@ -111,7 +110,7 @@ article.players ul li.player {
     border-radius: 2rem;
     border-color: darkgoldenrod;
     border-style: solid;
-    border-width: 4px;
+    border-width: 0.25rem;
     padding-left: 0.1rem;
 }
 
@@ -230,7 +229,7 @@ p.ambertoken {
     border-radius: 2rem;
     border-color: darkgoldenrod;
     border-style: solid;
-    border-width: 4px;
+    border-width: 0.25rem;
     padding-left: 0.1rem;
     margin-right: 1rem;
     width: 30%;
@@ -296,7 +295,7 @@ button#endturn {
     border-radius: 2rem;
     border-color: darkgoldenrod;
     border-style: solid;
-    border-width: 4px;
+    border-width: 0.25rem;
     width: 15%;
 }
 
@@ -308,7 +307,7 @@ button#endturn {
  margin-top: 2.2rem;
  background-color: rgba(255,255,255,0.6);
  box-shadow: 0 0.25rem 0.5rem 0 rgb(0 0 0 / 20%), 0 0.375rem 1.25rem 0 rgb(0 0 0 / 19%);
- border-radius: 12px;
+ border-radius: 0.75rem;
  display: flex;
  flex-direction: column;
  align-items: center;
@@ -319,7 +318,7 @@ button#endturn {
 
 .game-over {
  background-color: #D2A741;
- border-radius: 12px;
+ border-radius: 0.75rem;
  padding: 2rem;
  color: white;
  font-size: 5rem;
@@ -338,12 +337,12 @@ img {
  color: white;
  font-size: 2.5rem;
  background-color: #D2A741;
- border-radius: 12px;
+ border-radius: 0.75rem;
 }
 
 button {
  background-color: #D2A741;
- border-radius: 12px;
+ border-radius: 0.75rem;
  color: white;
  padding: 1rem;
  border: none;
