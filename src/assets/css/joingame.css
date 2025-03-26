@@ -1,0 +1,107 @@
+body {
+    max-width: 80%;
+    margin: 0 auto;
+    background: url(../images/beforeGameBackground.png) center;
+    background-size: cover;
+    height: 100vh;
+    overflow: hidden;
+}
+
+h1 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 5rem;
+    color: goldenrod;
+    -webkit-text-stroke: .25rem darkgoldenrod;
+}
+
+header {
+    margin-top: 4.5rem;
+    margin-bottom: 2.5rem;
+}
+
+main {
+    background-color: #ffffff99;
+    padding: 1rem;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border: solid 1px #000000;
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.nav-bar li button {
+    background-color: goldenrod;
+    color: white;
+    border: .2rem darkgoldenrod solid;
+    font-size: 2.25rem;
+    width: 17.5rem;
+    margin: 2rem;
+    padding: 1.5rem;
+    text-align: center;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: 0.5s, background-color 0.5s;
+}
+
+.nav-bar li button:hover {
+    background-color: #005f73;
+}
+
+
+.nav-bar li {
+    margin: 1rem 5rem;
+    display: inline-block;
+    padding: 1.5rem;
+    font-size: 0.5rem;
+}
+
+main ul {
+    background-color: goldenrod;
+    display: grid;
+    grid-template-columns: 1.2fr 12fr 0.5fr 0.35fr auto;
+    padding: 0.6rem;
+    transition: 0.5s, background-color 0.5s;
+}
+
+main ul:hover {
+    background-color: #005f73;
+    cursor: pointer;
+    color: white;
+}
+
+.selected {
+    background-color: #005f73;
+    color: white;
+}
+
+select#filter {
+    width: 20rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: .2rem darkgoldenrod solid;
+    background-color: goldenrod;
+    color: white;
+    font-size: 1.5rem;
+}
+
+select#filter option {
+    padding: 0.625rem;
+    background-color: goldenrod;
+    color: #fff;
+}
+
+.filter-menu {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
