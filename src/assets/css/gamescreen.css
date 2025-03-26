@@ -96,7 +96,7 @@ p.ambercard {
     background-size: contain;
 }
 
-ol#tokens li p, ol#cards li p {
+ol.tokens li p, ol.cards li p {
     color: white;
     -webkit-text-stroke: .045rem black;
     width : 2rem;
@@ -108,11 +108,11 @@ ol#tokens li p, ol#cards li p {
     margin: 0.2rem;
 }
 
-ol#cards li p {
+ol.cards li p {
     height: 2.5rem;
 }
 
-ol#tokens li p {
+ol.tokens li p {
     height: 2rem;
 }
 
@@ -192,16 +192,16 @@ p.prestige2 {
     width: 40%;
 }
 
-.you ol#tokens li p,.you ol#cards li p {
+.you ol.tokens li p,.you ol.cards li p {
     font-size: 3rem;
 }
 
-.you ol#cards li p {
+.you ol.cards li p {
     height: 4rem;
     width: 3rem;
 }
 
-.you ol#tokens li p {
+.you ol.tokens li p {
     height: 3.5rem;
     width: 3.5rem;
 }
