@@ -140,37 +140,37 @@ p.prestige{
     margin-left: 4rem;
 }
 
-p.rubycard {
+.rubyCard {
     background: url("../../media/rubycard.png") no-repeat;
     background-size: contain;
 }
 
-p.emeraldcard {
+.emeraldCard {
     background: url("../../media/emeraldcard.png") no-repeat;
     background-size: contain;
 }
 
-p.diamantcard {
+.diamondCard {
     background: url("../../media/diamantcard.png") no-repeat;
     background-size: contain;
 }
 
-p.amethystcard {
+.amethystCard {
     background: url("../../media/amethystrcard.png")no-repeat;
     background-size: contain;
 }
 
-p.onyxcard {
+.onyxCard {
     background: url("../../media/onyxcard.png") no-repeat;
     background-size: contain;
 }
 
-p.ambercard {
+.amberCard {
     background: url("../../media/ambercard.png") no-repeat;
     background-size: contain;
 }
 
-ol.tokens li p, ol.cards li p {
+ol.tokens li, ol.cards li {
     color: white;
     -webkit-text-stroke: .045rem black;
     width : 2rem;
@@ -182,40 +182,40 @@ ol.tokens li p, ol.cards li p {
     margin: 0.2rem;
 }
 
-ol.cards li p {
+ol.cards li {
     height: 2.5rem;
 }
 
-ol.tokens li p {
+ol.tokens li {
     height: 2rem;
 }
 
-p.rubytoken {
+.rubyToken {
     background: url("../../media/rubytoken.png") no-repeat;
     background-size: contain;
 }
 
-p.emeraldtoken {
+.emeraldToken {
     background: url("../../media/emeraldtoken.png") no-repeat;
     background-size: contain;
 }
 
-p.diamanttoken {
+.diamondToken {
     background: url("../../media/diamanttoken.png") no-repeat;
     background-size: contain;
 }
 
-p.amethysttoken {
+.amethystToken {
     background: url("../../media/amethysttoken.png")no-repeat;
     background-size: contain;
 }
 
-p.onyxtoken {
+.onyxToken {
     background: url("../../media/onyxtoken.png") no-repeat;
     background-size: contain;
 }
 
-p.ambertoken {
+.amberToken {
     background: url("../../media/ambertoken.png") no-repeat;
     background-size: contain;
 }
@@ -245,8 +245,8 @@ p.ambertoken {
     margin-bottom: 0.1rem;
 }
 
-#tokenselection  h1{
-    font-size: 4rem;
+#tokenSelection h1{
+    font-size: 3.5rem;
     margin-bottom: 1rem;
 }
 
@@ -270,23 +270,23 @@ p.prestige2 {
     width: 40%;
 }
 
-.you ol.tokens li p,.you ol.cards li p {
+.you ol.tokens li,.you ol.cards li {
     font-size: 3rem;
 }
 
-.you ol.cards li p {
+.you ol.cards li {
     height: 4rem;
     width: 3rem;
     margin-right: 0.5rem;
     margin-left: 0.4rem;
 }
 
-.you ol.tokens li p {
+.you ol.tokens li {
     height: 3.5rem;
     width: 3.5rem;
 }
 
-button#endturn {
+button#endTurn {
     display: flex;
     justify-content: center;
     align-items: center;
