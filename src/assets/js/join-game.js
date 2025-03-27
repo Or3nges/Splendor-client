@@ -3,14 +3,16 @@ import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js
 
 function init() {
     document.querySelector("#search").value = "";
+    document.querySelector("#filter").value = "Waiting";
     document.querySelector("#filter").addEventListener("change", loadGames);
     document.querySelector("#search").addEventListener("input", searchGames);
+    localStorage.removeItem("selectedGame");
     loadGames();
 }
 
 const WAITFORTIMEOUT = 5000;
 
-document.querySelector("#backButton").addEventListener("click", () => {
+document.querySelector("#back-button").addEventListener("click", () => {
     window.location.href = "../index.html";
 });
 
@@ -31,27 +33,37 @@ function loadGames() {
             document.querySelector('main').innerHTML = "";
             const games = data.games;
 
-            games.forEach((game, index) => {
-                addGame(game, index + 1);
+            games.forEach(game => {
+                addGame(game);
             });
             document.querySelectorAll("main ul").forEach(item => item.addEventListener('click', chooseGame));
-            searchGames(searchQuery);
+            searchGames();
+
+            const selectedGameID = localStorage.getItem("selectedGame");
+            if (selectedGameID) {
+                const $selectedGame = document.querySelector(`#game-${selectedGameID}`);
+                if ($selectedGame) {
+                    $selectedGame.classList.add("selected");
+                    document.querySelector("#join-game").classList.add("active");
+                }
+            }
+
             setTimeout(loadGames, WAITFORTIMEOUT);
         });
 }
 
-function addGame(game, gameIdx) {
+function addGame(game) {
     const countOfPlayers = game.players.length;
-    const $game = document.querySelector('template').content.firstElementChild.cloneNode(true);
-    const $gameList = document.querySelector('main');
+    const $game = document.querySelector("template").content.firstElementChild.cloneNode(true);
+    const $gameList = document.querySelector("main");
     const selectedGameID = StorageAbstractor.loadFromStorage("selectedGame");
 
-    $game.setAttribute('id', `game-${gameIdx}`);
-    $game.querySelector('#gameIdx').innerText = `Game ${gameIdx}:`;
+    $game.setAttribute('id', `game-${game.gameId}`);
+    $game.querySelector('#gameIdx').innerText = `Game ${game.gameId}:`;
     $game.querySelector('#gameName').innerText = game.gameName;
     $game.querySelector('#players').innerText = `${countOfPlayers}/${game.numberOfPlayers}`;
 
-    if (`game-${gameIdx}` === selectedGameID) {
+    if (`game-${game.gameId}` === selectedGameID) {
         $game.classList.add("selected");
     }
 
@@ -61,11 +73,15 @@ function addGame(game, gameIdx) {
 function chooseGame(e) {
     let selectedGameID = e.currentTarget.id;
 
-    StorageAbstractor.saveToStorage("selectedGame", selectedGameID);
     if (selectedGameID === "" || e.target.tagName === 'LI') {
         selectedGameID = e.target.parentNode.id;
     }
+
     if (selectedGameID) {
+        const gameIDNumber = selectedGameID.split('-')[1];
+        StorageAbstractor.saveToStorage("selectedGame", gameIDNumber);
+        localStorage.setItem("selectedGame", gameIDNumber);
+
         const $allGames = document.querySelectorAll(`main ul`);
         $allGames.forEach($game => {
             $game.classList.remove("selected");
@@ -90,7 +106,7 @@ function joinGame() {
         .then(data => {
             StorageAbstractor.saveToStorage("playerToken", data.playerToken);
             StorageAbstractor.saveToStorage("gameId", data.gameId);
-            window.location.href = "gamelobby.html";
+            window.location.href = "lobby.html";
         })
         .catch(error => {
             alert(error.cause);
