@@ -9,7 +9,7 @@ document.querySelector("#backButton").addEventListener("click", () => {
 });
 
 document.querySelector("#startGameButton").addEventListener("click", () => {
-    window.location.href = "../html/gamescreen.html";
+    window.location.href = "../gamescreen.html";
 });
 
 function fetchGameLobby() {
