@@ -39,19 +39,19 @@ function displayLobby(game) {
     const main = document.querySelector("main");
     main.innerHTML = "";
 
+    const $lobby = document.querySelector('#lobby-template').content.firstElementChild.cloneNode(true);
 
-    const header = document.createElement("h2");
-    header.innerText = `Game Lobby: ${game.gameName ? game.gameName : "Unnamed Game"}`;
-    main.appendChild(header);
+    $lobby.querySelector('#lobbyGameName').innerText = `Game Lobby: ${game.gameName}`;
 
-        const ul = document.createElement("ul");
-        game.players.forEach(player => {
-            const li = document.createElement("li");
-            li.innerText = player;
-            ul.appendChild(li);
-        });
-        main.appendChild(ul);
-    }
+    const $playersList = $lobby.querySelector('#lobbyPlayers');
+    game.players.forEach(player => {
+        const li = document.createElement("li");
+        li.innerText = player;
+        $playersList.appendChild(li);
+    });
+
+    main.appendChild($lobby);
+}
 
 
 fetchGameLobby();
