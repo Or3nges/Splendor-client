@@ -4,6 +4,7 @@ import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js
 const TIMEOUT = 5000;
 
 document.querySelector("#backButton").addEventListener("click", () => {
+    StorageAbstractor.deleteFromStorage("gameId", "gameName", "numberOfPlayers");
     window.location.href = "../index.html";
 });
 
