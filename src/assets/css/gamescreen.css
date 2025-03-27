@@ -13,6 +13,10 @@ body {
 
 /* DEVELOPMENT CARDS */
 
+h2 {
+    text-align: center;
+}
+
 #cardType {
  height: auto;
  display: block;
@@ -28,7 +32,7 @@ body {
  right: 0.5%
 }
 
-#cost p {
+#cost li {
     background: url("../../media/ambertoken.png") no-repeat;
     -webkit-text-stroke: 0.03rem black;
     font-size: 1.2rem;
@@ -52,14 +56,14 @@ body {
     left: 7.25%;
 }
 
-#gamescreen {
+#cardsContainer {
  display: grid;
  grid-template-columns: repeat(4, 1fr);
  grid-template-rows: repeat(3, 1fr);
  width: 35%;
 }
 
-#gamescreen figure {
+#gameScreen figure {
  margin-top: 1.5rem;
  position: relative;
  display: inline-block;
@@ -88,10 +92,40 @@ body {
     display: none;
 }
 
+/* GEMS */
 
+.rubycard {
+    background: url("../../media/rubycard.png") no-repeat;
+    background-size: contain;
+}
 
-/* players
--------------------------------------------------- */
+.emeraldcard {
+    background: url("../../media/emeraldcard.png") no-repeat;
+    background-size: contain;
+}
+
+.diamantcard {
+    background: url("../../media/diamantcard.png") no-repeat;
+    background-size: contain;
+}
+
+.amethystcard {
+    background: url("../../media/amethystrcard.png")no-repeat;
+    background-size: contain;
+}
+
+.onyxcard {
+    background: url("../../media/onyxcard.png") no-repeat;
+    background-size: contain;
+}
+
+.ambercard {
+    background: url("../../media/ambercard.png") no-repeat;
+    background-size: contain;
+}
+
+/* PLAYERS */
+
 article.players {
     display: flex;
 }
@@ -139,36 +173,6 @@ p.prestige{
     justify-content: center;
     align-items: center;
     margin-left: 4rem;
-}
-
-p.rubycard {
-    background: url("../../media/rubycard.png") no-repeat;
-    background-size: contain;
-}
-
-p.emeraldcard {
-    background: url("../../media/emeraldcard.png") no-repeat;
-    background-size: contain;
-}
-
-p.diamantcard {
-    background: url("../../media/diamantcard.png") no-repeat;
-    background-size: contain;
-}
-
-p.amethystcard {
-    background: url("../../media/amethystrcard.png")no-repeat;
-    background-size: contain;
-}
-
-p.onyxcard {
-    background: url("../../media/onyxcard.png") no-repeat;
-    background-size: contain;
-}
-
-p.ambercard {
-    background: url("../../media/ambercard.png") no-repeat;
-    background-size: contain;
 }
 
 ol.tokens li p, ol.cards li p {
@@ -287,7 +291,8 @@ p.prestige2 {
     width: 3.5rem;
 }
 
-button#endturn {
+#endturn {
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
