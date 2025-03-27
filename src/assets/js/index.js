@@ -37,7 +37,7 @@ document.querySelector("#join").addEventListener("click", () => {
 });
 
 document.querySelector("#rules").addEventListener("click", () => {
-  window.open('assets/rulebook/splendor-rulebook.pdf');
+  window.location.href = "html/rules.html";
 });
 
 init();
