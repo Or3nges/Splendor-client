@@ -10,12 +10,10 @@
 
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/gamescreen.css">
-
-    <script src="assets/js/gamescreen/initgame.js" type="module"></script>
-
     <link rel="stylesheet" href="assets/css/reachedprestigepopup.css">
 
-    <script type="module" src="assets/js/player.js"></script>
+    <script src="assets/js/gamescreen/initgame.js" type="module"></script>
+    <script type="module" src="assets/js/gamescreen/player.js"></script>
 </head>
 <body>
 <div>
@@ -25,24 +23,12 @@
             <template id="player-template">
                 <li class="player">
                     <div class="container">
-                        <h2>name</h2>
-                        <p class="prestige">0</p>
+                        <h2></h2>
+                        <p class="prestige"></p>
                     </div>
                     <ol class="container cards">
-                        <li><p class="rubycard">0</p></li>
-                        <li><p class="emeraldcard">0</p></li>
-                        <li><p class="diamantcard">0</p></li>
-                        <li><p class="amethystcard">0</p></li>
-                        <li><p class="onyxcard">0</p></li>
-                        <li><p class="ambercard">0</p></li>
                     </ol>
                     <ol class="container tokens">
-                        <li><p class="rubytoken">0</p></li>
-                        <li><p class="emeraldtoken">0</p></li>
-                        <li><p class="diamanttoken">0</p></li>
-                        <li><p class="amethysttoken">0</p></li>
-                        <li><p class="onyxtoken">0</p></li>
-                        <li><p class="ambertoken">0</p></li>
                     </ol>
                 </li>
             </template>
@@ -50,7 +36,7 @@
     </article>
 </div>
 <div class="container" id="bottomrow">
-    <article class="you" id="tokenselection">
+    <article class="you" id="tokenSelection">
         <div class="container">
             <h1>you</h1>
             <p class="prestige2">0</p>
@@ -62,24 +48,14 @@
         </div>
     </article>
     <div class="you" id="yourcards">
-        <ol class="container cards">
-            <li><p class="rubycard">0</p></li>
-            <li><p class="emeraldcard">0</p></li>
-            <li><p class="diamantcard">0</p></li>
-            <li><p class="amethystcard">0</p></li>
-            <li><p class="onyxcard">0</p></li>
-            <li><p class="ambercard">0</p></li>
-        </ol>
-        <ol class="container tokens">
-            <li><p class="rubytoken">0</p></li>
-            <li><p class="emeraldtoken">0</p></li>
-            <li><p class="diamanttoken">0</p></li>
-            <li><p class="amethysttoken">0</p></li>
-            <li><p class="onyxtoken">0</p></li>
-            <li><p class="ambertoken">0</p></li>
-        </ol>
+        <template id="self-template">
+            <figure>
+            <ol class="container cards"></ol>
+            <ol class="container tokens"></ol>
+            </figure>
+        </template>
     </div>
-    <button id="endturn">end turn</button>
+    <button id="endTurn">end turn</button>
 </div>
 
 <section id="gamescreen">
