@@ -43,6 +43,16 @@ main ul li {
     transition: background-color 0.5s;
 }
 
+.lobby h2 {
+    display: flex;
+    align-items: center;
+}
+
+.lobby h2 .player-amount {
+    margin-left: auto;
+    font-size: 1.5rem;
+}
+
 .nav-bar li {
     margin: 1rem 5rem;
     display: inline-block;

@@ -40,8 +40,10 @@ function displayLobby(game) {
     main.innerHTML = "";
 
     const $lobby = document.querySelector('#lobby-template').content.firstElementChild.cloneNode(true);
+    const countOfPlayers = game.players.length;
 
-    $lobby.querySelector('#lobbyGameName').innerText = `Game Lobby: ${game.gameName}`;
+    $lobby.querySelector('#gameName').innerText = `Game Lobby: ${game.gameName}`;
+    $lobby.querySelector('#playerAmount').innerText = `Players: ${countOfPlayers}/${game.numberOfPlayers}`;
 
     const $playersList = $lobby.querySelector('#lobbyPlayers');
     game.players.forEach(player => {
@@ -52,6 +54,7 @@ function displayLobby(game) {
 
     main.appendChild($lobby);
 }
+
 
 
 fetchGameLobby();
