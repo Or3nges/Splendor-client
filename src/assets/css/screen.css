@@ -10,7 +10,7 @@ main {
  flex-direction: column;
  justify-content: space-between;
  gap: 0.5rem;
- border: solid 1px #000000;
+ border: solid 0.0625rem #000000;
  max-height: 40vh;
  overflow-y: auto;
 }
