@@ -7,6 +7,10 @@ body {
     overflow: hidden;
 }
 
+.hidden{
+    display: none;
+}
+
 h1 {
     text-align: center;
     font-weight: bold;
@@ -20,18 +24,6 @@ header {
     margin-bottom: 2.5rem;
 }
 
-main {
-    background-color: #ffffff99;
-    padding: 1rem;
-    font-size: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 0.5rem;
-    border: solid 1px #000000;
-    max-height: 40vh;
-    overflow-y: auto;
-}
 
 .nav-bar {
     display: flex;
@@ -39,19 +31,6 @@ main {
     margin-bottom: 2rem;
 }
 
-.nav-bar li button {
-    background-color: goldenrod;
-    color: white;
-    border: .2rem darkgoldenrod solid;
-    font-size: 2.25rem;
-    width: 17.5rem;
-    margin: 2rem;
-    padding: 1.5rem;
-    text-align: center;
-    border-radius: 2rem;
-    cursor: pointer;
-    transition: 0.5s, background-color 0.5s;
-}
 
 .nav-bar li button:hover {
     background-color: #005f73;
@@ -86,8 +65,8 @@ main ul:hover {
 
 select#filter {
     width: 20rem;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 0.6rem;
+    border-radius: 0.3rem;
     border: .2rem darkgoldenrod solid;
     background-color: goldenrod;
     color: white;
@@ -109,8 +88,7 @@ select#filter option {
 .search-filter-menu input,
 .search-filter-menu select {
     width: 20rem;
-    padding: 10px;
-    border-radius: 5px;
+    border-radius: 0.3rem;
     border: .2rem darkgoldenrod solid;
     background-color: goldenrod;
     color: white;
@@ -123,8 +101,8 @@ select#filter option {
 
 #search {
     width: 20rem;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 0.6rem;
+    border-radius: 0.3rem;
     border: .2rem darkgoldenrod solid;
     background-color: goldenrod;
     color: white;
