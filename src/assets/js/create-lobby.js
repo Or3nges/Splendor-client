@@ -14,7 +14,6 @@ function addDataToLocalStorage(data, formData) {
 
     StorageAbstractor.saveToStorage("gameId", data.gameId);
     StorageAbstractor.saveToStorage("gameName", formData.get('gameName'));
-    StorageAbstractor.saveToStorage("numberOfPlayers", parseInt(formData.get('playerAmount'), 10));
 }
 
 function handleGameConfigFormSubmit() {
