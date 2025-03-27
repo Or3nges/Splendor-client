@@ -325,6 +325,12 @@ button#endturn {
  margin-bottom: 2rem;
 }
 
+img {
+    margin-bottom: 2rem;
+    width: 6rem;
+    height: 6rem;
+}
+
 .score-board {
  margin-bottom: 1rem;
  padding: 1rem;
