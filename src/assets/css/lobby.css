@@ -27,11 +27,17 @@ header {
     margin-bottom: 2rem;
 }
 
-
 .nav-bar li button:hover {
     background-color: #005f73;
 }
 
+main ul li {
+    display: block;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    background-color: goldenrod;
+    transition: background-color 0.5s;
+}
 
 .nav-bar li {
     margin: 1rem 5rem;
@@ -40,43 +46,8 @@ header {
     font-size: 0.5rem;
 }
 
-main ul {
-    background-color: goldenrod;
-    display: grid;
-    grid-template-columns: 1.2fr 12fr 0.5fr 0.35fr auto;
-    padding: 0.6rem;
-    transition: 0.5s, background-color 0.5s;
-}
-
-main ul:hover {
+main ul li:hover {
     background-color: #005f73;
     cursor: pointer;
     color: white;
-}
-
-.selected {
-    background-color: #005f73;
-    color: white;
-}
-
-select#filter {
-    width: 20rem;
-    padding: 10px;
-    border-radius: 5px;
-    border: .2rem darkgoldenrod solid;
-    background-color: goldenrod;
-    color: white;
-    font-size: 1.5rem;
-}
-
-select#filter option {
-    padding: 0.625rem;
-    background-color: goldenrod;
-    color: #fff;
-}
-
-.filter-menu {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
 }

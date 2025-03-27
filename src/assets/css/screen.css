@@ -1,3 +1,30 @@
 * {
  font-family: Verdana, sans-serif;
 }
+
+main {
+ background-color: #ffffff99;
+ padding: 1rem;
+ font-size: 1.5rem;
+ display: flex;
+ flex-direction: column;
+ justify-content: space-between;
+ gap: 0.5rem;
+ border: solid 1px #000000;
+ max-height: 40vh;
+ overflow-y: auto;
+}
+
+.nav-bar li button {
+ background-color: goldenrod;
+ color: white;
+ border: .2rem darkgoldenrod solid;
+ font-size: 2.25rem;
+ width: 17.5rem;
+ margin: 2rem;
+ padding: 1.5rem;
+ text-align: center;
+ border-radius: 2rem;
+ cursor: pointer;
+ transition: 0.5s, background-color 0.5s;
+}
