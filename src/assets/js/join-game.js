@@ -1,23 +1,29 @@
 import * as CommunicationAbstractor from "./data-connector/api-communication-abstractor.js";
 import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js";
 
-
 function init() {
+    document.querySelector("#search").value = "";
     document.querySelector("#filter").addEventListener("change", loadGames);
+    document.querySelector("#search").addEventListener("input", searchGames);
     loadGames();
 }
+
+const WAITFORTIMEOUT = 5000;
 
 document.querySelector("#backButton").addEventListener("click", () => {
     window.location.href = "../index.html";
 });
+
 function loadGames() {
     const filter = document.querySelector("#filter").value;
-    let apiPath = "/games";
+    let apiPath;
 
     if (filter === "Started") {
         apiPath = "/games?started=true";
     } else if (filter === "Waiting") {
         apiPath = "/games?started=false";
+    } else {
+        apiPath = "/games";
     }
 
     CommunicationAbstractor.fetchFromServer(apiPath, 'GET')
@@ -29,7 +35,8 @@ function loadGames() {
                 addGame(game, index + 1);
             });
             document.querySelectorAll("main ul").forEach(item => item.addEventListener('click', chooseGame));
-            setTimeout(loadGames, 5000);
+            searchGames(searchQuery);
+            setTimeout(loadGames, WAITFORTIMEOUT);
         });
 }
 
@@ -70,7 +77,6 @@ function chooseGame(e) {
         $joinButton.classList.add("active");
         $joinButton.addEventListener('click', joinGame);
     }
-
 }
 
 function joinGame() {
@@ -91,5 +97,14 @@ function joinGame() {
         });
 }
 
+function searchGames() {
+    const query = document.querySelector("#search").value.toLowerCase();
+    const games = document.querySelectorAll("main ul");
+
+    games.forEach(game => {
+        const gameName = game.querySelector("#gameName").innerText.toLowerCase();
+        game.classList.toggle("hidden", !gameName.includes(query));
+    });
+}
 
 init();

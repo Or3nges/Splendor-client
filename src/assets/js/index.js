@@ -7,7 +7,7 @@ function init() {
 }
 
 function testConnection(){
-  CommunicationAbstractor.fetchFromServer('/gems', 'GET').then(gems => console.log(gems)).catch(ErrorHandler.handleError);
+  CommunicationAbstractor.fetchFromServer('/games', 'GET').then(gems => console.log(gems)).catch(ErrorHandler.handleError);
 }
 
 function getPlayerName(){
@@ -18,7 +18,7 @@ function validateName(){
   const playerName = getPlayerName();
   const pattern = /^[a-zA-Z]\w{2,15}$/;
   if(!pattern.test(playerName)){
-    alert("Invalid username. Username must be more than 3 characters long and cannot consist of special characters");
+    alert("Invalid username. Username must be between 3 and 14 characters long and cannot consist of special characters");
     return false;
   }
   return true;
