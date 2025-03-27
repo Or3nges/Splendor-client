@@ -10,6 +10,14 @@ function deleteFromStorage(key) {
   }
 }
 
+function deleteMultipleKeysFromStorage(...keys) {
+  if (localStorage) {
+    keys.forEach(key => {
+      localStorage.removeItem(key);
+    });
+  }
+}
+
 function loadFromStorage(key) {
   if (localStorage) {
     return JSON.parse(localStorage.getItem(key));
@@ -17,4 +25,4 @@ function loadFromStorage(key) {
   return null;
 }
 
-export { saveToStorage, loadFromStorage, deleteFromStorage };
+export { saveToStorage, loadFromStorage, deleteFromStorage, deleteMultipleKeysFromStorage };
