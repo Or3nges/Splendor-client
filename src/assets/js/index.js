@@ -4,10 +4,18 @@ import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js
 
 function init() {
   testConnection();
+  loadName();
 }
 
 function testConnection(){
   CommunicationAbstractor.fetchFromServer('/games', 'GET').then(gems => console.log(gems)).catch(ErrorHandler.handleError);
+}
+
+function loadName(){
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+    if(playerName){
+        document.querySelector("#name").value = playerName;
+    }
 }
 
 function getPlayerName(){

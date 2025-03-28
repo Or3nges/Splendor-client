@@ -16,10 +16,8 @@
     <script type="module" src="assets/js/gamescreen/player.js"></script>
 </head>
 <body>
-<div>
-    <article class="players">
+    <div class="players">
         <ul>
-            <!--this is a hardcoded example of a player for the template-->
             <template id="player-template">
                 <li class="player">
                     <div class="container">
@@ -33,8 +31,21 @@
                 </li>
             </template>
         </ul>
-    </article>
-</div>
+    </div>
+    <section id="gameScreen">
+        <h2>Current Development Cards</h2>
+        <div id="cardsContainer">
+            <template id="developmentCard">
+                <figure>
+                    <img id="cardType" src="" alt="alt" title="title">
+                    <img id="cardToken" src="" alt="alt" title="title">
+                    <p class="hidden">0</p>
+                    <ul id="cost">
+                    </ul>
+                </figure>
+            </template>
+        </div>
+    </section>
 <div class="container" id="bottomrow">
     <article class="you" id="tokenSelection">
         <div class="container">
@@ -57,22 +68,6 @@
     </div>
     <button id="endTurn">end turn</button>
 </div>
-
-<section id="gamescreen">
-        <template id="developmentCard">
-            <figure>
-                <img id="cardType" src="" alt="title" title="title">
-                <img id="cardToken" src="" alt="" title="">
-                <div id="cost">
-                    <p>1</p>
-                    <p>1</p>
-                    <p>1</p>
-                    <p>1</p>
-                    <p>1</p>
-                </div>
-            </figure>
-        </template>
-</section>
 
 <section class="hidden">
     <h1 class="game-over">Game over</h1>

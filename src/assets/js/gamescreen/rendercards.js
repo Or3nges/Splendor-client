@@ -2,8 +2,9 @@ import * as communicationAbstractor from "../data-connector/api-communication-ab
 import * as storageAbstractor from "../data-connector/local-storage-abstractor.js";
 import {allDevelopmentCards} from "../Objects/developmentCards.js"
 import {allGems} from "../Objects/gems.js";
+import {createLiElement} from "../util.js";
 
-const gameId = storageAbstractor.loadFromStorage("game id")
+const gameId = storageAbstractor.loadFromStorage("gameId")
 
 function fetchDevelopmentCards() {
     communicationAbstractor.fetchFromServer(`/games/${gameId}`, "GET")
@@ -12,24 +13,36 @@ function fetchDevelopmentCards() {
 
 function renderDevelopmentCards(market) {
     console.log(market);
-    for (let row = 0; row < market.length; row++) {
-        for (let col = 0; col < market[0].visibleCards.length; col++) {
-            displayDevelopmentCards(row, market[row].visibleCards[col]);
-        }
-    }
+    market.forEach(tier => {
+        handleTier(tier);
+    });
 }
 
-function displayDevelopmentCards(row, card) {
-    const $gamescreenArticle = document.querySelector("#gamescreen");
+function handleTier(tier) {
+    tier.visibleCards.forEach(card => {
+        displayDevelopmentCards(card);
+    });
+}
+
+function findGem(gemName) {
+    return allGems.filter(gem => gem.name === gemName)[0];
+}
+
+function findCard(tier) {
+    return allDevelopmentCards.filter(tierLevel => tier === tierLevel.level)[0];
+}
+
+function displayDevelopmentCards(card) {
+    const $gamescreenArticle = document.querySelector("#gameScreen div");
     const $template = document.querySelector('#developmentCard').content.firstElementChild.cloneNode(true);
+    const $cost = $template.querySelector('#cost');
     console.log();
-    $template.querySelector('#cardType').setAttribute('src', allDevelopmentCards[row].img);
-    $template.querySelector('#cardToken').setAttribute('src', findBonusCard(card.bonus));
-    $gamescreenArticle.insertAdjacentHTML('beforeend', $template.outerHTML);
-}
 
-function findBonusCard(bonus) {
-    return allGems.filter(gem => gem.name === bonus)[0].img;
+    Object.keys(card.cost).forEach(bonusCost => {$cost.insertAdjacentHTML('beforeend', createLiElement(card.cost[bonusCost], findGem(bonusCost).tokenId))});
+        //$cost.insertAdjacentHTML('beforeend', fillCost(card)));
+    $template.querySelector('#cardType').setAttribute('src', findCard(card.level).img);
+    $template.querySelector('#cardToken').setAttribute('src', findGem(card.bonus).img);
+    $gamescreenArticle.insertAdjacentHTML('beforeend', $template.outerHTML);
 }
 
 export {renderDevelopmentCards, fetchDevelopmentCards};

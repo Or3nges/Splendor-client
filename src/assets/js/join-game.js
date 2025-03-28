@@ -19,7 +19,6 @@ document.querySelector("#back-button").addEventListener("click", () => {
 function loadGames() {
     const filter = document.querySelector("#filter").value;
     let apiPath;
-
     if (filter === "Started") {
         apiPath = "/games?started=true";
     } else if (filter === "Waiting") {
@@ -27,18 +26,15 @@ function loadGames() {
     } else {
         apiPath = "/games";
     }
-
     CommunicationAbstractor.fetchFromServer(apiPath, 'GET')
         .then(data => {
             document.querySelector('main').innerHTML = "";
             const games = data.games;
-
             games.forEach(game => {
                 addGame(game);
             });
             document.querySelectorAll("main ul").forEach(item => item.addEventListener('click', chooseGame));
             searchGames();
-
             const selectedGameID = localStorage.getItem("selectedGame");
             if (selectedGameID) {
                 const $selectedGame = document.querySelector(`#game-${selectedGameID}`);
@@ -47,7 +43,6 @@ function loadGames() {
                     document.querySelector("#join-game").classList.add("active");
                 }
             }
-
             setTimeout(loadGames, WAITFORTIMEOUT);
         });
 }
