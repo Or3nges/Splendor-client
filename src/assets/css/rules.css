@@ -1,5 +1,4 @@
 body {
-    display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -8,7 +7,6 @@ body {
 }
 
 header {
-    background-color: #333;
     color: white;
     text-align: center;
     padding: 1rem;
@@ -21,11 +19,73 @@ h1 {
     color: goldenrod;
     -webkit-text-stroke: .25rem darkgoldenrod;
 }
-section {
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    padding: 1.25rem;
+    border-radius: 1rem;
     border: 0.1rem black solid;
     margin: auto;
+    width: 60%;
+    min-height: 50vh;
+    max-height: 50vh;
 }
 
+#rules-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+}
+
+.rule-article {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: black;
+    display: none;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: black;
+}
+.rule-article p {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.rule-article.active {
+    display: block;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.nav-buttons button {
+    background: #d2a741;
+    color: #fff;
+    border: .2rem darkgoldenrod solid;
+    padding: 0.75rem 1.75rem;
+    font-size: 1.25rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: 0.5s, background-color 0.5s;
+}
+
+.nav-buttons button:hover {
+    background-color: #005f73;
+}
 
 .nav-bar {
     display: flex;
