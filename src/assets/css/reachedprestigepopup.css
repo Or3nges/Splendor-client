@@ -1,4 +1,4 @@
-#prestige-popup {
+.popup {
     background-position: center;
     text-align: center;
     width: 45%;
@@ -34,3 +34,17 @@
     color: #d2a741;
 }
 
+#buy-cards-option button{
+    font-size: 2rem;
+    border-radius: 2rem;
+    border-color: darkgoldenrod;
+    border-style: solid;
+    border-width: 0.25rem;
+    cursor: pointer;
+}
+
+#buy-cards-option ul{
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 3rem;
+}
