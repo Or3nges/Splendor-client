@@ -38,6 +38,11 @@ function displayDevelopmentCards(card) {
     const $cost = $template.querySelector('#cost');
     console.log();
 
+    const p = `<p>${card.prestigePoints}</p>`;
+    if (card.prestigePoints !== 0) {
+        $template.insertAdjacentHTML('beforeend', p);
+    }
+
     Object.keys(card.cost).forEach(bonusCost => {$cost.insertAdjacentHTML('beforeend', createLiElement(card.cost[bonusCost], findGem(bonusCost).tokenId))});
     $template.querySelector('#cardType').setAttribute('src', findCard(card.level).img);
     $template.querySelector('#cardToken').setAttribute('src', findGem(card.bonus).img);
