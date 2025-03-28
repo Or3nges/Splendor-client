@@ -1,6 +1,6 @@
 import * as communicationAbstractor from "../data-connector/api-communication-abstractor.js";
 import * as storageAbstractor from "../data-connector/local-storage-abstractor.js";
-import {allDevelopmentCards} from "../Objects/developmentCards.js"
+import {allDevelopmentCards} from "../Objects/developmentCards.js";
 import {allGems} from "../Objects/gems.js";
 import {createLiElement} from "../util.js";
 

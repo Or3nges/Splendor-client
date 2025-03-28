@@ -11,25 +11,28 @@
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/gamescreen.css">
     <link rel="stylesheet" href="assets/css/popup.css">
+    <link rel="stylesheet" href="assets/css/player.css">
 
-    <script src="assets/js/gamescreen/initgame.js" type="module"></script>
+    <script src="assets/js/gamescreen/init-game.js" type="module"></script>
     <script type="module" src="assets/js/gamescreen/player.js"></script>
+
 </head>
 <body>
     <div class="players">
+        <template id="player-template">
+            <li class="player unhighlighted">
+                <div class="container">
+                    <h2>name</h2>
+                    <p class="prestige"></p>
+                </div>
+                <ol class="container cards">
+                </ol>
+                <ol class="container tokens">
+                </ol>
+            </li>
+        </template>
         <ul>
-            <template id="player-template">
-                <li class="player">
-                    <div class="container">
-                        <h2></h2>
-                        <p class="prestige"></p>
-                    </div>
-                    <ol class="container cards">
-                    </ol>
-                    <ol class="container tokens">
-                    </ol>
-                </li>
-            </template>
+
         </ul>
     </div>
     <section id="gameScreen">
@@ -46,7 +49,7 @@
         </div>
     </section>
 <div class="container" id="bottomrow">
-    <article class="you" id="tokenSelection">
+    <article class="you unhighlighted" id="tokenSelection">
         <div class="container">
             <h1>you</h1>
             <p class="prestige2">0</p>
@@ -57,13 +60,14 @@
             <img src="media/grey_token.png" alt="grey token" height="306" width="306">
         </div>
     </article>
+    <template id="self-template">
+    <figure>
+        <ol class="container cards"></ol>
+        <ol class="container tokens"></ol>
+    </figure>
+</template>
     <div class="you" id="yourcards">
-        <template id="self-template">
-            <figure>
-            <ol class="container cards"></ol>
-            <ol class="container tokens"></ol>
-            </figure>
-        </template>
+
     </div>
     <button id="endTurn">end turn</button>
 </div>
