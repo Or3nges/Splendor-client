@@ -8,9 +8,6 @@ document.querySelector("#backButton").addEventListener("click", () => {
     window.location.href = "../index.html";
 });
 
-document.querySelector("#startGameButton").addEventListener("click", () => {
-    window.location.href = "../gamescreen.html";
-});
 
 function fetchGameLobby() {
     const gameId = StorageAbstractor.loadFromStorage("gameId");
