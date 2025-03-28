@@ -52,7 +52,8 @@ function displayLobby(game) {
     });
     main.appendChild($lobby);
 
-    if (countOfPlayers === game.numberOfPlayers) {
+
+    if (game.players.length === game.numberOfPlayers) {
         window.location.href = "../gamescreen.html";
     }
 }
