@@ -2,7 +2,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: url(../images/beforeGameBackground.png) center;
+    background: url(../../media/beforeGameBackground.png) center;
     background-size: cover;
 }
 
@@ -56,6 +56,14 @@ h2 {
     margin-bottom: 1rem;
     color: black;
 }
+
+.nav-bar li {
+    margin: 1rem 5rem;
+    display: inline-block;
+    padding: 1.5rem;
+    font-size: 0.5rem;
+}
+
 .rule-article p, .rule-article ul li {
     font-size: 1.5rem;
     margin-bottom: 1rem;
@@ -99,12 +107,4 @@ h2 {
 
 .nav-bar li button:hover {
     background-color: #005f73;
-}
-
-
-.nav-bar li {
-    margin: 1rem 5rem;
-    display: inline-block;
-    padding: 1.5rem;
-    font-size: 0.5rem;
 }
