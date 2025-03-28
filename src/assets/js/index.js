@@ -5,8 +5,11 @@ import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js
 function init() {
   testConnection();
   loadName();
+  deleteStorage();
 }
-
+function deleteStorage(){
+  StorageAbstractor.deleteMultipleKeysFromStorage( "gameId", "gameName", "numberOfPlayers", "selectedGame", "playerToken");
+}
 function testConnection(){
   CommunicationAbstractor.fetchFromServer('/games', 'GET').then(gems => console.log(gems)).catch(ErrorHandler.handleError);
 }
