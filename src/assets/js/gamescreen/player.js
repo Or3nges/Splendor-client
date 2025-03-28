@@ -2,63 +2,72 @@ import * as StorageAbstractor from "../data-connector/local-storage-abstractor.j
 import * as CommunicationAbstractor from "../data-connector/api-communication-abstractor.js";
 import {allGems} from "../Objects/gems.js";
 
+let gems;
+const $playerList = document.querySelector("div.players ul");
+
+function fetchgems(){
+    CommunicationAbstractor.fetchFromServer(`/gems`, 'GET')
+        .then(data => gems = data.gems);
+}
+
 function fetchPlayers(){
     const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
-        .then(game => fetchgems(game));
+        .then(game => renderPlayers(game));
 
 }
 
-function fetchgems(game){
-    CommunicationAbstractor.fetchFromServer(`/gems`, 'GET')
-        .then(data => renderPlayers(game, data.gems));
-}
-
-function renderPlayers(game, gems){
+function renderPlayers(game){
     const players = game.players;
-    console.log(players);
+    $playerList.innerHTML ="";
     for (const player of players) {
         if (player.name !== StorageAbstractor.loadFromStorage("playerName")) {
-            displayPlayer(player, gems);
-        } else { displaySelf(player, gems) }
+            displayPlayer(player, game.currentPlayer);
+        } else { displaySelf(player, game.currentPlayer) }
     }
 }
 
-function displayPlayer(player, gems) {
-    const $playerList = document.querySelector("div.players ul");
+function displayPlayer(player, currentPlayer) {
     const $playerTemplate = document.querySelector("template#player-template");
     const playerClone = $playerTemplate.content.firstElementChild.cloneNode(true);
+
     const $prestigePoints = playerClone.querySelector("p.prestige");
     const $tokenOl = playerClone.querySelector("ol.tokens");
     const $cardOl = playerClone.querySelector("ol.cards");
     $prestigePoints.insertAdjacentHTML('beforeend', `${player.totalPrestigePoints}`);
 
-    createLiPreperation(player, gems, $tokenOl, $cardOl);
+        if (player.name === currentPlayer) {
+            playerClone.classList.remove("unhighlight");
+            playerClone.classList.add("highlight");
+        }
+
+    createLiPreperation(player, $tokenOl, $cardOl);
 
     playerClone.querySelector("h2").innerText = player.name;
     $playerList.insertAdjacentHTML('beforeend', playerClone.outerHTML);
 }
 
-function displaySelf(player, gems) {
+function displaySelf(player, currentPlayer) {
     const $owntokendiv = document.querySelector("div#yourcards");
     const $playerTemplate = document.querySelector("template#self-template");
     const playerClone = $playerTemplate.content.firstElementChild.cloneNode(true);
     const $tokenOl = playerClone.querySelector("ol.tokens");
     const $cardOl = playerClone.querySelector("ol.cards");
 
-    createLiPreperation(player, gems, $tokenOl, $cardOl);
-    changeNameAndPrestige(player);
+    createLiPreperation(player, $tokenOl, $cardOl);
+    changeNameAndPrestige(player, currentPlayer);
+    $owntokendiv.innerHTML = "";
     $owntokendiv.insertAdjacentHTML('beforeend', playerClone.outerHTML);
 }
 
-function changeNameAndPrestige(player){
-    const $nameholder = document.querySelector("article#tokenSelection h1");
+function changeNameAndPrestige(player, currentPlayer){
+    const $article = document.querySelector("article#tokenSelection");
     const $prestigePoints = document.querySelector("article#tokenSelection p.prestige2");
-    console.log(player.name);
-    console.log(player.totalPrestigePoints);
-    console.log($nameholder);
-    console.log($prestigePoints);
-    $nameholder.innerText = player.name;
+    if (player.name === currentPlayer) {
+        $article.classList.remove("unhighlighted");
+        $article.classList.add("highlighted");
+    }
+    $article.querySelector("h1").innerText = player.name;
     $prestigePoints.innerText = player.totalPrestigePoints;
 }
 
@@ -75,7 +84,7 @@ function getGemId(gem, type){
     }
 }
 
-function createLiPreperation(player, gems, $tokenOl, $cardOl){
+function createLiPreperation(player, $tokenOl, $cardOl){
     for (const gem of gems) {
         let tokenId = getGemId(gem, "token");
         let cardId = getGemId(gem, "card");
@@ -87,4 +96,4 @@ function createLiPreperation(player, gems, $tokenOl, $cardOl){
         $cardOl.insertAdjacentHTML('beforeend', createLiElement(cardAmount, cardId));
     }
 }
-export { fetchPlayers };
+export { fetchgems, fetchPlayers };

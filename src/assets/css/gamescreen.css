@@ -130,16 +130,24 @@ h2 {
     font-size: 2rem ;
 }
 
-.players ul li.player {
+.players ul .player {
     margin-bottom: 0.5rem;
     margin-top: 0.5rem;
     margin-left: 0.1rem;
     background-color: goldenrod;
-    border-radius: 2rem;
-    border-color: darkgoldenrod;
+    padding-left: 0.1rem;
     border-style: solid;
     border-width: 0.25rem;
-    padding-left: 0.1rem;
+    border-radius: 2rem;
+}
+
+.unhighlighted {
+    border-color: darkgoldenrod;
+}
+
+.highlighted {
+    border-color: blueviolet;
+
 }
 
 .container {
@@ -260,7 +268,6 @@ ol.tokens li {
     align-items: center;
     background-color: goldenrod;
     border-radius: 2rem;
-    border-color: darkgoldenrod;
     border-style: solid;
     border-width: 0.25rem;
     padding-left: 0.1rem;
@@ -300,6 +307,7 @@ p.prestige2 {
 
 #yourcards {
     width: 40%;
+    border-color: darkgoldenrod;
     margin-left: 2.2rem;
 }
 
