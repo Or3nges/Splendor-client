@@ -39,24 +39,23 @@ function fetchGameLobby() {
 function displayLobby(game) {
     const main = document.querySelector("main");
     main.innerHTML = "";
-
-    const $lobby = document.querySelector('#lobby-template').content.firstElementChild.cloneNode(true);
+    const $lobby = document.querySelector("#lobby-template").content.firstElementChild.cloneNode(true);
     const countOfPlayers = game.players.length;
+    $lobby.querySelector("#gameName").innerText = `Game Lobby: ${game.gameName}`;
+    $lobby.querySelector("#playerAmount").innerText = `Players: ${countOfPlayers}/${game.numberOfPlayers}`;
+    const $playersList = $lobby.querySelector("#lobbyPlayers");
 
-    $lobby.querySelector('#gameName').innerText = `Game Lobby: ${game.gameName}`;
-    $lobby.querySelector('#playerAmount').innerText = `Players: ${countOfPlayers}/${game.numberOfPlayers}`;
-
-    const $playersList = $lobby.querySelector('#lobbyPlayers');
     game.players.forEach(player => {
         const li = document.createElement("li");
         li.innerText = player;
         $playersList.appendChild(li);
     });
-
     main.appendChild($lobby);
+
+    if (countOfPlayers === game.numberOfPlayers) {
+        window.location.href = "../gamescreen.html";
+    }
 }
-
-
 
 fetchGameLobby();
 setInterval(fetchGameLobby, TIMEOUT);
