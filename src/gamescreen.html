@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/gamescreen.css">
-    <link rel="stylesheet" href="assets/css/reachedprestigepopup.css">
+    <link rel="stylesheet" href="assets/css/popup.css">
 
     <script src="assets/js/gamescreen/initgame.js" type="module"></script>
     <script type="module" src="assets/js/gamescreen/player.js"></script>
@@ -52,9 +52,9 @@
             <p class="prestige2">0</p>
         </div>
         <div>
-            <img src="assets/images/grey_token.png" alt="grey token" height="306" width="306">
-            <img src="assets/images/grey_token.png" alt="grey token" height="306" width="306">
-            <img src="assets/images/grey_token.png" alt="grey token" height="306" width="306">
+            <img src="media/grey_token.png" alt="grey token" height="306" width="306">
+            <img src="media/grey_token.png" alt="grey token" height="306" width="306">
+            <img src="media/grey_token.png" alt="grey token" height="306" width="306">
         </div>
     </article>
     <div class="you" id="yourcards">
@@ -86,11 +86,39 @@
     <button class="return">Return</button>
 </section>
 
-<section class="hidden" id="prestige-popup">
-    <h1 class="close">X</h1>
-    <p id=current-winner></p>
-    <p>has reached the desired amount of prestige points</p>
-</section>
+    <section id="prestige-popup" class="popup, hidden">
+        <h1 class="close">X</h1>
+        <p id=current-winner></p>
+        <p>has reached the desired amount of prestige points</p>
+    </section>
+
+    <section id="buy-cards-option" class="popup, hidden">
+        <h1 class="close">X</h1>
+        <p>Do u want to buy this card with cards or tokens?</p>
+        <ul>
+            <li>
+                <button>cards</button>
+            </li>
+            <li>
+                <button>tokens</button>
+            </li>
+        </ul>
+    </section>
+
+    <section id="buy-or-reserve-option" class="popup, hidden">
+        <h1 class="close">X</h1>
+        <p>Do u want to buy or reserve this card?</p>
+        <ul>
+            <li>
+                <button>buy</button>
+            </li>
+            <li>
+                <button>reserve</button>
+            </li>
+        </ul>
+    </section>
+
+
 
 </body>
 </html>
