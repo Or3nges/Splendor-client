@@ -78,7 +78,7 @@ h2 {
 }
 
 #cardsContainer p {
-    background: url("../images/prestigestar.png") no-repeat;
+    background: url("../../media/prestigestar.png") no-repeat;
     background-size: contain;
     font-size: 1.2rem;
     text-align: center;
@@ -171,7 +171,7 @@ ol{
 }
 
 p.prestige{
-    background: url("../images/prestigestar.png") no-repeat;
+    background: url("../../media/prestigestar.png") no-repeat;
     background-size: contain;
     width: 3rem;
     height: 3rem;
@@ -292,7 +292,7 @@ ol.tokens li {
 
 p.prestige2 {
     background-size: contain;
-    background-image: url("../images/prestigestar.png");
+    background-image: url("../../media/prestigestar.png");
     width: 5rem;
     height: 5rem;
     display: flex;
