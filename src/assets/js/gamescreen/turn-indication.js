@@ -2,7 +2,7 @@ import * as CommunicationAbstractor from "../data-connector/api-communication-ab
 import * as StorageAbstractor from "../data-connector/local-storage-abstractor.js";
 import {fetchPlayers} from "./player.js";
 
-const gameLoopDelay = 2000;
+const GameLoopDelay = 2000;
 const playerName = StorageAbstractor.loadFromStorage("playerName");
 const gameId = StorageAbstractor.loadFromStorage("gameId");
 
@@ -12,10 +12,10 @@ function initTurnIndication(){
 
 function gameLoop(){
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}`).then(data => {
-        setTimeout(fetchPlayers, 500);
+        fetchPlayers();
         if (data.currentPlayer === playerName) {
         } else {
-            setTimeout(gameLoop, gameLoopDelay);
+            setTimeout(gameLoop, GameLoopDelay);
         }
     });
 }

@@ -1,13 +1,13 @@
 import {fetchDevelopmentCards} from "./render-cards.js";
-import {initEndGame} from "./end-game.js";
-import {fetchgems} from "./player.js";
+import {fetchGems} from "./player.js";
 import {initTurnIndication} from "./turn-indication.js";
+import {initPopup} from "./popup.js";
 
 function initGame() {
    fetchDevelopmentCards();
-   initEndGame();
-    fetchgems();
-    initTurnIndication()
+   initPopup();
+   fetchGems();
+   initTurnIndication();
 }
 
 initGame();

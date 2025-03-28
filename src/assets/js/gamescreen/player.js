@@ -5,7 +5,7 @@ import {allGems} from "../Objects/gems.js";
 let gems;
 const $playerList = document.querySelector("div.players ul");
 
-function fetchgems(){
+function fetchGems(){
     CommunicationAbstractor.fetchFromServer(`/gems`, 'GET')
         .then(data => gems = data.gems);
 }
@@ -96,4 +96,4 @@ function createLiPreperation(player, $tokenOl, $cardOl){
         $cardOl.insertAdjacentHTML('beforeend', createLiElement(cardAmount, cardId));
     }
 }
-export { fetchgems, fetchPlayers };
+export { fetchGems, fetchPlayers };
