@@ -4,7 +4,7 @@
 }
 
 body {
- background-image: url("../images/gamebackground.png");
+ background-image: url("../../media/gamebackground.png");
  background-size: 100%;
     font-family: MyCustomFont, sans-serif;
     color: white;
@@ -78,7 +78,7 @@ h2 {
 }
 
 #cardsContainer p {
-    background: url("../../media/prestigestar.png") no-repeat;
+    background: url("../images/prestigestar.png") no-repeat;
     background-size: contain;
     font-size: 1.2rem;
     text-align: center;
@@ -98,32 +98,32 @@ h2 {
 /* GEMS */
 
 .rubycard {
-    background: url("../../media/rubycard.png") no-repeat;
+    background: url("../images/rubycard.png") no-repeat;
     background-size: contain;
 }
 
 .emeraldcard {
-    background: url("../../media/emeraldcard.png") no-repeat;
+    background: url("../images/emeraldcard.png") no-repeat;
     background-size: contain;
 }
 
 .diamantcard {
-    background: url("../../media/diamantcard.png") no-repeat;
+    background: url("../images/diamantcard.png") no-repeat;
     background-size: contain;
 }
 
 .amethystcard {
-    background: url("../../media/amethystrcard.png")no-repeat;
+    background: url("../images/amethystrcard.png")no-repeat;
     background-size: contain;
 }
 
 .onyxcard {
-    background: url("../../media/onyxcard.png") no-repeat;
+    background: url("../images/onyxcard.png") no-repeat;
     background-size: contain;
 }
 
 .ambercard {
-    background: url("../../media/ambercard.png") no-repeat;
+    background: url("../images/ambercard.png") no-repeat;
     background-size: contain;
 }
 
@@ -171,7 +171,7 @@ ol{
 }
 
 p.prestige{
-    background: url("../../media/prestigestar.png") no-repeat;
+    background: url("../images/prestigestar.png") no-repeat;
     background-size: contain;
     width: 3rem;
     height: 3rem;
@@ -183,32 +183,32 @@ p.prestige{
     margin-top: 0.3rem;
 }
 .rubyCard {
-    background: url("../../media/rubycard.png") no-repeat;
+    background: url("../images/rubycard.png") no-repeat;
     background-size: contain;
 }
 
 .emeraldCard {
-    background: url("../../media/emeraldcard.png") no-repeat;
+    background: url("../images/emeraldcard.png") no-repeat;
     background-size: contain;
 }
 
 .diamondCard {
-    background: url("../../media/diamantcard.png") no-repeat;
+    background: url("../images/diamantcard.png") no-repeat;
     background-size: contain;
 }
 
 .amethystCard {
-    background: url("../../media/amethystrcard.png")no-repeat;
+    background: url("../images/amethystrcard.png")no-repeat;
     background-size: contain;
 }
 
 .onyxCard {
-    background: url("../../media/onyxcard.png") no-repeat;
+    background: url("../images/onyxcard.png") no-repeat;
     background-size: contain;
 }
 
 .amberCard {
-    background: url("../../media/ambercard.png") no-repeat;
+    background: url("../images/ambercard.png") no-repeat;
     background-size: contain;
 }
 
@@ -233,32 +233,32 @@ ol.tokens li {
 }
 
 .rubyToken {
-    background: url("../../media/rubytoken.png") no-repeat;
+    background: url("../images/rubytoken.png") no-repeat;
     background-size: contain;
 }
 
 .emeraldToken {
-    background: url("../../media/emeraldtoken.png") no-repeat;
+    background: url("../images/emeraldtoken.png") no-repeat;
     background-size: contain;
 }
 
 .diamondToken {
-    background: url("../../media/diamanttoken.png") no-repeat;
+    background: url("../images/diamanttoken.png") no-repeat;
     background-size: contain;
 }
 
 .amethystToken {
-    background: url("../../media/amethysttoken.png")no-repeat;
+    background: url("../images/amethysttoken.png")no-repeat;
     background-size: contain;
 }
 
 .onyxToken {
-    background: url("../../media/onyxtoken.png") no-repeat;
+    background: url("../images/onyxtoken.png") no-repeat;
     background-size: contain;
 }
 
 .amberToken {
-    background: url("../../media/ambertoken.png") no-repeat;
+    background: url("../images/ambertoken.png") no-repeat;
     background-size: contain;
 }
 
@@ -292,7 +292,7 @@ ol.tokens li {
 
 p.prestige2 {
     background-size: contain;
-    background-image: url("../../media/prestigestar.png");
+    background-image: url("../images/prestigestar.png");
     width: 5rem;
     height: 5rem;
     display: flex;
