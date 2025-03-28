@@ -1,6 +1,7 @@
 import * as CommunicationAbstractor from "./data-connector/api-communication-abstractor.js";
 import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js";
 import { addDataToLocalStorage } from "./util.js";
+import {deleteFromStorage} from "./data-connector/local-storage-abstractor.js";
 
 function init() {
     document.querySelector("#search").value = "";
@@ -102,6 +103,7 @@ function joinGame() {
         .then(data => {
             addDataToLocalStorage(data);
             window.location.href = "lobby.html";
+            deleteFromStorage("selectedGame");
         })
         .catch(error => {
             alert(error.cause);
