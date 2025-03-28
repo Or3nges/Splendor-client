@@ -1,4 +1,4 @@
-#prestige-popup {
+.popup {
     background-position: center;
     text-align: center;
     width: 45%;
@@ -34,3 +34,18 @@
     color: #d2a741;
 }
 
+.popup button{
+    font-size: 2rem;
+    border-radius: 2rem;
+    border-color: darkgoldenrod;
+    border-style: solid;
+    border-width: 0.25rem;
+    cursor: pointer;
+    width: 10rem;
+}
+
+.popup ul{
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 3rem;
+}

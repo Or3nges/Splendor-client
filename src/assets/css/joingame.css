@@ -1,14 +1,10 @@
 body {
     max-width: 80%;
     margin: 0 auto;
-    background: url(../images/beforeGameBackground.png) center;
+    background: url(../../media/beforeGameBackground.png) center;
     background-size: cover;
     height: 100vh;
     overflow: hidden;
-}
-
-.hidden{
-    display: none;
 }
 
 h1 {
