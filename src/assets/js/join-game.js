@@ -1,5 +1,6 @@
 import * as CommunicationAbstractor from "./data-connector/api-communication-abstractor.js";
 import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js";
+import { addDataToLocalStorage } from "./util.js";
 
 function init() {
     document.querySelector("#search").value = "";
@@ -99,8 +100,7 @@ function joinGame() {
     }
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}/players/${playerName}`, "POST")
         .then(data => {
-            StorageAbstractor.saveToStorage("playerToken", data.playerToken);
-            StorageAbstractor.saveToStorage("gameId", data.gameId);
+            addDataToLocalStorage(data);
             window.location.href = "lobby.html";
         })
         .catch(error => {
