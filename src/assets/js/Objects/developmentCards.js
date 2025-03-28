@@ -1,14 +1,14 @@
 const allDevelopmentCards = [
 {
-    "tier": 3,
+    "level": 3,
     "img": "media/EmperorDevelopmentCard.png"
 },
 {
-    "tier": 2,
+    "level": 2,
     "img": "media/EliteDevelopmentCard.png"
 },
 {
-    "tier": 1,
+    "level": 1,
     "img": "media/CitizenDevelopmentCard.png"
 }
 ]

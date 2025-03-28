@@ -3,7 +3,7 @@ import * as CommunicationAbstractor from "../data-connector/api-communication-ab
 import {allGems} from "../Objects/gems.js";
 
 function fetchPlayers(){
-    const gameId = parseInt(StorageAbstractor.loadFromStorage("game id"));
+    const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
         .then(game => fetchgems(game));
 
@@ -25,7 +25,7 @@ function renderPlayers(game, gems){
 }
 
 function displayPlayer(player, gems) {
-    const $playerList = document.querySelector("article.players ul");
+    const $playerList = document.querySelector("div.players ul");
     const $playerTemplate = document.querySelector("template#player-template");
     const playerClone = $playerTemplate.content.firstElementChild.cloneNode(true);
     const $prestigePoints = playerClone.querySelector("p.prestige");

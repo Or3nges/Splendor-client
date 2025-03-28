@@ -13,6 +13,10 @@ body {
 
 /* DEVELOPMENT CARDS */
 
+h2 {
+    text-align: center;
+}
+
 #cardType {
  height: auto;
  display: block;
@@ -28,8 +32,7 @@ body {
  right: 0.5%
 }
 
-#cost p {
-    background: url("../../media/ambertoken.png") no-repeat;
+#cost li {
     -webkit-text-stroke: 0.03rem black;
     font-size: 1.2rem;
     color: white;
@@ -48,61 +51,86 @@ body {
     position: absolute;
     width: 100%;
     height: 2rem;
-    bottom: 0.5%;
+    bottom: 6%;
     left: 7.25%;
 }
 
-#gamescreen {
+#cardsContainer {
  display: grid;
+ grid-gap: 1rem;
  grid-template-columns: repeat(4, 1fr);
  grid-template-rows: repeat(3, 1fr);
  width: 35%;
 }
 
-#gamescreen figure {
- margin-top: 1.5rem;
+#gameScreen figure {
  position: relative;
  display: inline-block;
  width: fit-content;
  height: auto;
 }
 
-/*p {
- background-image: url("../../media/ambertoken1.png");
- color: white;
- font-size: 1.5rem;
- -webkit-text-stroke: 0.4px black;
- position: absolute;
- background-size: contain;
- text-align: center;
- align-content: center;
- width: 2rem;
- height: 2rem;
- top: 1%;
- right: 1%
-}*/
+#gameScreen {
+    position: fixed;
+    margin-left: 34.5%;
+    top: 2%;
+    width: 32.1%;
+}
 
-
+#gameContainer {
+    display: flex;
+    flex-direction: row;
+}
 
 .hidden {
     display: none;
 }
 
+/* GEMS */
 
+.rubycard {
+    background: url("../../media/rubycard.png") no-repeat;
+    background-size: contain;
+}
 
-/* players
--------------------------------------------------- */
-article.players {
+.emeraldcard {
+    background: url("../../media/emeraldcard.png") no-repeat;
+    background-size: contain;
+}
+
+.diamantcard {
+    background: url("../../media/diamantcard.png") no-repeat;
+    background-size: contain;
+}
+
+.amethystcard {
+    background: url("../../media/amethystrcard.png")no-repeat;
+    background-size: contain;
+}
+
+.onyxcard {
+    background: url("../../media/onyxcard.png") no-repeat;
+    background-size: contain;
+}
+
+.ambercard {
+    background: url("../../media/ambercard.png") no-repeat;
+    background-size: contain;
+}
+
+/* PLAYERS */
+
+.players {
     display: flex;
 }
 
-article.players ul {
+.players ul {
     display: inline-block;
     width: 20%;
     font-size: 2rem ;
 }
 
-article.players ul li.player {
+.players ul li.player {
     margin-bottom: 0.5rem;
     margin-top: 0.5rem;
     margin-left: 0.1rem;
@@ -122,6 +150,10 @@ article.players ul li.player {
 
 }
 
+.you .container {
+    margin-top: 0.5rem;
+}
+
 ol{
     display: flex;
     flex-wrap: wrap;
@@ -130,16 +162,17 @@ ol{
 }
 
 p.prestige{
+    background: url("../../media/prestigestar.png") no-repeat;
     background-size: contain;
-    background-image: url("../../media/prestigestar.png");
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-left: 4rem;
+    margin-bottom: 0.3rem;
+    margin-top: 0.3rem;
 }
-
 .rubyCard {
     background: url("../../media/rubycard.png") no-repeat;
     background-size: contain;
@@ -231,7 +264,6 @@ ol.tokens li {
     border-style: solid;
     border-width: 0.25rem;
     padding-left: 0.1rem;
-    margin-right: 1rem;
     width: 30%;
 }
 
@@ -239,8 +271,7 @@ ol.tokens li {
     width: 95%;
     position: fixed;
     bottom: 0;
-    justify-content: space-between;
-    margin-right: 2.5rem;
+    justify-content: left;
     margin-left: 0.1rem;
     margin-bottom: 0.1rem;
 }
@@ -253,8 +284,8 @@ ol.tokens li {
 p.prestige2 {
     background-size: contain;
     background-image: url("../../media/prestigestar.png");
-    width: 6rem;
-    height: 6rem;
+    width: 5rem;
+    height: 5rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -262,12 +293,14 @@ p.prestige2 {
     font-size: 2.5rem;
 }
 
-#tokenselection img {
-    margin-bottom: 0.1rem;
+#tokenSelection div img {
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 #yourcards {
     width: 40%;
+    margin-left: 2.2rem;
 }
 
 .you ol.tokens li,.you ol.cards li {
@@ -286,9 +319,11 @@ p.prestige2 {
     width: 3.5rem;
 }
 
-button#endTurn {
+#endTurn {
     display: flex;
+    cursor: pointer;
     justify-content: center;
+    padding: 2rem;
     align-items: center;
     font-size: 3rem;
     background-color: goldenrod;
@@ -296,7 +331,7 @@ button#endTurn {
     border-color: darkgoldenrod;
     border-style: solid;
     border-width: 0.25rem;
-    width: 15%;
+    margin-left: 7.6rem;
 }
 
 /* End screen
