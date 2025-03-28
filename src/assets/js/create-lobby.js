@@ -11,9 +11,9 @@ function handleLeaveButtonClick() {
 }
 
 function addDataToLocalStorage(data, formData) {
-
     StorageAbstractor.saveToStorage("gameId", data.gameId);
     StorageAbstractor.saveToStorage("gameName", formData.get('gameName'));
+    StorageAbstractor.saveToStorage("playerToken", data.playerToken);
 }
 
 function handleGameConfigFormSubmit() {
