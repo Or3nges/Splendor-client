@@ -4,7 +4,7 @@ import {allDevelopmentCards} from "../Objects/developmentCards.js"
 import {allGems} from "../Objects/gems.js";
 import {createLiElement} from "../util.js";
 
-const gameId = storageAbstractor.loadFromStorage("gameId")
+const gameId = storageAbstractor.loadFromStorage("gameId");
 
 function fetchDevelopmentCards() {
     communicationAbstractor.fetchFromServer(`/games/${gameId}`, "GET")
@@ -38,8 +38,12 @@ function displayDevelopmentCards(card) {
     const $cost = $template.querySelector('#cost');
     console.log();
 
+    const p = `<p>${card.prestigePoints}</p>`;
+    if (card.prestigePoints !== 0) {
+        $template.insertAdjacentHTML('beforeend', p);
+    }
+
     Object.keys(card.cost).forEach(bonusCost => {$cost.insertAdjacentHTML('beforeend', createLiElement(card.cost[bonusCost], findGem(bonusCost).tokenId))});
-        //$cost.insertAdjacentHTML('beforeend', fillCost(card)));
     $template.querySelector('#cardType').setAttribute('src', findCard(card.level).img);
     $template.querySelector('#cardToken').setAttribute('src', findGem(card.bonus).img);
     $gamescreenArticle.insertAdjacentHTML('beforeend', $template.outerHTML);
