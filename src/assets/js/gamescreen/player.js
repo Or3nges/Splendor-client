@@ -76,7 +76,7 @@ function createLiElement(amount, id){
 }
 
 function getGemId(gem, type){
-   let selectedGem = allGems.filter(objectGem => objectGem.name === gem)
+   const selectedGem = allGems.filter(objectGem => objectGem.name === gem)
     if (type === "token"){
         return selectedGem[0].tokenId;
     }else {
@@ -86,11 +86,11 @@ function getGemId(gem, type){
 
 function createLiPreperation(player, $tokenOl, $cardOl){
     for (const gem of gems) {
-        let tokenId = getGemId(gem, "token");
-        let cardId = getGemId(gem, "card");
+        const tokenId = getGemId(gem, "token");
+        const cardId = getGemId(gem, "card");
 
-        let tokenAmount = player.tokens[gem] || 0;
-        let cardAmount = player.bonuses[gem] || 0;
+        const tokenAmount = player.tokens[gem] || 0;
+        const cardAmount = player.bonuses[gem] || 0;
 
         $tokenOl.insertAdjacentHTML('beforeend', createLiElement(tokenAmount, tokenId));
         $cardOl.insertAdjacentHTML('beforeend', createLiElement(cardAmount, cardId));

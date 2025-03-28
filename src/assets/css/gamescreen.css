@@ -127,69 +127,8 @@ h2 {
     background-size: contain;
 }
 
-/* PLAYERS */
+/* Gems */
 
-.players {
-    display: flex;
-}
-
-.players ul {
-    display: inline-block;
-    width: 20%;
-    font-size: 2rem ;
-}
-
-.players ul .player {
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
-    margin-left: 0.1rem;
-    background-color: goldenrod;
-    padding-left: 0.1rem;
-    border-style: solid;
-    border-width: 0.25rem;
-    border-radius: 2rem;
-}
-
-.unhighlighted {
-    border-color: darkgoldenrod;
-}
-
-.highlighted {
-    border-color: blueviolet;
-
-}
-
-.container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-}
-
-.you .container {
-    margin-top: 0.5rem;
-}
-
-ol{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-}
-
-p.prestige{
-    background: url("../../media/prestigestar.png") no-repeat;
-    background-size: contain;
-    width: 3rem;
-    height: 3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 4rem;
-    margin-bottom: 0.3rem;
-    margin-top: 0.3rem;
-}
 .rubyCard {
     background: url("../images/rubycard.png") no-repeat;
     background-size: contain;
@@ -220,26 +159,6 @@ p.prestige{
     background-size: contain;
 }
 
-ol.tokens li, ol.cards li {
-    color: white;
-    -webkit-text-stroke: .045rem black;
-    width : 2rem;
-    height: 2.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0.3rem;
-    margin: 0.2rem;
-}
-
-ol.cards li {
-    height: 2.5rem;
-}
-
-ol.tokens li {
-    height: 2rem;
-}
-
 .rubyToken {
     background: url("../images/rubytoken.png") no-repeat;
     background-size: contain;
@@ -268,87 +187,6 @@ ol.tokens li {
 .amberToken {
     background: url("../images/ambertoken.png") no-repeat;
     background-size: contain;
-}
-
-.you {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: goldenrod;
-    border-radius: 2rem;
-    border-style: solid;
-    border-width: 0.25rem;
-    padding-left: 0.1rem;
-    width: 30%;
-}
-
-#bottomrow {
-    width: 95%;
-    position: fixed;
-    bottom: 0;
-    justify-content: left;
-    margin-left: 0.1rem;
-    margin-bottom: 0.1rem;
-}
-
-#tokenSelection h1{
-    font-size: 3.5rem;
-    margin-bottom: 1rem;
-}
-
-p.prestige2 {
-    background-size: contain;
-    background-image: url("../../media/prestigestar.png");
-    width: 5rem;
-    height: 5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 8rem;
-    font-size: 2.5rem;
-}
-
-#tokenSelection div img {
-    margin-top: 0.5rem;
-    margin-bottom: 0.25rem;
-}
-
-#yourcards {
-    width: 40%;
-    border-color: darkgoldenrod;
-    margin-left: 2.2rem;
-}
-
-.you ol.tokens li,.you ol.cards li {
-    font-size: 3rem;
-}
-
-.you ol.cards li {
-    height: 4rem;
-    width: 3rem;
-    margin-right: 0.5rem;
-    margin-left: 0.4rem;
-}
-
-.you ol.tokens li {
-    height: 3.5rem;
-    width: 3.5rem;
-}
-
-#endTurn {
-    display: flex;
-    cursor: pointer;
-    justify-content: center;
-    padding: 2rem;
-    align-items: center;
-    font-size: 3rem;
-    background-color: goldenrod;
-    border-radius: 2rem;
-    border-color: darkgoldenrod;
-    border-style: solid;
-    border-width: 0.25rem;
-    margin-left: 7.6rem;
 }
 
 /* End screen
