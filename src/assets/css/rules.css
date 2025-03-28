@@ -1,4 +1,8 @@
 body {
+    max-width: 80%;
+    margin: 0 auto;
+    background-size: cover;
+    overflow: hidden;
     justify-content: center;
     align-items: center;
     height: 100vh;
