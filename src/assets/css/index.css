@@ -1,9 +1,10 @@
 body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     background: url(../../media/beforeGameBackground.png) center;
     background-size: cover;
-    min-height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
 }
 
 #startScreen {
