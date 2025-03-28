@@ -10,24 +10,34 @@ function handleLeaveButtonClick() {
     }
 }
 
+function addDataToLocalStorage(data, formData) {
+
+    StorageAbstractor.saveToStorage("gameId", data.gameId);
+    StorageAbstractor.saveToStorage("gameName", formData.get('gameName'));
+}
+
 function handleGameConfigFormSubmit() {
     const gameConfigForm = document.querySelector('#gameConfigForm');
     if (gameConfigForm) {
         gameConfigForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const formData = new FormData(gameConfigForm);
-            const data = {
-                playerName: StorageAbstractor.loadFromStorage('playerName'),
-                numberOfPlayers: parseInt(formData.get('playerAmount'), 10),
+
+            const lobbyData = {
                 gameName: formData.get('gameName'),
+                numberOfPlayers: parseInt(formData.get('playerAmount'), 10),
+                playerName: StorageAbstractor.loadFromStorage("playerName")
+
             };
-            console.log(data);
-            CommunicationAbstractor.fetchFromServer('/games', 'POST', data)
-                .then((res) => {
-                    console.log('API response:', res);
+
+
+            CommunicationAbstractor.fetchFromServer('/games', 'POST', lobbyData)
+                .then(responseData => {
+
+                    addDataToLocalStorage(responseData, formData);
                     window.location.href = '../html/lobby.html';
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.error('Error:', error);
                     alert('Failed to connect to server.');
                 });
@@ -38,4 +48,4 @@ function handleGameConfigFormSubmit() {
 handleLeaveButtonClick();
 handleGameConfigFormSubmit();
 
-export {handleLeaveButtonClick, handleGameConfigFormSubmit};
+export { handleLeaveButtonClick, handleGameConfigFormSubmit };
