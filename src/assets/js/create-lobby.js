@@ -1,5 +1,6 @@
 import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js";
 import * as CommunicationAbstractor from "./data-connector/api-communication-abstractor.js";
+import { addDataToLocalStorage } from "./util.js";
 
 function handleLeaveButtonClick() {
     const leaveButton = document.querySelector('#leaveButton');
@@ -8,12 +9,6 @@ function handleLeaveButtonClick() {
             window.location.href = '../index.html';
         });
     }
-}
-
-function addDataToLocalStorage(data, formData) {
-
-    StorageAbstractor.saveToStorage("gameId", data.gameId);
-    StorageAbstractor.saveToStorage("gameName", formData.get('gameName'));
 }
 
 function handleGameConfigFormSubmit() {

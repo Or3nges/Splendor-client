@@ -4,13 +4,9 @@ import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js
 const TIMEOUT = 5000;
 
 document.querySelector("#backButton").addEventListener("click", () => {
-    StorageAbstractor.deleteMultipleKeysFromStorage("gameId", "gameName", "numberOfPlayers");
     window.location.href = "../index.html";
 });
 
-document.querySelector("#startGameButton").addEventListener("click", () => {
-    window.location.href = "../gamescreen.html";
-});
 
 function fetchGameLobby() {
     const gameId = StorageAbstractor.loadFromStorage("gameId");
@@ -52,7 +48,8 @@ function displayLobby(game) {
     });
     main.appendChild($lobby);
 
-    if (countOfPlayers === game.numberOfPlayers) {
+
+    if (game.players.length === game.numberOfPlayers) {
         window.location.href = "../gamescreen.html";
     }
 }
