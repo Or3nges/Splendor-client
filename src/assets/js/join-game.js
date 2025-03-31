@@ -1,5 +1,7 @@
 import * as CommunicationAbstractor from "./data-connector/api-communication-abstractor.js";
 import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js";
+import { addDataToLocalStorage } from "./util.js";
+import {deleteFromStorage} from "./data-connector/local-storage-abstractor.js";
 
 function init() {
     document.querySelector("#search").value = "";
@@ -16,38 +18,33 @@ document.querySelector("#back-button").addEventListener("click", () => {
     window.location.href = "../index.html";
 });
 
+function getApiPath(filter) {
+    if (filter === "Started") {
+        return "/games?started=true";
+    } else if (filter === "Waiting") {
+        return "/games?started=false";
+    } else {
+        return "/games";
+    }
+}
+
 function loadGames() {
     const filter = document.querySelector("#filter").value;
-    let apiPath;
-
-    if (filter === "Started") {
-        apiPath = "/games?started=true";
-    } else if (filter === "Waiting") {
-        apiPath = "/games?started=false";
-    } else {
-        apiPath = "/games";
-    }
-
+    const apiPath = getApiPath(filter);
     CommunicationAbstractor.fetchFromServer(apiPath, 'GET')
         .then(data => {
             document.querySelector('main').innerHTML = "";
-            const games = data.games;
-
-            games.forEach(game => {
-                addGame(game);
-            });
+            data.games.forEach(game => addGame(game));
             document.querySelectorAll("main ul").forEach(item => item.addEventListener('click', chooseGame));
             searchGames();
-
             const selectedGameID = localStorage.getItem("selectedGame");
             if (selectedGameID) {
-                const $selectedGame = document.querySelector(`#game-${selectedGameID}`);
+                const $selectedGame = document.querySelector('#game-${selectedGameID}');
                 if ($selectedGame) {
                     $selectedGame.classList.add("selected");
                     document.querySelector("#join-game").classList.add("active");
                 }
             }
-
             setTimeout(loadGames, WAITFORTIMEOUT);
         });
 }
@@ -104,9 +101,9 @@ function joinGame() {
     }
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}/players/${playerName}`, "POST")
         .then(data => {
-            StorageAbstractor.saveToStorage("playerToken", data.playerToken);
-            StorageAbstractor.saveToStorage("gameId", data.gameId);
+            addDataToLocalStorage(data);
             window.location.href = "lobby.html";
+            deleteFromStorage("selectedGame");
         })
         .catch(error => {
             alert(error.cause);

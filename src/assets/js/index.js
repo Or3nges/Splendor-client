@@ -5,8 +5,11 @@ import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js
 function init() {
   testConnection();
   loadName();
+  deleteStorage();
 }
-
+function deleteStorage(){
+  StorageAbstractor.deleteMultipleKeysFromStorage( "gameId", "gameName", "numberOfPlayers", "selectedGame", "playerToken");
+}
 function testConnection(){
   CommunicationAbstractor.fetchFromServer('/games', 'GET').then(gems => console.log(gems)).catch(ErrorHandler.handleError);
 }
@@ -45,7 +48,7 @@ document.querySelector("#join").addEventListener("click", () => {
 });
 
 document.querySelector("#rules").addEventListener("click", () => {
-  window.open('assets/rulebook/splendor-rulebook.pdf');
+  window.location.href = "html/rules.html";
 });
 
 init();
