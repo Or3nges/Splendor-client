@@ -13,8 +13,9 @@ body {
 
 /* DEVELOPMENT CARDS */
 
-h2 {
+#gameScreen h2 {
     text-align: center;
+    -webkit-text-stroke: 0.01rem black;
 }
 
 #cardType {
@@ -30,6 +31,27 @@ h2 {
  height: 2rem;
  top: 0.5%;
  right: 0.5%
+}
+
+#tokens {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    background-color: goldenrod;
+    padding: 0.5rem;
+    border: 0.3rem solid darkgoldenrod;
+    border-radius: 1rem;
+    margin-left: 70%;
+    top: 9%;
+}
+
+#tokens ul li{
+    cursor: pointer;
+    text-align: center;
+    align-content: center;
+    font-size: 3rem;
+    width: 4rem;
+    height: 4rem;
 }
 
 #cost li {
@@ -68,6 +90,10 @@ h2 {
  display: inline-block;
  width: fit-content;
  height: auto;
+}
+
+#market {
+    width: 100%;
 }
 
 #gameScreen {
