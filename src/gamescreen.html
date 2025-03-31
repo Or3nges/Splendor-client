@@ -103,13 +103,13 @@
     <button class="return">Return</button>
 </section>
 
-    <section id="prestige-popup" class="popup, hidden">
+    <section id="prestige-popup" class="popup hidden">
         <h1 class="close">X</h1>
         <p id=current-winner></p>
         <p>has reached the desired amount of prestige points</p>
     </section>
 
-    <section id="buy-cards-option" class="popup, hidden">
+    <section id="buy-cards-option" class="popup hidden">
         <h1 class="close">X</h1>
         <p>Do u want to buy this card with cards or tokens?</p>
         <ul>
@@ -122,12 +122,12 @@
         </ul>
     </section>
 
-    <section id="buy-or-reserve-option" class="popup, hidden">
+    <section id="buy-or-reserve-option" class="popup ">
         <h1 class="close">X</h1>
         <p>Do u want to buy or reserve this card?</p>
         <ul>
             <li>
-                <button>buy</button>
+                <button id="buy-button">buy</button>
             </li>
             <li>
                 <button>reserve</button>
@@ -135,7 +135,18 @@
         </ul>
     </section>
 
-
+    <section id="leave-game-option" class="popup hidden">
+        <h1 class="close">X</h1>
+        <p>Are u sure u want to give up and leave the game?</p>
+        <ul>
+            <li>
+                <button>yes</button>
+            </li>
+            <li>
+                <button>no</button>
+            </li>
+        </ul>
+    </section>
 
 </body>
 </html>
