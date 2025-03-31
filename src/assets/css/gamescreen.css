@@ -93,13 +93,16 @@ figure p {
 
 #allNobles {
     position: fixed;
-    top: 4%;
+    top: 2%;
     left: 80%;
+}
+
+#noblesContainer {
     display: grid;
     grid-gap: 0.5rem;
     grid-template-columns: repeat(2, 1fr);
-    width: 20%;
-    height: 50%;
+    width: 100%;
+    height: auto;
 }
 
 #allNobles figure {
@@ -110,8 +113,7 @@ figure p {
 }
 
 #allNobles ul {
-bottom: 22.5%;
-    left: 9%;
+    bottom: 8%;
 }
 
 #allNobles img {
