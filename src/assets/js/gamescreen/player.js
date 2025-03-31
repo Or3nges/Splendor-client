@@ -37,8 +37,8 @@ function displayPlayer(player, currentPlayer) {
     $prestigePoints.insertAdjacentHTML('beforeend', `${player.totalPrestigePoints}`);
 
         if (player.name === currentPlayer) {
-            playerClone.classList.remove("unhighlight");
-            playerClone.classList.add("highlight");
+            playerClone.classList.remove("unhighlighted");
+            playerClone.classList.add("highlighted");
         }
 
     createLiPreperation(player, $tokenOl, $cardOl);
