@@ -18,7 +18,6 @@ function fetchUnclaimedNobles() {
 
 
 function renderNoble(noble) {
-    console.log(noble)
     const $template = document.querySelector("template#noble-template");
     const $section = document.querySelector("div#noblesContainer")
     const playerClone = $template.content.firstElementChild.cloneNode(true);
