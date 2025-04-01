@@ -12,7 +12,7 @@ function init() {
     loadGames();
 }
 
-const WAITFORTIMEOUT = 5000;
+const WAIT_FOR_TIMEOUT = 5000;
 
 document.querySelector("#back-button").addEventListener("click", () => {
     window.location.href = "../index.html";
@@ -45,7 +45,7 @@ function loadGames() {
                     document.querySelector("#join-game").classList.add("active");
                 }
             }
-            setTimeout(loadGames, WAITFORTIMEOUT);
+            setTimeout(loadGames, WAIT_FOR_TIMEOUT);
         });
 }
 
