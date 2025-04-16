@@ -23,7 +23,7 @@ function renderPlayers(game){
     for (const player of players) {
         if (player.name !== StorageAbstractor.loadFromStorage("playerName")) {
             displayPlayer(player, game.currentPlayer);
-        } else { displaySelf(player, game.currentPlayer) }
+        } else { displaySelf(player, game.currentPlayer); }
     }
 }
 
@@ -85,7 +85,7 @@ function createLiElement(amount, id){
 }
 
 function getGemId(gem, type){
-   const selectedGem = allGems.filter(objectGem => objectGem.name === gem)
+   const selectedGem = allGems.filter(objectGem => objectGem.name === gem);
     if (type === "token"){
         return selectedGem[0].tokenId;
     }else {
