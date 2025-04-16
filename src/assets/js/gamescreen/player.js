@@ -56,6 +56,7 @@ function displaySelf(player, currentPlayer) {
 
     createLiPreperation(player, $tokenOl, $cardOl);
     changeNameAndPrestige(player, currentPlayer);
+    checkPrestigePoints(player);
     $owntokendiv.innerHTML = "";
     $owntokendiv.insertAdjacentHTML('beforeend', playerClone.outerHTML);
 }
@@ -69,6 +70,14 @@ function changeNameAndPrestige(player, currentPlayer){
     }
     $article.querySelector("h1").innerText = player.name;
     $prestigePoints.innerText = player.totalPrestigePoints;
+}
+
+function checkPrestigePoints(player) {
+    const MAX_PRESTIGE_POINTS = 15;
+    if (player.totalPrestigePoints >= MAX_PRESTIGE_POINTS) {
+        alert(`${player.name} has reached ${MAX_PRESTIGE_POINTS} prestige points!`);
+        window.location.href = "../html/endscreen.html";
+    }
 }
 
 function createLiElement(amount, id){
