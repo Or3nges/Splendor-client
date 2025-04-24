@@ -92,6 +92,13 @@ body {
  height: auto;
 }
 
+.selected {
+    background-color: #005f7300;
+    box-shadow: 0 0 15px 10px blueviolet;
+    border-radius: 0.5rem;
+    transition: all 0.5s ease;
+}
+
 #market {
     width: 100%;
 }
