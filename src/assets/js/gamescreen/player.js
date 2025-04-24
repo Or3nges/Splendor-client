@@ -4,6 +4,7 @@ import {allGems} from "../Objects/gems.js";
 
 let gems;
 const $playerList = document.querySelector("div.players ul");
+const $playerTemplate = document.querySelector("template#player-template");
 
 function fetchGems(){
     CommunicationAbstractor.fetchFromServer(`/gems`, 'GET')
@@ -19,7 +20,7 @@ function fetchPlayers(){
 
 function renderPlayers(game){
     const players = game.players;
-    $playerList.innerHTML ="";
+    $playerList.innerHTML = "";
     for (const player of players) {
         if (player.name !== StorageAbstractor.loadFromStorage("playerName")) {
             displayPlayer(player, game.currentPlayer);
@@ -28,9 +29,7 @@ function renderPlayers(game){
 }
 
 function displayPlayer(player, currentPlayer) {
-    const $playerTemplate = document.querySelector("template#player-template");
     const playerClone = $playerTemplate.content.firstElementChild.cloneNode(true);
-
     const $prestigePoints = playerClone.querySelector("p.prestige");
     const $tokenOl = playerClone.querySelector("ol.tokens");
     const $cardOl = playerClone.querySelector("ol.cards");
@@ -42,7 +41,6 @@ function displayPlayer(player, currentPlayer) {
         }
 
     createLiPreperation(player, $tokenOl, $cardOl);
-
     playerClone.querySelector("h2").innerText = player.name;
     $playerList.insertAdjacentHTML('beforeend', playerClone.outerHTML);
 }
