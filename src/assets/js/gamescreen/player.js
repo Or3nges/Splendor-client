@@ -23,7 +23,7 @@ function renderPlayers(game){
     for (const player of players) {
         if (player.name !== StorageAbstractor.loadFromStorage("playerName")) {
             displayPlayer(player, game.currentPlayer);
-        } else { displaySelf(player, game.currentPlayer) }
+        } else { displaySelf(player, game.currentPlayer); }
     }
 }
 
@@ -56,6 +56,7 @@ function displaySelf(player, currentPlayer) {
 
     createLiPreperation(player, $tokenOl, $cardOl);
     changeNameAndPrestige(player, currentPlayer);
+    checkPrestigePoints(player);
     $owntokendiv.innerHTML = "";
     $owntokendiv.insertAdjacentHTML('beforeend', playerClone.outerHTML);
 }
@@ -71,12 +72,20 @@ function changeNameAndPrestige(player, currentPlayer){
     $prestigePoints.innerText = player.totalPrestigePoints;
 }
 
+function checkPrestigePoints(player) {
+    const MAX_PRESTIGE_POINTS = 15;
+    if (player.totalPrestigePoints >= MAX_PRESTIGE_POINTS) {
+        alert(`${player.name} has reached ${MAX_PRESTIGE_POINTS} prestige points!`);
+        window.location.href = "../html/endscreen.html";
+    }
+}
+
 function createLiElement(amount, id){
     return `<li class="${id}">${amount}</li>`;
 }
 
 function getGemId(gem, type){
-   const selectedGem = allGems.filter(objectGem => objectGem.name === gem)
+   const selectedGem = allGems.filter(objectGem => objectGem.name === gem);
     if (type === "token"){
         return selectedGem[0].tokenId;
     }else {
