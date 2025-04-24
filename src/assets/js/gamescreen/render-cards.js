@@ -33,7 +33,14 @@ function displayDevelopmentCards(card) {
     Object.keys(card.cost).forEach(bonusCost => {$cost.insertAdjacentHTML('beforeend', createLiElement(card.cost[bonusCost], findGemByName(bonusCost).tokenId))});
     $template.querySelector('#cardType').setAttribute('src', findCard(card.level).img);
     $template.querySelector('#cardToken').setAttribute('src', findGemByName(card.bonus).img);
-    $gamescreenArticle.insertAdjacentHTML('beforeend', $template.outerHTML);
+    $template.addEventListener('click', () => {
+        document.querySelectorAll("#gameScreen div figure").forEach(cardElement => {
+            cardElement.classList.remove("selected");
+        });
+        $template.classList.add("selected");
+    });
+
+    $gamescreenArticle.appendChild($template);
 }
 
 export {renderDevelopmentCards};
