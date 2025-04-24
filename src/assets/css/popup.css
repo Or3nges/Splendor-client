@@ -1,4 +1,5 @@
 .popup {
+    display: none;
     background-position: center;
     text-align: center;
     width: 45%;
