@@ -24,8 +24,9 @@
 }
 
 .highlighted {
-    border-color: blueviolet;
-
+    border-color: darkgoldenrod;
+    box-shadow: 0 0 0.9375rem 0.625rem blueviolet;
+    border-radius: 0.5rem;
 }
 
 .container {
