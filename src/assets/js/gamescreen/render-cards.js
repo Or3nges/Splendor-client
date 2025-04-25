@@ -35,29 +35,57 @@ async function isCurrentPlayerTurn() {
     return playerName === currentPlayer;
 }
 
+async function handleReserveButtonClick($template, $popup) {
+    const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+
+    const game = await CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET');
+    const currentPlayer = game.players.find(player => player.name === playerName);
+
+    if (currentPlayer.reserve.length >= 3) {
+        console.log("You cannot reserve more than 3 cards.");
+        return;
+    }
+
+    const cardId = $template.getAttribute('data-card-id');
+    currentPlayer.reserve.push(cardId);
+    currentPlayer.tokens.gold = (currentPlayer.tokens.gold || 0) + 1;
+
+    console.log("Updated Tokens:", currentPlayer.tokens);
+    console.log("Reserved Cards:", currentPlayer.reserve);
+
+    await CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'POST', game);
+    $popup.style.display = "none";
+}
+
+function closePopup($popup) {
+    document.querySelectorAll("#gameScreen div figure").forEach(cardElement => {
+        cardElement.classList.remove("selected");
+    });
+    $popup.style.display = "none";
+}
+
+function selectCard($template, $popup) {
+    document.querySelectorAll("#gameScreen div figure").forEach(cardElement => {
+        cardElement.classList.remove("selected");
+    });
+    $template.classList.add("selected");
+    $popup.style.display = "block";
+}
+
 function addCardEventListeners($template, $popup) {
     $template.addEventListener('click', async () => {
         const isTurn = await isCurrentPlayerTurn();
+        if (!isTurn) return;
 
-        if (!isTurn) {
-            console.log("It's not your turn!");
-            return;
-        }
+        selectCard($template, $popup);
 
-        document.querySelectorAll("#gameScreen div figure").forEach(cardElement => {
-            cardElement.classList.remove("selected");
-        });
-        $template.classList.add("selected");
-        $popup.style.display = "block";
+        const $reserveButton = $popup.querySelector('#reserve-button');
+        $reserveButton.addEventListener('click', () => handleReserveButtonClick($template, $popup));
     });
 
     const $closeButton = $popup.querySelector('.close');
-    $closeButton.addEventListener('click', () => {
-        document.querySelectorAll("#gameScreen div figure").forEach(cardElement => {
-            cardElement.classList.remove("selected");
-        });
-        $popup.style.display = "none";
-    });
+    $closeButton.addEventListener('click', () => closePopup($popup));
 }
 
 function populateCardDetails($template, card) {
