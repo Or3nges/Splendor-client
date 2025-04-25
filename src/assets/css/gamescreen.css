@@ -90,6 +90,7 @@ body {
  display: inline-block;
  width: fit-content;
  height: auto;
+ cursor: pointer;
 }
 
 .selected {
