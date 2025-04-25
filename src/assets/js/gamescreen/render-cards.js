@@ -1,5 +1,7 @@
 import {allDevelopmentCards} from "../Objects/developmentCards.js";
 import {createLiElement, fetchGame, findGemByName} from "../util.js";
+import * as StorageAbstractor from "../data-connector/local-storage-abstractor.js";
+import * as CommunicationAbstractor from "../data-connector/api-communication-abstractor.js";
 
 function renderDevelopmentCards(gameId) {
     fetchGame(gameId)
@@ -20,8 +22,28 @@ function findCard(tier) {
     return allDevelopmentCards.filter(tierLevel => tier === tierLevel.level)[0];
 }
 
+async function isCurrentPlayerTurn() {
+    const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
+    const currentPlayer = await CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
+        .then(game => game.currentPlayer)
+        .catch(error => {
+            console.error("Error fetching current player:", error);
+            return null;
+        });
+
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+    return playerName === currentPlayer;
+}
+
 function addCardEventListeners($template, $popup) {
     $template.addEventListener('click', async () => {
+        const isTurn = await isCurrentPlayerTurn();
+
+        if (!isTurn) {
+            console.log("It's not your turn!");
+            return;
+        }
+
         document.querySelectorAll("#gameScreen div figure").forEach(cardElement => {
             cardElement.classList.remove("selected");
         });
