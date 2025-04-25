@@ -132,6 +132,10 @@ function addCardEventListeners($template, $popup) {
 
 function populateCardDetails($template, card) {
     const $cost = $template.querySelector('#cost');
+    const p = `<p>${card.prestigePoints}</p>`;
+    if (card.prestigePoints !== 0) {
+        $template.insertAdjacentHTML('beforeend', p);
+    }
     Object.keys(card.cost).forEach(bonusCost => {
         $cost.insertAdjacentHTML('beforeend', createLiElement(card.cost[bonusCost], findGemByName(bonusCost).tokenId));
     });
