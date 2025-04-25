@@ -35,27 +35,69 @@ async function isCurrentPlayerTurn() {
     return playerName === currentPlayer;
 }
 
-async function handleReserveButtonClick($template, $popup) {
+function handleReserveButtonClick($template, $popup) {
     const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
     const playerName = StorageAbstractor.loadFromStorage("playerName");
 
-    const game = await CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET');
-    const currentPlayer = game.players.find(player => player.name === playerName);
+    fetchGameData(gameId, playerName)
+        .then(({ game, currentPlayer }) => {
+            if (currentPlayer.reserve.length >= 3) {
+                console.log("You cannot reserve more than 3 cards.");
+                return;
+            }
 
-    if (currentPlayer.reserve.length >= 3) {
-        console.log("You cannot reserve more than 3 cards.");
-        return;
+            const cardLevel = $template.getAttribute('data-card-level');
+            const cardName = $template.getAttribute('data-card-name');
+
+            const reservedCard = findReservedCard(game, cardLevel, cardName);
+            if (!reservedCard) return;
+
+            return sendReserveRequest(gameId, playerName, reservedCard);
+        })
+        .then(() => {
+            $popup.style.display = "none";
+        })
+        .catch(error => {
+            console.error("Error handling reserve button click:", error);
+        });
+}
+
+function fetchGameData(gameId, playerName) {
+    return CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
+        .then(game => {
+            const currentPlayer = game.players.find(player => player.name === playerName);
+            return { game, currentPlayer };
+        });
+}
+
+function findReservedCard(game, cardLevel, cardName) {
+    const tier = game.market.find(tier => tier.level === parseInt(cardLevel));
+    if (!tier) {
+        console.error("Level not found for card level:", cardLevel);
+        console.log("Available market tiers:", game.market);
+        return null;
     }
 
-    const cardId = $template.getAttribute('data-card-id');
-    currentPlayer.reserve.push(cardId);
-    currentPlayer.tokens.gold = (currentPlayer.tokens.gold || 0) + 1;
+    const reservedCard = tier.visibleCards.find(card => card.name === cardName);
+    if (!reservedCard) {
+        console.error("Card not found in the market for name:", cardName);
+        return null;
+    }
 
-    console.log("Updated Tokens:", currentPlayer.tokens);
-    console.log("Reserved Cards:", currentPlayer.reserve);
+    console.log("Reserved card:", reservedCard);
+    return reservedCard;
+}
 
-    await CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'POST', game);
-    $popup.style.display = "none";
+function sendReserveRequest(gameId, playerName, reservedCard) {
+    const requestBody = {
+        development: { level: reservedCard.level },
+    };
+
+    return CommunicationAbstractor.fetchFromServer(
+        `/games/${gameId}/players/${playerName}/reserve`,
+        'POST',
+        requestBody
+    );
 }
 
 function closePopup($popup) {
@@ -99,9 +141,10 @@ function populateCardDetails($template, card) {
 
 function createCardTemplate(card) {
     const $template = document.querySelector('#developmentCard').content.firstElementChild.cloneNode(true);
-    if (card.prestigePoints !== 0) {
-        $template.insertAdjacentHTML('beforeend', `<p>${card.prestigePoints}</p>`);
-    }
+
+    $template.setAttribute('data-card-level', card.level);
+    $template.setAttribute('data-card-name', card.name);
+
     return $template;
 }
 
