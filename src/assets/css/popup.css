@@ -16,6 +16,11 @@
     z-index: 1;
 }
 
+.popup p{
+    font-size: 2.75rem;
+    margin-bottom: 1rem;
+}
+
 #current-winner{
     padding-bottom: 2rem;
     font-weight: bold;

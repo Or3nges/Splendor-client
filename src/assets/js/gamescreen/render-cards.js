@@ -68,27 +68,27 @@ async function isCurrentPlayerTurn() {
 function handleReserveButtonClick($template, $popup) {
     const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
     const playerName = StorageAbstractor.loadFromStorage("playerName");
-
     fetchGameData(gameId, playerName)
         .then(({ game, currentPlayer }) => {
             if (currentPlayer.reserve.length >= 3) {
-                console.log("You cannot reserve more than 3 cards.");
+                alert("You cannot reserve more than 3 cards.");
                 return;
             }
-
             const cardLevel = $template.getAttribute('data-card-level');
             const cardName = $template.getAttribute('data-card-name');
-
+            const isAlreadyReserved = currentPlayer.reserve.some(
+                reservedCard => reservedCard.name === cardName && reservedCard.level === parseInt(cardLevel)
+            );
+            if (isAlreadyReserved) {
+                alert("You can't reserve a reserved card.");
+                return;
+            }
             const reservedCard = findReservedCard(game, cardLevel, cardName);
             if (!reservedCard) return;
-
             return sendReserveRequest(gameId, playerName, reservedCard);
         })
-        .then(() => {
-            $popup.style.display = "none";
-        })
-        .catch(error => {
-            console.error("Error handling reserve button click:", error);
+        .then(() => {$popup.style.display = "none";})
+        .catch(error => {console.error("Error handling reserve button click:", error);
         });
 }
 
@@ -131,7 +131,7 @@ function sendReserveRequest(gameId, playerName, reservedCard) {
 }
 
 function closePopup($popup) {
-    document.querySelectorAll("#gameScreen div figure").forEach(cardElement => {
+    document.querySelectorAll("#gameScreen div figure, #reservedCards figure").forEach(cardElement => {
         cardElement.classList.remove("selected");
     });
     $popup.style.display = "none";
