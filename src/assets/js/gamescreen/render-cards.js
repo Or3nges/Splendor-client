@@ -3,12 +3,42 @@ import {createLiElement, fetchGame, findGemByName} from "../util.js";
 import * as StorageAbstractor from "../data-connector/local-storage-abstractor.js";
 import * as CommunicationAbstractor from "../data-connector/api-communication-abstractor.js";
 
+function createCardTemplate(card) {
+    const $template = document.querySelector('#developmentCard').content.firstElementChild.cloneNode(true);
+
+    $template.setAttribute('data-card-level', card.level);
+    $template.setAttribute('data-card-name', card.name);
+
+    return $template;
+}
+
+function renderReservedCards(reservedCards) {
+    const $reservedCardsContainer = document.querySelector("#reservedCardsContainer");
+    $reservedCardsContainer.innerHTML = "";
+
+    reservedCards.forEach(card => {
+        const $template = createCardTemplate(card);
+        populateCardDetails($template, card);
+
+        // Add event listeners for reserved cards
+        const $popup = document.querySelector("#buy-or-reserve-option");
+        addCardEventListeners($template, $popup);
+
+        $reservedCardsContainer.appendChild($template);
+    });
+}
+
 function renderDevelopmentCards(gameId) {
     fetchGame(gameId)
         .then(data => {
             data.market.forEach(tier => {
                 handleTier(tier);
             });
+
+            const currentPlayer = data.players.find(player => player.name === StorageAbstractor.loadFromStorage("playerName"));
+            if (currentPlayer) {
+                renderReservedCards(currentPlayer.reserve);
+            }
         });
 }
 
@@ -141,15 +171,6 @@ function populateCardDetails($template, card) {
     });
     $template.querySelector('#cardType').setAttribute('src', findCard(card.level).img);
     $template.querySelector('#cardToken').setAttribute('src', findGemByName(card.bonus).img);
-}
-
-function createCardTemplate(card) {
-    const $template = document.querySelector('#developmentCard').content.firstElementChild.cloneNode(true);
-
-    $template.setAttribute('data-card-level', card.level);
-    $template.setAttribute('data-card-name', card.name);
-
-    return $template;
 }
 
 function displayDevelopmentCards(card) {

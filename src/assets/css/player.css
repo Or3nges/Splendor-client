@@ -11,7 +11,7 @@
 .players ul .player {
     margin-bottom: 0.5rem;
     margin-top: 0.5rem;
-    margin-left: 0.1rem;
+    margin-left: 0.5rem;
     background-color: goldenrod;
     padding-left: 0.1rem;
     border-style: solid;
@@ -95,12 +95,13 @@ ol.tokens li {
 }
 
 #bottomrow {
-    width: 95%;
+    width: 100%;
     position: fixed;
     bottom: 0;
     justify-content: left;
-    margin-left: 0.1rem;
-    margin-bottom: 0.1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 #tokenSelection h1{
