@@ -20,7 +20,6 @@ function renderReservedCards(reservedCards) {
         const $template = createCardTemplate(card);
         populateCardDetails($template, card);
 
-        // Add event listeners for reserved cards
         const $popup = document.querySelector("#buy-or-reserve-option");
         addCardEventListeners($template, $popup);
 
