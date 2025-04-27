@@ -216,3 +216,22 @@ function confirmTokenSelection() {
             });
     });
 }
+
+function validatePlayerAndGameInfo(gameId, playerName) {
+    if (!gameId || !playerName) {
+        alert("Error: Missing game or player information. Cannot take tokens.");
+        updateTakeTokensButton();
+        return false;
+    }
+    return true;
+}
+
+function handleTurnValidation(stillMyTurn, gameId) {
+    if (!stillMyTurn) {
+        alert("It's no longer your turn!");
+        retrieveTokens(gameId);
+        fetchPlayers();
+        return false;
+    }
+    return true;
+}
