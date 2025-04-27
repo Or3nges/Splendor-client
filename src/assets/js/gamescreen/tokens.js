@@ -1,24 +1,20 @@
-import {fetchGame, createLiElement, findGemByName, findGemByTokenId} from "../util.js";
+import {fetchGame} from "../util.js";
 
-function retrieveTokens(gameId) {
-    fetchGame(gameId)
-        .then(data => {displayTokens(data.unclaimedTokens)});
+import {loadFromStorage} from "../data-connector/local-storage-abstractor.js";
+
+
+function isCurrentPlayerTurn() {
+    const gameId = loadFromStorage("gameId");
+    const playerName = loadFromStorage("playerName");
+
+    if (!gameId || !playerName) return Promise.resolve(false);
+
+    return fetchGame(gameId)
+        .then(game => {
+            return game.currentPlayer === playerName;
+        })
+        .catch(() => {
+            return false;
+        });
 }
 
-function displayTokens(tokens) {
-    const $tokensContainer = document.querySelector("#tokens ul");
-    Object.keys(tokens).forEach(tokenName => {
-        $tokensContainer.insertAdjacentHTML("beforeend", createLiElement(tokens[tokenName], findGemByName(tokenName).tokenId, tokenName))});
-
-    document.querySelectorAll("#tokens ul li").forEach(li => {
-        const tokenName = findGemByTokenId(li.classList.value).name;
-        li.setAttribute("data-token", tokenName);
-        li.addEventListener("click", selectToken);
-    })
-}
-
-function selectToken(e) {
-    console.log(e.target);
-}
-
-export {retrieveTokens};
