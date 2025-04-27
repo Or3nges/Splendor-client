@@ -35,3 +35,17 @@ function createCardTemplate(card) {
     return figure;
 }
 
+function renderReservedCards(reservedCards) {
+    const $reservedCardsContainer = document.querySelector("#reservedCardsContainer");
+    $reservedCardsContainer.innerHTML = "";
+
+    reservedCards.forEach(card => {
+        const $template = createCardTemplate(card);
+        populateCardDetails($template, card);
+
+        const $popup = document.querySelector("#buy-or-reserve-option");
+        addCardEventListeners($template, $popup);
+
+        $reservedCardsContainer.appendChild($template);
+    });
+}
