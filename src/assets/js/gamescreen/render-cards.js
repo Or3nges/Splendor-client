@@ -82,3 +82,22 @@ function handleTier(tier) {
         displayDevelopmentCards(card);
     });
 }
+
+function findCard(tier) {
+    return allDevelopmentCards.filter(tierLevel => tier === tierLevel.level)[0];
+}
+
+function isCurrentPlayerTurn() {
+    const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+
+    return CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
+        .then(game => {
+            const currentPlayer = game.currentPlayer;
+            return playerName === currentPlayer;
+        })
+        .catch(error => {
+            console.error("Error fetching current player:", error);
+            return false;
+        });
+}
