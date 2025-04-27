@@ -193,3 +193,26 @@ function updateTakeTokensButton() {
 
     button.disabled = !isValidSelection;
 }
+
+function confirmTokenSelection() {
+    const button = document.querySelector('#confirm-token-selection');
+    button.disabled = true;
+
+    const gameId = loadFromStorage("gameId");
+    const playerName = loadFromStorage("playerName");
+
+    if (!validatePlayerAndGameInfo(gameId, playerName)) return;
+
+    isCurrentPlayerTurn().then(stillMyTurn => {
+        if (!handleTurnValidation(stillMyTurn, gameId)) return;
+
+        getCurrentPlayerTokens(gameId, playerName)
+            .then(currentTokens => {
+                if (!handleCurrentTokensValidation(currentTokens)) return;
+
+                if (!validateTokenLimits(currentTokens, selectedTokens)) return;
+
+                sendSelectedTokens(gameId, playerName);
+            });
+    });
+}
