@@ -49,3 +49,36 @@ function renderReservedCards(reservedCards) {
         $reservedCardsContainer.appendChild($template);
     });
 }
+
+function renderDevelopmentCards(gameId) {
+    const $cardsContainer = document.querySelector("#cardsContainer");
+    if (!$cardsContainer) {
+        console.error("#cardsContainer not found!");
+        return;
+    }
+
+    while ($cardsContainer.firstChild) {
+        $cardsContainer.removeChild($cardsContainer.firstChild);
+    }
+
+    fetchGame(gameId)
+        .then(data => {
+            data.market.forEach(tier => {
+                handleTier(tier);
+            });
+
+            const currentPlayer = data.players.find(player => player.name === StorageAbstractor.loadFromStorage("playerName"));
+            if (currentPlayer) {
+                renderReservedCards(currentPlayer.reserve);
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching game data:", error);
+        });
+}
+
+function handleTier(tier) {
+    tier.visibleCards.forEach(card => {
+        displayDevelopmentCards(card);
+    });
+}
