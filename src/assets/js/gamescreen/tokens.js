@@ -170,3 +170,26 @@ function updateSelectionVisuals() {
         }
     });
 }
+
+function updateTakeTokensButton() {
+    const button = document.querySelector('#confirm-token-selection');
+    if (!button) return;
+
+    if (!isMyTurn) {
+        button.disabled = true;
+        return;
+    }
+
+    const totalSelectedCount = Object.values(selectedTokens).reduce((sum, count) => sum + count, 0);
+    const differentSelectedTypes = Object.keys(selectedTokens).length;
+
+    let isValidSelection = false;
+    if (totalSelectedCount === TOKEN_SELECTED_MAX && differentSelectedTypes === TOKEN_SELECTED_MAX ) {
+        isValidSelection = true;
+    }
+    if (totalSelectedCount === 2 && differentSelectedTypes === 1 && Object.values(selectedTokens)[0] === 2){
+        isValidSelection = true;
+    }
+
+    button.disabled = !isValidSelection;
+}
