@@ -256,3 +256,22 @@ function validateTokenLimits(currentTokens, selectedTokensParam) {
     }
     return true;
 }
+
+function sendSelectedTokens(gameId, playerName) {
+    const requestBody = { take: selectedTokens };
+    fetchFromServer(`/games/${gameId}/players/${playerName}/tokens`, "PATCH", requestBody)
+        .then(() => {
+            retrieveTokens(gameId);
+            fetchPlayers();
+        })
+        .catch(() => {
+            alert('Could not take tokens. Please try again.');
+            updateTakeTokensButton();
+        });
+}
+
+document.querySelector('#confirm-token-selection').addEventListener('click', confirmTokenSelection);
+
+
+
+export { retrieveTokens, updateTakeTokensButton };
