@@ -155,3 +155,18 @@ function getTotalSelectedCount() {
 function getDifferentSelectedTypes() {
     return Object.keys(selectedTokens).length;
 }
+
+function updateSelectionVisuals() {
+    document.querySelectorAll("#tokens ul li").forEach(li => {
+        const tokenName = li.getAttribute("data-token");
+        const count = selectedTokens[tokenName] || 0;
+
+        if (count > 0) {
+            li.classList.add('selected');
+            li.setAttribute('data-selection-count', count);
+        } else {
+            li.classList.remove('selected');
+            li.removeAttribute('data-selection-count');
+        }
+    });
+}
