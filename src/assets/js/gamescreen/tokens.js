@@ -235,3 +235,24 @@ function handleTurnValidation(stillMyTurn, gameId) {
     }
     return true;
 }
+
+function handleCurrentTokensValidation(currentTokens) {
+    if (currentTokens === null) {
+        alert("Error checking player tokens. Cannot proceed.");
+        updateTakeTokensButton();
+        return false;
+    }
+    return true;
+}
+
+function validateTokenLimits(currentTokens, selectedTokensParam) {
+    const currentTotal = Object.values(currentTokens).reduce((sum, count) => sum + count, 0);
+    const selectedTotal = Object.values(selectedTokensParam).reduce((sum, count) => sum + count, 0);
+
+    if (currentTotal + selectedTotal > 10) {
+        alert(`Cannot take tokens. You have ${currentTotal} and taking ${selectedTotal} would exceed the limit of 10.`);
+        updateTakeTokensButton();
+        return false;
+    }
+    return true;
+}
