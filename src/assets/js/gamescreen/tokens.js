@@ -23,8 +23,18 @@ function isCurrentPlayerTurn() {
 }
 
 function getCurrentPlayerTokens(gameId, playerName) {
+    if (!gameId || !playerName) {
+        return null;
+    }
+
     return fetchGame(gameId)
-        .then(gameData => gameData.players.find(p => p.name === playerName)?.tokens ?? null) // moet optional chaining gebruiken anders geeft sonarqube een issue
+        .then(gameData => {
+            const player = gameData.players.find(p => p.name === playerName);
+            if (player && player.tokens !== undefined) {
+                return player.tokens;
+            }
+            return null;
+        })
         .catch(() => null);
 }
 
@@ -64,8 +74,10 @@ function renderTokensList(tokens, container) {
 function setupTokenClickEvents() {
     document.querySelectorAll("#tokens ul li").forEach(li => {
         const tokenId = li.classList[0];
-        const tokenName = findGemByTokenId(tokenId)?.name;
-        if (tokenName) {
+        const token = findGemByTokenId(tokenId);
+
+        if (token && token.name) {
+            const tokenName = token.name;
             li.setAttribute("data-token", tokenName);
 
             if (isMyTurn && tokenName !== "Gold") {
