@@ -1,4 +1,5 @@
 .popup {
+    display: none;
     background-position: center;
     text-align: center;
     width: 45%;
@@ -13,6 +14,11 @@
     transform: translate(-50%, -50%);
     color: black;
     z-index: 1;
+}
+
+.popup p{
+    font-size: 2.75rem;
+    margin-bottom: 1rem;
 }
 
 #current-winner{

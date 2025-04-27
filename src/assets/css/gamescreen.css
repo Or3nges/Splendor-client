@@ -1,11 +1,11 @@
 @font-face {
- font-family: 'MyCustomFont';
- src: url('../fonts/Itim-Regular.ttf') format('truetype');
+    font-family: 'MyCustomFont';
+    src: url('../fonts/Itim-Regular.ttf') format('truetype');
 }
 
 body {
- background-image: url("../../media/gamebackground.png");
- background-size: 100%;
+    background-image: url("../../media/gamebackground.png");
+    background-size: 100%;
     font-family: MyCustomFont, sans-serif;
     color: white;
     -webkit-text-stroke: .045rem black;
@@ -13,24 +13,23 @@ body {
 
 /* DEVELOPMENT CARDS */
 
-#gameScreen h2 {
-    text-align: center;
-    -webkit-text-stroke: 0.01rem black;
+#gameScreen {
+    padding-top: 1rem;
 }
 
 #cardType {
- height: auto;
- display: block;
- width: 7rem;
- margin-bottom: 0;
+    height: auto;
+    display: block;
+    width: 7rem;
+    margin-bottom: 0;
 }
 
 #cardToken {
- position: absolute;
- width: 2rem;
- height: 2rem;
- top: 0.5%;
- right: 0.5%
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    top: 0.5%;
+    right: 0.5%
 }
 
 #tokens {
@@ -45,7 +44,7 @@ body {
     top: 9%;
 }
 
-#tokens ul li{
+#tokens ul li {
     cursor: pointer;
     text-align: center;
     align-content: center;
@@ -65,7 +64,7 @@ body {
     height: 1.5rem;
 }
 
-#cost{
+#cost {
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
@@ -78,18 +77,25 @@ body {
 }
 
 #cardsContainer {
- display: grid;
- grid-gap: 1rem;
- grid-template-columns: repeat(4, 1fr);
- grid-template-rows: repeat(3, 1fr);
- width: 35%;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 35%;
 }
 
 #gameScreen figure {
- position: relative;
- display: inline-block;
- width: fit-content;
- height: auto;
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+    height: auto;
+    cursor: pointer;
+}
+
+.selected {
+    box-shadow: 0 0 0.9375rem 0.625rem blueviolet;
+    border-radius: 0.5rem;
+    transition: all 0.5s ease;
 }
 
 #market {
@@ -122,7 +128,8 @@ figure p {
     top: 2%;
     left: 80%;
 }
-#allNobles h2{
+
+#allNobles h2 {
     text-align: center;
     -webkit-text-stroke: 0.01rem black;
 }
@@ -156,6 +163,36 @@ figure p {
     display: none;
 }
 
+#reservedCards {
+    position: fixed;
+    right: 1.25rem;
+    width: fit-content;
+    background-color: goldenrod;
+    border: 0.3rem solid darkgoldenrod;
+    border-radius: 0.5rem;
+    padding: 0.625rem;
+}
+
+#reservedCards h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#reservedCardsContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+    grid-gap: 0.5rem;
+}
+
+#reservedCards figure {
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+    height: auto;
+}
+
 /* GEMS */
 
 .rubycard {
@@ -174,7 +211,7 @@ figure p {
 }
 
 .amethystcard {
-    background: url("../images/amethystrcard.png")no-repeat;
+    background: url("../images/amethystrcard.png") no-repeat;
     background-size: contain;
 }
 
@@ -206,7 +243,7 @@ figure p {
 }
 
 .amethystCard {
-    background: url("../images/amethystrcard.png")no-repeat;
+    background: url("../images/amethystrcard.png") no-repeat;
     background-size: contain;
 }
 
@@ -236,7 +273,7 @@ figure p {
 }
 
 .amethystToken {
-    background: url("../images/amethysttoken.png")no-repeat;
+    background: url("../images/amethysttoken.png") no-repeat;
     background-size: contain;
 }
 
@@ -253,27 +290,27 @@ figure p {
 /* End screen
 -----------------------------------------*/
 .end-screen {
- margin-left: auto;
- margin-right: auto;
- margin-top: 2.2rem;
- background-color: rgba(255,255,255,0.6);
- box-shadow: 0 0.25rem 0.5rem 0 rgb(0 0 0 / 20%), 0 0.375rem 1.25rem 0 rgb(0 0 0 / 19%);
- border-radius: 0.75rem;
- display: flex;
- flex-direction: column;
- align-items: center;
- padding: 3rem;
- text-align: center;
- width: 30rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2.2rem;
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0.25rem 0.5rem 0 rgb(0 0 0 / 20%), 0 0.375rem 1.25rem 0 rgb(0 0 0 / 19%);
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem;
+    text-align: center;
+    width: 30rem;
 }
 
 .game-over {
- background-color: #D2A741;
- border-radius: 0.75rem;
- padding: 2rem;
- color: white;
- font-size: 5rem;
- margin-bottom: 2rem;
+    background-color: #D2A741;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    color: white;
+    font-size: 5rem;
+    margin-bottom: 2rem;
 }
 
 img {
@@ -283,31 +320,31 @@ img {
 }
 
 .score-board {
- margin-bottom: 1rem;
- padding: 1rem;
- color: white;
- font-size: 2.5rem;
- background-color: #D2A741;
- border-radius: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    color: white;
+    font-size: 2.5rem;
+    background-color: #D2A741;
+    border-radius: 0.75rem;
 }
 
 button {
- background-color: #D2A741;
- border-radius: 0.75rem;
- color: white;
- padding: 1rem;
- border: none;
- margin-bottom: 1rem;
+    background-color: #D2A741;
+    border-radius: 0.75rem;
+    color: white;
+    padding: 1rem;
+    border: none;
+    margin-bottom: 1rem;
 }
 
 .play-again {
- font-size: 4rem;
+    font-size: 4rem;
 }
 
 .return {
- font-size: 1.5rem;
+    font-size: 1.5rem;
 }
 
 button:hover {
- background-color: #5a5a5a;
+    background-color: #5a5a5a;
 }

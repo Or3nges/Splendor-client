@@ -18,55 +18,54 @@
 
 </head>
 <body>
-    <div class="players">
-        <ul>
-            <template id="player-template">
-                <li class="player unhighlighted">
-                    <div class="container">
-                        <h2>name</h2>
-                        <p class="prestige"></p>
-                    </div>
-                    <ol class="container cards">
-                    </ol>
-                    <ol class="container tokens">
-                    </ol>
-                </li>
-            </template>
-        </ul>
+<div class="players">
+    <ul>
+        <template id="player-template">
+            <li class="player unhighlighted">
+                <div class="container">
+                    <h2>name</h2>
+                    <p class="prestige"></p>
+                </div>
+                <ol class="container cards">
+                </ol>
+                <ol class="container tokens">
+                </ol>
+            </li>
+        </template>
+    </ul>
+</div>
+
+<section id="gameScreen">
+    <div id="cardsContainer">
+        <template id="developmentCard">
+            <figure>
+                <img id="cardType" src="" alt="alt" title="title">
+                <img id="cardToken" src="" alt="alt" title="title">
+                <ul id="cost">
+                </ul>
+            </figure>
+        </template>
     </div>
+</section>
 
-    <section id="gameScreen">
-        <h2>Current Development Cards</h2>
-        <div id="cardsContainer">
-            <template id="developmentCard">
-                <figure>
-                    <img id="cardType" src="" alt="alt" title="title">
-                    <img id="cardToken" src="" alt="alt" title="title">
-                    <ul id="cost">
-                    </ul>
-                </figure>
-            </template>
-        </div>
-    </section>
+<div id="tokens">
+    <ul>
+    </ul>
+</div>
 
-    <div id="tokens">
-        <ul>
+
+<template id="noble-template">
+    <figure>
+        <img id="noble" src="" alt="alt" title="title">
+        <ul id="cost">
         </ul>
-    </div>
+    </figure>
+</template>
 
-
-    <template id="noble-template">
-        <figure>
-            <img id="noble" src="" alt="alt" title="title">
-            <ul id="cost">
-            </ul>
-        </figure>
-    </template>
-
-    <section id="allNobles">
-        <h2>unclaimed nobles</h2>
-        <div id="noblesContainer"></div>
-    </section>
+<section id="allNobles">
+    <h2>unclaimed nobles</h2>
+    <div id="noblesContainer"></div>
+</section>
 <div class="container" id="bottomrow">
     <article class="you unhighlighted" id="tokenSelection">
         <div class="container">
@@ -80,15 +79,21 @@
         </div>
     </article>
     <template id="self-template">
-    <figure>
-        <ol class="container cards"></ol>
-        <ol class="container tokens"></ol>
-    </figure>
-</template>
+        <figure>
+            <ol class="container cards"></ol>
+            <ol class="container tokens"></ol>
+        </figure>
+    </template>
     <div class="you" id="yourcards">
 
     </div>
-    <button id="endTurn">end turn</button>
+    <div id="reservedCards">
+        <header>
+            <h2>Reserved Cards</h2>
+        </header>
+        <div id="reservedCardsContainer">
+        </div>
+    </div>
 </div>
 
 <section class="hidden">
@@ -109,50 +114,50 @@
     <button class="return">Return</button>
 </section>
 
-    <section id="prestige-popup" class="popup hidden">
-        <h1 class="close">X</h1>
-        <p id=current-winner></p>
-        <p>has reached the desired amount of prestige points</p>
-    </section>
+<section id="prestige-popup" class="popup hidden">
+    <h1 class="close">X</h1>
+    <p id=current-winner></p>
+    <p>has reached the desired amount of prestige points</p>
+</section>
 
-    <section id="buy-cards-option" class="popup hidden">
-        <h1 class="close">X</h1>
-        <p>Do u want to buy this card with cards or tokens?</p>
-        <ul>
-            <li>
-                <button>cards</button>
-            </li>
-            <li>
-                <button>tokens</button>
-            </li>
-        </ul>
-    </section>
+<section id="buy-cards-option" class="popup hidden">
+    <h1 class="close">X</h1>
+    <p>Do you want to buy this card with cards or tokens?</p>
+    <ul>
+        <li>
+            <button>cards</button>
+        </li>
+        <li>
+            <button>tokens</button>
+        </li>
+    </ul>
+</section>
 
-    <section id="buy-or-reserve-option" class="popup ">
-        <h1 class="close">X</h1>
-        <p>Do u want to buy or reserve this card?</p>
-        <ul>
-            <li>
-                <button id="buy-button">buy</button>
-            </li>
-            <li>
-                <button>reserve</button>
-            </li>
-        </ul>
-    </section>
+<section id="buy-or-reserve-option" class="popup ">
+    <h1 class="close">X</h1>
+    <p>Do you want to buy or reserve this card?</p>
+    <ul>
+        <li>
+            <button id="buy-button">buy</button>
+        </li>
+        <li>
+            <button id="reserve-button">reserve</button>
+        </li>
+    </ul>
+</section>
 
-    <section id="leave-game-option" class="popup hidden">
-        <h1 class="close">X</h1>
-        <p>Are u sure u want to give up and leave the game?</p>
-        <ul>
-            <li>
-                <button>yes</button>
-            </li>
-            <li>
-                <button>no</button>
-            </li>
-        </ul>
-    </section>
+<section id="leave-game-option" class="popup hidden">
+    <h1 class="close">X</h1>
+    <p>Are you sure u want to give up and leave the game?</p>
+    <ul>
+        <li>
+            <button>yes</button>
+        </li>
+        <li>
+            <button>no</button>
+        </li>
+    </ul>
+</section>
 
 </body>
 </html>
