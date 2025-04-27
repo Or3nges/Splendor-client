@@ -4,8 +4,7 @@ import * as StorageAbstractor from "../data-connector/local-storage-abstractor.j
 import * as CommunicationAbstractor from "../data-connector/api-communication-abstractor.js";
 
 function createCardTemplate(card) {
-    const $template = document.querySelector('#developmentCard').content.firstElementChild.cloneNode(true);
-
+    const $template = document.querySelector('#developmentCard').content.children[0].cloneNode(true);
     $template.setAttribute('data-card-level', card.level);
     $template.setAttribute('data-card-name', card.name);
 
@@ -51,17 +50,19 @@ function findCard(tier) {
     return allDevelopmentCards.filter(tierLevel => tier === tierLevel.level)[0];
 }
 
-async function isCurrentPlayerTurn() {
+function isCurrentPlayerTurn() {
     const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
-    const currentPlayer = await CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
-        .then(game => game.currentPlayer)
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+
+    return CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
+        .then(game => {
+            const currentPlayer = game.currentPlayer;
+            return playerName === currentPlayer;
+        })
         .catch(error => {
             console.error("Error fetching current player:", error);
-            return null;
+            return false;
         });
-
-    const playerName = StorageAbstractor.loadFromStorage("playerName");
-    return playerName === currentPlayer;
 }
 
 function handleReserveButtonClick($template, $popup) {
@@ -145,14 +146,19 @@ function selectCard($template, $popup) {
 }
 
 function addCardEventListeners($template, $popup) {
-    $template.addEventListener('click', async () => {
-        const isTurn = await isCurrentPlayerTurn();
-        if (!isTurn) return;
+    $template.addEventListener('click', () => {
+        isCurrentPlayerTurn()
+            .then(isTurn => {
+                if (!isTurn) return;
 
-        selectCard($template, $popup);
+                selectCard($template, $popup);
 
-        const $reserveButton = $popup.querySelector('#reserve-button');
-        $reserveButton.addEventListener('click', () => handleReserveButtonClick($template, $popup));
+                const $reserveButton = $popup.querySelector('#reserve-button');
+                $reserveButton.addEventListener('click', () => handleReserveButtonClick($template, $popup));
+            })
+            .catch(error => {
+                console.error("Error checking if it's the current player's turn:", error);
+            });
     });
 
     const $closeButton = $popup.querySelector('.close');
