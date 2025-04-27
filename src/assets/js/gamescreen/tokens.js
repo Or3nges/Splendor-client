@@ -147,3 +147,11 @@ function tryNormalSelection(tokenName, totalSelectedCount, differentSelectedType
     }
     return false;
 }
+
+function getTotalSelectedCount() {
+    return Object.values(selectedTokens).reduce((sum, count) => sum + count, 0);
+}
+
+function getDifferentSelectedTypes() {
+    return Object.keys(selectedTokens).length;
+}
