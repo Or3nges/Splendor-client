@@ -63,3 +63,20 @@ function renderTokensList(tokens, container) {
     });
 }
 
+function setupTokenClickEvents() {
+    document.querySelectorAll("#tokens ul li").forEach(li => {
+        const tokenId = li.classList[0];
+        const tokenName = findGemByTokenId(tokenId)?.name;
+        if (tokenName) {
+            li.setAttribute("data-token", tokenName);
+
+            if (isMyTurn && tokenName !== "Gold") {
+                li.addEventListener("click", selectToken);
+                li.classList.add('selectable-token');
+            } else {
+                li.classList.add('unselectable-token');
+            }
+        }
+    });
+}
+
