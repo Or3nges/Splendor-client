@@ -11,6 +11,6 @@ const allDevelopmentCards = [
     "level": 1,
     "img": "assets/images/CitizenDevelopmentCard.png"
 }
-]
+];
 
-export {allDevelopmentCards}
+export {allDevelopmentCards};
