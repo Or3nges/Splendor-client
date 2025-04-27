@@ -80,3 +80,45 @@ function setupTokenClickEvents() {
     });
 }
 
+function selectToken(e) {
+    const li = e.currentTarget;
+    const tokenName = li.getAttribute("data-token");
+
+    if (!isValidToken(tokenName)) return;
+
+    if (isTokenAlreadySelected(tokenName)) {
+        deselectToken(tokenName);
+    } else {
+        attemptTokenSelection(tokenName);
+    }
+
+
+}
+
+function isValidToken(tokenName) {
+    return tokenName && tokenName !== "Gold";
+}
+
+function isTokenAlreadySelected(tokenName) {
+    return selectedTokens[tokenName] > 0;
+}
+
+function deselectToken(tokenName) {
+    selectedTokens[tokenName]--;
+    if (selectedTokens[tokenName] === 0) {
+        delete selectedTokens[tokenName];
+    }
+}
+
+function attemptTokenSelection(tokenName) {
+    const initialCount = availableTokens[tokenName] || 0;
+    const totalSelectedCount = getTotalSelectedCount();
+    const differentSelectedTypes = getDifferentSelectedTypes();
+    const selectionMade = trySpecialSelection(tokenName, initialCount, totalSelectedCount, differentSelectedTypes)
+        || tryNormalSelection(tokenName, totalSelectedCount, differentSelectedTypes);
+
+    if (!selectionMade) {
+        console.log("Selection conditions not met.");
+    }
+}
+
