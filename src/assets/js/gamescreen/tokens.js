@@ -92,7 +92,8 @@ function selectToken(e) {
         attemptTokenSelection(tokenName);
     }
 
-
+    updateSelectionVisuals();
+    updateTakeTokensButton();
 }
 
 function isValidToken(tokenName) {
@@ -122,3 +123,27 @@ function attemptTokenSelection(tokenName) {
     }
 }
 
+function trySpecialSelection(tokenName, initialCount, totalSelectedCount, differentSelectedTypes) {
+    if (initialCount >= 4) {
+        if (totalSelectedCount === 0) {
+            selectedTokens[tokenName] = 2;
+            return true;
+        } else if (totalSelectedCount === 1 && differentSelectedTypes === 1 && selectedTokens[tokenName] === 1) {
+            selectedTokens[tokenName]++;
+            return true;
+        } else {
+            console.log("Picked 2 tokens.");
+        }
+    }
+    return false;
+}
+
+function tryNormalSelection(tokenName, totalSelectedCount, differentSelectedTypes) {
+    const hasTwoSame = Object.values(selectedTokens).some(count => count === 2);
+
+    if (!hasTwoSame && totalSelectedCount < TOKEN_SELECTED_MAX && differentSelectedTypes < TOKEN_SELECTED_MAX) {
+        selectedTokens[tokenName] = 1;
+        return true;
+    }
+    return false;
+}
