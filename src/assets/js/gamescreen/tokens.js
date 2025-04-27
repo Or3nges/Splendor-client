@@ -42,3 +42,24 @@ function retrieveTokens(gameId) {
         });
 }
 
+function displayTokens(tokens) {
+    const $tokensContainer = document.querySelector("#tokens ul");
+    $tokensContainer.innerHTML = '';
+
+    renderTokensList(tokens, $tokensContainer);
+    setupTokenClickEvents();
+
+    selectedTokens = {};
+    updateSelectionVisuals();
+    updateTakeTokensButton();
+}
+
+function renderTokensList(tokens, container) {
+    Object.keys(tokens).forEach(tokenName => {
+        const gem = findGemByName(tokenName);
+        if (gem) {
+            container.insertAdjacentHTML("beforeend", createLiElement(tokens[tokenName], gem.tokenId, tokenName));
+        }
+    });
+}
+
