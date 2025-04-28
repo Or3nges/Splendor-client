@@ -101,3 +101,45 @@ function isCurrentPlayerTurn() {
             return false;
         });
 }
+
+
+function handleReserveButtonClick($template, $popup) {
+    const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+
+    fetchGameData(gameId, playerName)
+        .then(gameData => processReserve(gameData, $template, $popup, gameId, playerName))
+        .catch(error => handleReserveError(error, $popup));
+}
+
+function processReserve(gameData, $template, $popup, gameId, playerName) {
+    const { game, currentPlayer } = gameData;
+
+    if (!canReserveCard(currentPlayer)) {
+        alert("You cannot reserve more than 3 cards.");
+        return null;
+    }
+
+    const cardDetails = getCardDetails($template);
+
+    if (isAlreadyReserved(currentPlayer, cardDetails)) {
+        alert("You have already reserved this card.");
+        return null;
+    }
+
+    const cardToReserve = findCardInMarket(game, cardDetails.level, cardDetails.name);
+    if (!cardToReserve) {
+        console.error("Card not found in market to reserve:", cardDetails.name);
+        alert("Error: Could not find the selected card in the market.");
+        return null;
+    }
+
+    const takeGold = determineGoldAvailability(currentPlayer, game);
+
+    return sendReserveRequest(gameId, playerName, cardToReserve, takeGold)
+        .then(result => handleReserveResult(result, $popup, gameId));
+}
+
+function canReserveCard(currentPlayer) {
+    return !(currentPlayer.reserve && currentPlayer.reserve.length >= MAX_RESERVED_CARDS);
+}
