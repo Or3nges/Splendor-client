@@ -102,7 +102,6 @@ function isCurrentPlayerTurn() {
         });
 }
 
-
 function handleReserveButtonClick($template, $popup) {
     const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
     const playerName = StorageAbstractor.loadFromStorage("playerName");
@@ -155,6 +154,7 @@ function isAlreadyReserved(currentPlayer, cardDetails) {
         reservedCard => reservedCard.name === cardDetails.name && reservedCard.level === cardDetails.level
     );
 }
+
 function determineGoldAvailability(currentPlayer, game) {
     const currentTokenCount = Object.values(currentPlayer.tokens || {}).reduce((sum, count) => sum + count, 0);
     const goldAvailable = game.unclaimedTokens && game.unclaimedTokens.Gold > 0;
@@ -175,6 +175,7 @@ function handleReserveError(error, $popup) {
     console.error("Error handling reserve button click:", error);
     closePopup($popup);
 }
+
 function calculatePayment(cardCost, playerTokens, playerBonuses) {
     const payment = {};
     const neededGold = calculateNeededGold(cardCost, playerTokens, playerBonuses, payment);
@@ -265,7 +266,7 @@ function processGameData(gameData, cardLevel, cardName, gameId, playerName) {
         return;
     }
 
-    const playerBonuses = calculateAllBonuses(currentPlayer, game);
+    const playerBonuses = calculateAllBonuses(currentPlayer);
     const payment = calculatePayment(cardToBuy.cost, currentPlayer.tokens, playerBonuses);
 
     if (!payment) {
@@ -303,12 +304,11 @@ function findCardToBuy(game, currentPlayer, cardLevel, cardName) {
     return cardToBuy;
 }
 
-function calculateAllBonuses(currentPlayer, game) {
+function calculateAllBonuses(currentPlayer) {
     let bonuses = {};
 
     if (currentPlayer.bonuses && typeof currentPlayer.bonuses === 'object') {
         bonuses = {...currentPlayer.bonuses};
-        console.log("Using pre-calculated bonuses:", bonuses);
         return bonuses;
     }
 
@@ -331,20 +331,6 @@ function calculateAllBonuses(currentPlayer, game) {
 
     return bonuses;
 }
-
-function calculatePlayerBonuses(developments) {
-    const playerBonuses = {};
-    const devArray = developments || [];
-
-    devArray.forEach(dev => {
-        if (dev && dev.bonus) {
-            playerBonuses[dev.bonus] = (playerBonuses[dev.bonus] || 0) + 1;
-        }
-    });
-
-    return playerBonuses;
-}
-
 function handleBuyResult(buyResult, $popup, gameId) {
     closePopup($popup);
     retrieveTokens(gameId);
