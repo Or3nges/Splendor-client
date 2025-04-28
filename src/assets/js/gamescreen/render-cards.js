@@ -418,3 +418,33 @@ function selectCard($template, $popup) {
     $template.classList.add("selected");
     $popup.style.display = "block";
 }
+
+function addCardEventListeners($template, $popup) {
+    const cardName = $template.dataset.cardName;
+
+    attachCardClickListener($template, cardName, $popup);
+    attachCloseButtonListener($popup);
+}
+
+function attachCardClickListener($template, cardName, $popup) {
+    if (!$template.cardClickHandlerAttached) {
+        $template.addEventListener('click', () => cardClickHandler($template, cardName, $popup));
+        $template.cardClickHandlerAttached = true;
+    }
+}
+
+function cardClickHandler($template, cardName, $popup) {
+    isCurrentPlayerTurn()
+        .then(isTurn => {
+            if (!isTurn) {
+                return;
+            }
+
+            removeOldEventListeners($popup);
+            selectCard($template, $popup);
+            attachReserveAndBuyHandlers($template, $popup);
+        })
+        .catch(error => {
+            console.error(`[${cardName}] Error checking player turn:`, error);
+        });
+}
