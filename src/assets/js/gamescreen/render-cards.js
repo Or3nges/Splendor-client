@@ -344,3 +344,35 @@ function calculatePlayerBonuses(developments) {
 
     return playerBonuses;
 }
+
+function handleBuyResult(buyResult, $popup, gameId) {
+    closePopup($popup);
+    retrieveTokens(gameId);
+    fetchPlayers();
+    renderDevelopmentCards(gameId);
+}
+
+function handleBuyError(error, $popup) {
+    console.error("Error buying card:", error);
+    alert(`Failed to buy card: ${error.message || error}`);
+    closePopup($popup);
+}
+
+
+function fetchGameData(gameId, playerName) {
+    return CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
+        .then(game => {
+            const currentPlayer = game.players.find(player => player.name === playerName);
+            if (!currentPlayer) {
+                console.error(`Could not find player with name ${playerName} in game data!`);
+            }
+            if (!currentPlayer.tokens) {
+                console.warn(`currentPlayer object for ${playerName} is missing the 'tokens' property!`, JSON.parse(JSON.stringify(currentPlayer)));
+            }
+            return { game, currentPlayer };
+        })
+        .catch(error => {
+            console.error(`Error fetching game data in fetchGameData for game ${gameId}:`, error);
+            throw error;
+        });
+}
