@@ -284,3 +284,63 @@ function processGameData(gameData, cardLevel, cardName, gameId, playerName) {
         requestBody
     );
 }
+
+function findCardToBuy(game, currentPlayer, cardLevel, cardName) {
+    let cardToBuy = findCardInMarket(game, cardLevel, cardName);
+    let boughtFromReserve = false;
+
+    if (!cardToBuy) {
+        cardToBuy = currentPlayer.reserve && currentPlayer.reserve.find(card => card.name === cardName && card.level === cardLevel);
+        if (cardToBuy) {
+            boughtFromReserve = true;
+        }
+    }
+
+    if (cardToBuy) {
+        cardToBuy.boughtFromReserve = boughtFromReserve;
+    }
+
+    return cardToBuy;
+}
+
+function calculateAllBonuses(currentPlayer, game) {
+    let bonuses = {};
+
+    if (currentPlayer.bonuses && typeof currentPlayer.bonuses === 'object') {
+        bonuses = {...currentPlayer.bonuses};
+        console.log("Using pre-calculated bonuses:", bonuses);
+        return bonuses;
+    }
+
+    if (currentPlayer.built && Array.isArray(currentPlayer.built)) {
+        currentPlayer.built.forEach(card => {
+            if (card && card.bonus) {
+                bonuses[card.bonus] = (bonuses[card.bonus] || 0) + 1;
+            }
+        });
+        console.log("Bonuses from built cards:", bonuses);
+    }
+
+    if (currentPlayer.developments && Array.isArray(currentPlayer.developments)) {
+        currentPlayer.developments.forEach(dev => {
+            if (dev && dev.bonus) {
+                bonuses[dev.bonus] = (bonuses[dev.bonus] || 0) + 1;
+            }
+        });
+    }
+
+    return bonuses;
+}
+
+function calculatePlayerBonuses(developments) {
+    const playerBonuses = {};
+    const devArray = developments || [];
+
+    devArray.forEach(dev => {
+        if (dev && dev.bonus) {
+            playerBonuses[dev.bonus] = (playerBonuses[dev.bonus] || 0) + 1;
+        }
+    });
+
+    return playerBonuses;
+}
