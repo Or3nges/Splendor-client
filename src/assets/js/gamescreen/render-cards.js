@@ -489,3 +489,29 @@ function closeHandler($popup) {
     closePopup($popup);
     removeOldEventListeners($popup);
 }
+
+function populateCardDetails($template, card) {
+    appendPrestigePoints($template, card);
+    populateCostDetails($template, card);
+    setCardTypeImage($template, card);
+    setCardTokenImage($template, card);
+}
+
+function appendPrestigePoints($template, card) {
+    if (card.prestigePoints !== 0) {
+        const p = document.createElement('p');
+        p.textContent = card.prestigePoints;
+        $template.appendChild(p);
+    }
+}
+
+function populateCostDetails($template, card) {
+    const $cost = $template.querySelector('#cost');
+    Object.keys(card.cost).forEach(bonusCost => {
+        const gemInfo = findGemByName(bonusCost);
+        if (gemInfo && gemInfo.tokenId) {
+            const costItem = createCostItem(gemInfo, card.cost[bonusCost]);
+            $cost.appendChild(costItem);
+        }
+    });
+}
