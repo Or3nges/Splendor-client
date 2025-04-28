@@ -542,3 +542,25 @@ function setCardTokenImage($template, card) {
         cardTokenImg.setAttribute('title', card.bonus + ' bonus');
     }
 }
+
+function displayDevelopmentCards(card) {
+    const $cardsContainer = document.querySelector("#cardsContainer");
+    if (!$cardsContainer) {
+        console.error("Cannot find cards container (#cardsContainer)!");
+        return;
+    }
+
+    const $popup = document.querySelector("#buy-or-reserve-option");
+    if (!$popup) {
+        console.error("Cannot find popup (#buy-or-reserve-option)!");
+        return;
+    }
+
+    const $template = createCardTemplate(card);
+    populateCardDetails($template, card);
+    addCardEventListeners($template, $popup);
+
+    $cardsContainer.appendChild($template);
+}
+
+export {renderDevelopmentCards};
