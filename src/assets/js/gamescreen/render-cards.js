@@ -175,3 +175,70 @@ function handleReserveError(error, $popup) {
     console.error("Error handling reserve button click:", error);
     closePopup($popup);
 }
+function calculatePayment(cardCost, playerTokens, playerBonuses) {
+    const payment = {};
+    const neededGold = calculateNeededGold(cardCost, playerTokens, playerBonuses, payment);
+
+    if (!validateGoldTokens(neededGold, playerTokens)) {
+        return null;
+    }
+
+    if (neededGold > 0) {
+        payment['Gold'] = neededGold;
+    }
+
+    if (!validatePaymentTokens(payment, playerTokens)) {
+        return null;
+    }
+
+    return payment;
+}
+
+function calculateNeededGold(cardCost, playerTokens, playerBonuses, payment) {
+    let neededGold = 0;
+
+    for (const gemType in cardCost) {
+        const cost = cardCost[gemType];
+        const bonus = playerBonuses[gemType] || 0;
+        let needed = cost - bonus;
+
+        if (needed > 0) {
+            const availableTokens = playerTokens[gemType] || 0;
+            const tokensToUse = Math.min(needed, availableTokens);
+
+            if (tokensToUse > 0) {
+                payment[gemType] = tokensToUse;
+                needed -= tokensToUse;
+            }
+
+            if (needed > 0) {
+                neededGold += needed;
+            }
+        }
+    }
+
+    return neededGold;
+}
+
+function validateGoldTokens(neededGold, playerTokens) {
+    const availableGold = playerTokens['Gold'] || 0;
+    if (neededGold > availableGold) {
+        console.error("Insufficient funds: Not enough gold tokens.");
+        alert("Insufficient funds to buy this card (not enough gold).");
+        return false;
+    }
+    return true;
+}
+
+function validatePaymentTokens(payment, playerTokens) {
+    for (const gemType in payment) {
+        const required = payment[gemType];
+        const available = playerTokens[gemType] || 0;
+        if (available < required) {
+            console.error(`Insufficient funds: Not enough ${gemType} tokens. Required: ${required}, Available: ${available}`);
+            alert(`Insufficient funds to buy this card (not enough ${gemType} tokens).`);
+            return false;
+        }
+    }
+    return true;
+}
