@@ -403,3 +403,18 @@ function sendReserveRequest(gameId, playerName, cardToReserve, takeGold) {
             throw error;
         });
 }
+
+function closePopup($popup) {
+    document.querySelectorAll("#gameScreen div figure, #reservedCards figure").forEach(cardElement => {
+        cardElement.classList.remove("selected");
+    });
+    $popup.style.display = "none";
+}
+
+function selectCard($template, $popup) {
+    document.querySelectorAll("#gameScreen div figure").forEach(cardElement => {
+        cardElement.classList.remove("selected");
+    });
+    $template.classList.add("selected");
+    $popup.style.display = "block";
+}
