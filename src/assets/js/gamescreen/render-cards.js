@@ -143,3 +143,15 @@ function processReserve(gameData, $template, $popup, gameId, playerName) {
 function canReserveCard(currentPlayer) {
     return !(currentPlayer.reserve && currentPlayer.reserve.length >= MAX_RESERVED_CARDS);
 }
+
+function getCardDetails($template) {
+    const cardLevel = parseInt($template.getAttribute('data-card-level'));
+    const cardName = $template.getAttribute('data-card-name');
+    return { level: cardLevel, name: cardName };
+}
+
+function isAlreadyReserved(currentPlayer, cardDetails) {
+    return currentPlayer.reserve && currentPlayer.reserve.some(
+        reservedCard => reservedCard.name === cardDetails.name && reservedCard.level === cardDetails.level
+    );
+}
