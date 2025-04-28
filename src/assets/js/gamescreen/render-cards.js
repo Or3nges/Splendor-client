@@ -515,3 +515,30 @@ function populateCostDetails($template, card) {
         }
     });
 }
+
+function createCostItem(gemInfo, costValue) {
+    const costItem = document.createElement('li');
+    costItem.className = gemInfo.tokenId;
+    costItem.textContent = costValue;
+    return costItem;
+}
+
+function setCardTypeImage($template, card) {
+    const cardTypeImg = $template.querySelector('#cardType');
+    const cardTypeInfo = findCard(card.level);
+    if (cardTypeImg && cardTypeInfo) {
+        cardTypeImg.setAttribute('src', cardTypeInfo.img);
+        cardTypeImg.setAttribute('alt', `Level ${card.level} card`);
+        cardTypeImg.setAttribute('title', `Level ${card.level} card`);
+    }
+}
+
+function setCardTokenImage($template, card) {
+    const cardTokenImg = $template.querySelector('#cardToken');
+    const bonusInfo = findGemByName(card.bonus);
+    if (cardTokenImg && bonusInfo) {
+        cardTokenImg.setAttribute('src', bonusInfo.img);
+        cardTokenImg.setAttribute('alt', card.bonus + ' bonus');
+        cardTokenImg.setAttribute('title', card.bonus + ' bonus');
+    }
+}
