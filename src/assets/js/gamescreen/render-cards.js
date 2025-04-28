@@ -155,3 +155,23 @@ function isAlreadyReserved(currentPlayer, cardDetails) {
         reservedCard => reservedCard.name === cardDetails.name && reservedCard.level === cardDetails.level
     );
 }
+function determineGoldAvailability(currentPlayer, game) {
+    const currentTokenCount = Object.values(currentPlayer.tokens || {}).reduce((sum, count) => sum + count, 0);
+    const goldAvailable = game.unclaimedTokens && game.unclaimedTokens.Gold > 0;
+    const canTakeGold = currentTokenCount < 10;
+    return goldAvailable && canTakeGold;
+}
+
+function handleReserveResult(result, $popup, gameId) {
+    if (result) {
+        closePopup($popup);
+        retrieveTokens(gameId);
+        renderDevelopmentCards(gameId);
+        fetchPlayers();
+    }
+}
+
+function handleReserveError(error, $popup) {
+    console.error("Error handling reserve button click:", error);
+    closePopup($popup);
+}
