@@ -242,3 +242,45 @@ function validatePaymentTokens(payment, playerTokens) {
     }
     return true;
 }
+
+function handleBuyButtonClick($template, $popup) {
+    const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+    const cardLevel = parseInt($template.getAttribute('data-card-level'));
+    const cardName = $template.getAttribute('data-card-name');
+
+    fetchGameData(gameId, playerName)
+        .then(gameData => processGameData(gameData, cardLevel, cardName, gameId, playerName))
+        .then(buyResult => handleBuyResult(buyResult, $popup, gameId))
+        .catch(error => handleBuyError(error, $popup));
+}
+
+function processGameData(gameData, cardLevel, cardName, gameId, playerName) {
+    const { game, currentPlayer } = gameData;
+    const cardToBuy = findCardToBuy(game, currentPlayer, cardLevel, cardName);
+
+    if (!cardToBuy) {
+        console.error("Card details not found for:", cardName, "Level:", cardLevel);
+        alert("Could not find the card details.");
+        return;
+    }
+
+    const playerBonuses = calculateAllBonuses(currentPlayer, game);
+    const payment = calculatePayment(cardToBuy.cost, currentPlayer.tokens, playerBonuses);
+
+    if (!payment) {
+        return;
+    }
+
+    const requestBody = {
+        development: { name: cardToBuy.name },
+        payment: payment,
+        fromReserve: cardToBuy.boughtFromReserve
+    };
+
+    return CommunicationAbstractor.fetchFromServer(
+        `/games/${gameId}/players/${playerName}/developments`,
+        'POST',
+        requestBody
+    );
+}
