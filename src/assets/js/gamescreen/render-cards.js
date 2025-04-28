@@ -376,3 +376,30 @@ function fetchGameData(gameId, playerName) {
             throw error;
         });
 }
+
+function findCardInMarket(game, cardLevel, cardName) {
+    const marketTier = game.market.find(tier => tier.level === cardLevel);
+    if (!marketTier) {
+        console.warn("Market tier not found for level:", cardLevel);
+        return null;
+    }
+    return marketTier.visibleCards.find(card => card.name === cardName);
+}
+
+function sendReserveRequest(gameId, playerName, cardToReserve, takeGold) {
+    const requestBody = {
+        development: { name: cardToReserve.name },
+        takeGold: takeGold
+    };
+
+    return CommunicationAbstractor.fetchFromServer(
+        `/games/${gameId}/players/${playerName}/reserve`,
+        'POST',
+        requestBody
+    )
+        .catch(error => {
+            console.error("Error in sendReserveRequest:", error);
+            alert(`API Error reserving card: ${error.message || error}`);
+            throw error;
+        });
+}
