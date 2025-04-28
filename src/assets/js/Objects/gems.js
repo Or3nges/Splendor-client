@@ -35,6 +35,6 @@ const allGems = [
         "cardId": "onyxCard",
         "tokenId": "onyxToken"
     },
-]
+];
 
-export {allGems}
+export {allGems};

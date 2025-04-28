@@ -19,17 +19,18 @@ function fetchUnclaimedNobles() {
 
 function renderNoble(noble) {
     const $template = document.querySelector("template#noble-template");
-    const $section = document.querySelector("div#noblesContainer")
+    const $section = document.querySelector("div#noblesContainer");
     const playerClone = $template.content.firstElementChild.cloneNode(true);
 
     const nobleCardImage = playerClone.querySelector("img");
     const nobleCostUl = playerClone.querySelector("ul");
-    const prestigeP = playerClone.querySelector("p")
+    const prestigeP = playerClone.querySelector("p");
 
     nobleCardImage.setAttribute("src", "assets/images/nobleDevelopmentCard.png");
     nobleCardImage.setAttribute("alt", `${noble.name}`);
     nobleCardImage.setAttribute("title", `${noble.name}`);
-    Object.keys(noble.neededBonuses).forEach(bonusCost => {nobleCostUl.insertAdjacentHTML('beforeend', createLiElement(noble.neededBonuses[bonusCost], findGem(bonusCost).cardId))});
+    Object.keys(noble.neededBonuses).forEach(bonusCost => {nobleCostUl.insertAdjacentHTML('beforeend', createLiElement(noble.neededBonuses[bonusCost], findGem(bonusCost).cardId));
+    });
     const p = `<p>${noble.prestigePoints}</p>`;
     if (noble.prestigePoints !== 0) {
         playerClone.insertAdjacentHTML('beforeend', p);
@@ -41,4 +42,4 @@ function findGem(gemName) {
     return allGems.filter(gem => gem.name === gemName)[0];
 }
 
-export {initNobles}
+export {initNobles};

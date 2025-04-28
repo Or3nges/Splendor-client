@@ -1,14 +1,38 @@
 import {allDevelopmentCards} from "../Objects/developmentCards.js";
-import {createLiElement, fetchGame, findGemByName} from "../util.js";
+import {fetchGame, findGemByName} from "../util.js";
 import * as StorageAbstractor from "../data-connector/local-storage-abstractor.js";
 import * as CommunicationAbstractor from "../data-connector/api-communication-abstractor.js";
+import { retrieveTokens } from "./tokens.js";
+import { fetchPlayers } from "./player.js";
+
+const MAX_RESERVED_CARDS = 3;
 
 function createCardTemplate(card) {
-    const $template = document.querySelector('#developmentCard').content.children[0].cloneNode(true);
-    $template.setAttribute('data-card-level', card.level);
-    $template.setAttribute('data-card-name', card.name);
+    const figure = document.createElement('figure');
 
-    return $template;
+    const cardTypeImg = document.createElement('img');
+    cardTypeImg.id = 'cardType';
+    cardTypeImg.src = '';
+    cardTypeImg.alt = 'Card type';
+    cardTypeImg.title = 'Card type';
+
+    const cardTokenImg = document.createElement('img');
+    cardTokenImg.id = 'cardToken';
+    cardTokenImg.src = '';
+    cardTokenImg.alt = 'Card token';
+    cardTokenImg.title = 'Card token';
+
+    const costUl = document.createElement('ul');
+    costUl.id = 'cost';
+
+    figure.appendChild(cardTypeImg);
+    figure.appendChild(cardTokenImg);
+    figure.appendChild(costUl);
+
+    figure.setAttribute('data-card-level', card.level);
+    figure.setAttribute('data-card-name', card.name);
+
+    return figure;
 }
 
 function renderReservedCards(reservedCards) {
@@ -27,6 +51,16 @@ function renderReservedCards(reservedCards) {
 }
 
 function renderDevelopmentCards(gameId) {
+    const $cardsContainer = document.querySelector("#cardsContainer");
+    if (!$cardsContainer) {
+        console.error("#cardsContainer not found!");
+        return;
+    }
+
+    while ($cardsContainer.firstChild) {
+        $cardsContainer.removeChild($cardsContainer.firstChild);
+    }
+
     fetchGame(gameId)
         .then(data => {
             data.market.forEach(tier => {
@@ -37,6 +71,9 @@ function renderDevelopmentCards(gameId) {
             if (currentPlayer) {
                 renderReservedCards(currentPlayer.reserve);
             }
+        })
+        .catch(error => {
+            console.error("Error fetching game data:", error);
         });
 }
 
@@ -68,66 +105,297 @@ function isCurrentPlayerTurn() {
 function handleReserveButtonClick($template, $popup) {
     const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
     const playerName = StorageAbstractor.loadFromStorage("playerName");
+
     fetchGameData(gameId, playerName)
-        .then(({ game, currentPlayer }) => {
-            if (currentPlayer.reserve.length >= 3) {
-                alert("You cannot reserve more than 3 cards.");
-                return;
-            }
-            const cardLevel = $template.getAttribute('data-card-level');
-            const cardName = $template.getAttribute('data-card-name');
-            const isAlreadyReserved = currentPlayer.reserve.some(
-                reservedCard => reservedCard.name === cardName && reservedCard.level === parseInt(cardLevel)
-            );
-            if (isAlreadyReserved) {
-                alert("You can't reserve a reserved card.");
-                return;
-            }
-            const reservedCard = findReservedCard(game, cardLevel, cardName);
-            if (!reservedCard) return;
-            return sendReserveRequest(gameId, playerName, reservedCard);
-        })
-        .then(() => {$popup.style.display = "none";})
-        .catch(error => {console.error("Error handling reserve button click:", error);
-        });
+        .then(gameData => processReserve(gameData, $template, $popup, gameId, playerName))
+        .catch(error => handleReserveError(error, $popup));
 }
+
+function processReserve(gameData, $template, $popup, gameId, playerName) {
+    const { game, currentPlayer } = gameData;
+
+    if (!canReserveCard(currentPlayer)) {
+        alert("You cannot reserve more than 3 cards.");
+        return null;
+    }
+
+    const cardDetails = getCardDetails($template);
+
+    if (isAlreadyReserved(currentPlayer, cardDetails)) {
+        alert("You have already reserved this card.");
+        return null;
+    }
+
+    const cardToReserve = findCardInMarket(game, cardDetails.level, cardDetails.name);
+    if (!cardToReserve) {
+        console.error("Card not found in market to reserve:", cardDetails.name);
+        alert("Error: Could not find the selected card in the market.");
+        return null;
+    }
+
+    const takeGold = determineGoldAvailability(currentPlayer, game);
+
+    return sendReserveRequest(gameId, playerName, cardToReserve, takeGold)
+        .then(result => handleReserveResult(result, $popup, gameId));
+}
+
+function canReserveCard(currentPlayer) {
+    return !(currentPlayer.reserve && currentPlayer.reserve.length >= MAX_RESERVED_CARDS);
+}
+
+function getCardDetails($template) {
+    const cardLevel = parseInt($template.getAttribute('data-card-level'));
+    const cardName = $template.getAttribute('data-card-name');
+    return { level: cardLevel, name: cardName };
+}
+
+function isAlreadyReserved(currentPlayer, cardDetails) {
+    if (!currentPlayer.reserve) {
+        return false;
+    }
+
+    for (const element of currentPlayer.reserve) {
+        const reservedCard = element;
+        if (reservedCard.name === cardDetails.name && reservedCard.level === cardDetails.level) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function determineGoldAvailability(currentPlayer, game) {
+    const currentTokenCount = Object.values(currentPlayer.tokens || {}).reduce((sum, count) => sum + count, 0);
+    const goldAvailable = game.unclaimedTokens && game.unclaimedTokens.Gold > 0;
+    const canTakeGold = currentTokenCount < 10;
+    return goldAvailable && canTakeGold;
+}
+
+function handleReserveResult(result, $popup, gameId) {
+    if (result) {
+        closePopup($popup);
+        retrieveTokens(gameId);
+        renderDevelopmentCards(gameId);
+        fetchPlayers();
+    }
+}
+
+function handleReserveError(error, $popup) {
+    console.error("Error handling reserve button click:", error);
+    closePopup($popup);
+}
+
+function calculatePayment(cardCost, playerTokens, playerBonuses) {
+    const payment = {};
+    const neededGold = calculateNeededGold(cardCost, playerTokens, playerBonuses, payment);
+
+    if (!validateGoldTokens(neededGold, playerTokens)) {
+        return null;
+    }
+
+    if (neededGold > 0) {
+        payment['Gold'] = neededGold;
+    }
+
+    if (!validatePaymentTokens(payment, playerTokens)) {
+        return null;
+    }
+
+    return payment;
+}
+
+function calculateNeededGold(cardCost, playerTokens, playerBonuses, payment) {
+    let neededGold = 0;
+
+    for (const gemType in cardCost) {
+        const cost = cardCost[gemType];
+        const bonus = playerBonuses[gemType] || 0;
+        let needed = cost - bonus;
+
+        if (needed > 0) {
+            const availableTokens = playerTokens[gemType] || 0;
+            const tokensToUse = Math.min(needed, availableTokens);
+
+            if (tokensToUse > 0) {
+                payment[gemType] = tokensToUse;
+                needed -= tokensToUse;
+            }
+
+            if (needed > 0) {
+                neededGold += needed;
+            }
+        }
+    }
+
+    return neededGold;
+}
+
+function validateGoldTokens(neededGold, playerTokens) {
+    const availableGold = playerTokens['Gold'] || 0;
+    if (neededGold > availableGold) {
+        console.error("Insufficient funds: Not enough gold tokens.");
+        alert("Insufficient funds to buy this card (not enough gold).");
+        return false;
+    }
+    return true;
+}
+
+function validatePaymentTokens(payment, playerTokens) {
+    for (const gemType in payment) {
+        const required = payment[gemType];
+        const available = playerTokens[gemType] || 0;
+        if (available < required) {
+            console.error(`Insufficient funds: Not enough ${gemType} tokens. Required: ${required}, Available: ${available}`);
+            alert(`Insufficient funds to buy this card (not enough ${gemType} tokens).`);
+            return false;
+        }
+    }
+    return true;
+}
+
+function handleBuyButtonClick($template, $popup) {
+    const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+    const cardLevel = parseInt($template.getAttribute('data-card-level'));
+    const cardName = $template.getAttribute('data-card-name');
+
+    fetchGameData(gameId, playerName)
+        .then(gameData => processGameData(gameData, cardLevel, cardName, gameId, playerName))
+        .then(buyResult => handleBuyResult(buyResult, $popup, gameId))
+        .catch(error => handleBuyError(error, $popup));
+}
+
+function processGameData(gameData, cardLevel, cardName, gameId, playerName) {
+    const { game, currentPlayer } = gameData;
+    const cardToBuy = findCardToBuy(game, currentPlayer, cardLevel, cardName);
+
+    if (!cardToBuy) {
+        console.error("Card details not found for:", cardName, "Level:", cardLevel);
+        alert("Could not find the card details.");
+        return;
+    }
+
+    const playerBonuses = calculateAllBonuses(currentPlayer);
+    const payment = calculatePayment(cardToBuy.cost, currentPlayer.tokens, playerBonuses);
+
+    if (!payment) {
+        return;
+    }
+
+    const requestBody = {
+        development: { name: cardToBuy.name },
+        payment: payment,
+        fromReserve: cardToBuy.boughtFromReserve
+    };
+
+    return CommunicationAbstractor.fetchFromServer(
+        `/games/${gameId}/players/${playerName}/developments`,
+        'POST',
+        requestBody
+    );
+}
+
+function findCardToBuy(game, currentPlayer, cardLevel, cardName) {
+    let cardToBuy = findCardInMarket(game, cardLevel, cardName);
+    let boughtFromReserve = false;
+
+    if (!cardToBuy) {
+        cardToBuy = currentPlayer.reserve && currentPlayer.reserve.find(card => card.name === cardName && card.level === cardLevel);
+        if (cardToBuy) {
+            boughtFromReserve = true;
+        }
+    }
+
+    if (cardToBuy) {
+        cardToBuy.boughtFromReserve = boughtFromReserve;
+    }
+
+    return cardToBuy;
+}
+
+function calculateAllBonuses(currentPlayer) {
+    let bonuses = {};
+
+    if (currentPlayer.bonuses && typeof currentPlayer.bonuses === 'object') {
+        bonuses = {...currentPlayer.bonuses};
+        return bonuses;
+    }
+
+    if (currentPlayer.built && Array.isArray(currentPlayer.built)) {
+        currentPlayer.built.forEach(card => {
+            if (card && card.bonus) {
+                bonuses[card.bonus] = (bonuses[card.bonus] || 0) + 1;
+            }
+        });
+        console.log("Bonuses from built cards:", bonuses);
+    }
+
+    if (currentPlayer.developments && Array.isArray(currentPlayer.developments)) {
+        currentPlayer.developments.forEach(dev => {
+            if (dev && dev.bonus) {
+                bonuses[dev.bonus] = (bonuses[dev.bonus] || 0) + 1;
+            }
+        });
+    }
+
+    return bonuses;
+}
+function handleBuyResult(buyResult, $popup, gameId) {
+    closePopup($popup);
+    retrieveTokens(gameId);
+    fetchPlayers();
+    renderDevelopmentCards(gameId);
+}
+
+function handleBuyError(error, $popup) {
+    console.error("Error buying card:", error);
+    alert(`Failed to buy card: ${error.message || error}`);
+    closePopup($popup);
+}
+
 
 function fetchGameData(gameId, playerName) {
     return CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
         .then(game => {
             const currentPlayer = game.players.find(player => player.name === playerName);
+            if (!currentPlayer) {
+                console.error(`Could not find player with name ${playerName} in game data!`);
+            }
+            if (!currentPlayer.tokens) {
+                console.warn(`currentPlayer object for ${playerName} is missing the 'tokens' property!`, JSON.parse(JSON.stringify(currentPlayer)));
+            }
             return { game, currentPlayer };
+        })
+        .catch(error => {
+            console.error(`Error fetching game data in fetchGameData for game ${gameId}:`, error);
+            throw error;
         });
 }
 
-function findReservedCard(game, cardLevel, cardName) {
-    const tier = game.market.find(tier => tier.level === parseInt(cardLevel));
-    if (!tier) {
-        console.error("Level not found for card level:", cardLevel);
-        console.log("Available market tiers:", game.market);
+function findCardInMarket(game, cardLevel, cardName) {
+    const marketTier = game.market.find(tier => tier.level === cardLevel);
+    if (!marketTier) {
+        console.warn("Market tier not found for level:", cardLevel);
         return null;
     }
-
-    const reservedCard = tier.visibleCards.find(card => card.name === cardName);
-    if (!reservedCard) {
-        console.error("Card not found in the market for name:", cardName);
-        return null;
-    }
-
-    console.log("Reserved card:", reservedCard);
-    return reservedCard;
+    return marketTier.visibleCards.find(card => card.name === cardName);
 }
 
-function sendReserveRequest(gameId, playerName, reservedCard) {
+function sendReserveRequest(gameId, playerName, cardToReserve, takeGold) {
     const requestBody = {
-        development: { level: reservedCard.level },
+        development: { name: cardToReserve.name },
+        takeGold: takeGold
     };
 
     return CommunicationAbstractor.fetchFromServer(
         `/games/${gameId}/players/${playerName}/reserve`,
         'POST',
         requestBody
-    );
+    )
+        .catch(error => {
+            console.error("Error in sendReserveRequest:", error);
+            alert(`API Error reserving card: ${error.message || error}`);
+            throw error;
+        });
 }
 
 function closePopup($popup) {
@@ -146,47 +414,147 @@ function selectCard($template, $popup) {
 }
 
 function addCardEventListeners($template, $popup) {
-    $template.addEventListener('click', () => {
-        isCurrentPlayerTurn()
-            .then(isTurn => {
-                if (!isTurn) return;
+    const cardName = $template.dataset.cardName;
 
-                selectCard($template, $popup);
+    attachCardClickListener($template, cardName, $popup);
+    attachCloseButtonListener($popup);
+}
 
-                const $reserveButton = $popup.querySelector('#reserve-button');
-                $reserveButton.addEventListener('click', () => handleReserveButtonClick($template, $popup));
-            })
-            .catch(error => {
-                console.error("Error checking if it's the current player's turn:", error);
-            });
-    });
+function attachCardClickListener($template, cardName, $popup) {
+    if (!$template.cardClickHandlerAttached) {
+        $template.addEventListener('click', () => cardClickHandler($template, cardName, $popup));
+        $template.cardClickHandlerAttached = true;
+    }
+}
 
+function cardClickHandler($template, cardName, $popup) {
+    isCurrentPlayerTurn()
+        .then(isTurn => {
+            if (!isTurn) {
+                return;
+            }
+
+            removeOldEventListeners($popup);
+            selectCard($template, $popup);
+            attachReserveAndBuyHandlers($template, $popup);
+        })
+        .catch(error => {
+            console.error(`[${cardName}] Error checking player turn:`, error);
+        });
+}
+
+function removeOldEventListeners($popup) {
+    const oldReserveButton = $popup.querySelector('#reserve-button');
+    const oldBuyButton = $popup.querySelector('#buy-button');
+
+    if (oldReserveButton && oldReserveButton.clickHandler) {
+        oldReserveButton.removeEventListener('click', oldReserveButton.clickHandler);
+        oldReserveButton.clickHandler = null;
+    }
+    if (oldBuyButton && oldBuyButton.clickHandler) {
+        oldBuyButton.removeEventListener('click', oldBuyButton.clickHandler);
+        oldBuyButton.clickHandler = null;
+    }
+}
+
+function attachReserveAndBuyHandlers($template, $popup) {
+    const $reserveButton = $popup.querySelector('#reserve-button');
+    const $buyButton = $popup.querySelector('#buy-button');
+
+    const reserveHandler = () => handleReserveButtonClick($template, $popup);
+    const buyHandler = () => handleBuyButtonClick($template, $popup);
+
+    $reserveButton.addEventListener('click', reserveHandler);
+    $buyButton.addEventListener('click', buyHandler);
+
+    $reserveButton.clickHandler = reserveHandler;
+    $buyButton.clickHandler = buyHandler;
+}
+
+function attachCloseButtonListener($popup) {
     const $closeButton = $popup.querySelector('.close');
-    $closeButton.addEventListener('click', () => closePopup($popup));
+    if (!$closeButton.closeHandlerAttached) {
+        $closeButton.addEventListener('click', () => closeHandler($popup));
+        $closeButton.closeHandlerAttached = true;
+    }
+}
+
+function closeHandler($popup) {
+    closePopup($popup);
+    removeOldEventListeners($popup);
 }
 
 function populateCardDetails($template, card) {
-    const $cost = $template.querySelector('#cost');
-    const p = `<p>${card.prestigePoints}</p>`;
+    appendPrestigePoints($template, card);
+    populateCostDetails($template, card);
+    setCardTypeImage($template, card);
+    setCardTokenImage($template, card);
+}
+
+function appendPrestigePoints($template, card) {
     if (card.prestigePoints !== 0) {
-        $template.insertAdjacentHTML('beforeend', p);
+        const p = document.createElement('p');
+        p.textContent = card.prestigePoints;
+        $template.appendChild(p);
     }
+}
+
+function populateCostDetails($template, card) {
+    const $cost = $template.querySelector('#cost');
     Object.keys(card.cost).forEach(bonusCost => {
-        $cost.insertAdjacentHTML('beforeend', createLiElement(card.cost[bonusCost], findGemByName(bonusCost).tokenId));
+        const gemInfo = findGemByName(bonusCost);
+        if (gemInfo && gemInfo.tokenId) {
+            const costItem = createCostItem(gemInfo, card.cost[bonusCost]);
+            $cost.appendChild(costItem);
+        }
     });
-    $template.querySelector('#cardType').setAttribute('src', findCard(card.level).img);
-    $template.querySelector('#cardToken').setAttribute('src', findGemByName(card.bonus).img);
+}
+
+function createCostItem(gemInfo, costValue) {
+    const costItem = document.createElement('li');
+    costItem.className = gemInfo.tokenId;
+    costItem.textContent = costValue;
+    return costItem;
+}
+
+function setCardTypeImage($template, card) {
+    const cardTypeImg = $template.querySelector('#cardType');
+    const cardTypeInfo = findCard(card.level);
+    if (cardTypeImg && cardTypeInfo) {
+        cardTypeImg.setAttribute('src', cardTypeInfo.img);
+        cardTypeImg.setAttribute('alt', `Level ${card.level} card`);
+        cardTypeImg.setAttribute('title', `Level ${card.level} card`);
+    }
+}
+
+function setCardTokenImage($template, card) {
+    const cardTokenImg = $template.querySelector('#cardToken');
+    const bonusInfo = findGemByName(card.bonus);
+    if (cardTokenImg && bonusInfo) {
+        cardTokenImg.setAttribute('src', bonusInfo.img);
+        cardTokenImg.setAttribute('alt', card.bonus + ' bonus');
+        cardTokenImg.setAttribute('title', card.bonus + ' bonus');
+    }
 }
 
 function displayDevelopmentCards(card) {
-    const $gamescreenArticle = document.querySelector("#gameScreen div");
+    const $cardsContainer = document.querySelector("#cardsContainer");
+    if (!$cardsContainer) {
+        console.error("Cannot find cards container (#cardsContainer)!");
+        return;
+    }
+
     const $popup = document.querySelector("#buy-or-reserve-option");
+    if (!$popup) {
+        console.error("Cannot find popup (#buy-or-reserve-option)!");
+        return;
+    }
 
     const $template = createCardTemplate(card);
     populateCardDetails($template, card);
     addCardEventListeners($template, $popup);
 
-    $gamescreenArticle.appendChild($template);
+    $cardsContainer.appendChild($template);
 }
 
 export {renderDevelopmentCards};
