@@ -150,9 +150,17 @@ function getCardDetails($template) {
 }
 
 function isAlreadyReserved(currentPlayer, cardDetails) {
-    return currentPlayer.reserve && currentPlayer.reserve.some(
-        reservedCard => reservedCard.name === cardDetails.name && reservedCard.level === cardDetails.level
-    );
+    if (!currentPlayer.reserve) {
+        return false;
+    }
+
+    for (const element of currentPlayer.reserve) {
+        const reservedCard = element;
+        if (reservedCard.name === cardDetails.name && reservedCard.level === cardDetails.level) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function determineGoldAvailability(currentPlayer, game) {

@@ -149,7 +149,14 @@ function trySpecialSelection(tokenName, initialCount, totalSelectedCount, differ
 }
 
 function tryNormalSelection(tokenName, totalSelectedCount, differentSelectedTypes) {
-    const hasTwoSame = Object.values(selectedTokens).some(count => count === 2);
+    let hasTwoSame = false;
+
+    for (const count of Object.values(selectedTokens)) {
+        if (count === 2) {
+            hasTwoSame = true;
+            break;
+        }
+    }
 
     if (!hasTwoSame && totalSelectedCount < TOKEN_SELECTED_MAX && differentSelectedTypes < TOKEN_SELECTED_MAX) {
         selectedTokens[tokenName] = 1;
