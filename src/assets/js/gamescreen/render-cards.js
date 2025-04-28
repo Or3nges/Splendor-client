@@ -448,3 +448,44 @@ function cardClickHandler($template, cardName, $popup) {
             console.error(`[${cardName}] Error checking player turn:`, error);
         });
 }
+
+function removeOldEventListeners($popup) {
+    const oldReserveButton = $popup.querySelector('#reserve-button');
+    const oldBuyButton = $popup.querySelector('#buy-button');
+
+    if (oldReserveButton && oldReserveButton.clickHandler) {
+        oldReserveButton.removeEventListener('click', oldReserveButton.clickHandler);
+        oldReserveButton.clickHandler = null;
+    }
+    if (oldBuyButton && oldBuyButton.clickHandler) {
+        oldBuyButton.removeEventListener('click', oldBuyButton.clickHandler);
+        oldBuyButton.clickHandler = null;
+    }
+}
+
+function attachReserveAndBuyHandlers($template, $popup) {
+    const $reserveButton = $popup.querySelector('#reserve-button');
+    const $buyButton = $popup.querySelector('#buy-button');
+
+    const reserveHandler = () => handleReserveButtonClick($template, $popup);
+    const buyHandler = () => handleBuyButtonClick($template, $popup);
+
+    $reserveButton.addEventListener('click', reserveHandler);
+    $buyButton.addEventListener('click', buyHandler);
+
+    $reserveButton.clickHandler = reserveHandler;
+    $buyButton.clickHandler = buyHandler;
+}
+
+function attachCloseButtonListener($popup) {
+    const $closeButton = $popup.querySelector('.close');
+    if (!$closeButton.closeHandlerAttached) {
+        $closeButton.addEventListener('click', () => closeHandler($popup));
+        $closeButton.closeHandlerAttached = true;
+    }
+}
+
+function closeHandler($popup) {
+    closePopup($popup);
+    removeOldEventListeners($popup);
+}
