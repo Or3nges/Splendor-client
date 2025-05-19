@@ -2,44 +2,55 @@ import * as StorageAbstractor from "../data-connector/local-storage-abstractor.j
 import * as CommunicationAbstractor from "../data-connector/api-communication-abstractor.js";
 import {createLiElement} from "../util.js";
 import {allGems} from "../Objects/gems.js";
+import { fetchPlayers } from "./player.js";
 
 const gameId = StorageAbstractor.loadFromStorage("gameId");
 
 function initNobles() {
-    fetchUnclaimedNobles();
+    fetchAndRenderUnclaimedNobles();
 }
 
-function fetchUnclaimedNobles() {
+function fetchAndRenderUnclaimedNobles() {
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}`)
-        .then(data => data.unclaimedNobles.forEach(noble => renderNoble(noble)));
+        .then(data => {
+            const unclaimedNobles = data.unclaimedNobles || [];
+            const $section = document.querySelector("div#noblesContainer");
+            $section.innerHTML = '';
+            unclaimedNobles.forEach(noble => renderNoble(noble, $section));
+        })
+        .catch(error => console.error("Error fetching game data for nobles:", error));
 }
 
-
-
-
-function renderNoble(noble) {
-    const $template = document.querySelector("template#noble-template");
-    const $section = document.querySelector("div#noblesContainer");
-    const playerClone = $template.content.firstElementChild.cloneNode(true);
-
-    const nobleCardImage = playerClone.querySelector("img");
-    const nobleCostUl = playerClone.querySelector("ul");
-    const prestigeP = playerClone.querySelector("p");
-
-    nobleCardImage.setAttribute("src", "assets/images/nobleDevelopmentCard.png");
-    nobleCardImage.setAttribute("alt", `${noble.name}`);
-    nobleCardImage.setAttribute("title", `${noble.name}`);
-    Object.keys(noble.neededBonuses).forEach(bonusCost => {nobleCostUl.insertAdjacentHTML('beforeend', createLiElement(noble.neededBonuses[bonusCost], findGem(bonusCost).cardId));
-    });
-    const p = `<p>${noble.prestigePoints}</p>`;
-    if (noble.prestigePoints !== 0) {
-        playerClone.insertAdjacentHTML('beforeend', p);
+function setNobleImage(nobleElement, nobleName) {
+    const nobleCardImage = nobleElement.querySelector("img");
+    if (nobleCardImage) {
+        nobleCardImage.setAttribute("src", "assets/images/nobleDevelopmentCard.png");
+        nobleCardImage.setAttribute("alt", nobleName);
+        nobleCardImage.setAttribute("title", nobleName);
     }
-    $section.insertAdjacentHTML('beforeend', playerClone.outerHTML);
 }
 
-function findGem(gemName) {
-    return allGems.filter(gem => gem.name === gemName)[0];
+function renderNobleCosts(nobleElement, neededBonuses) {
+    const nobleCostUl = nobleElement.querySelector("ul");
+    if (nobleCostUl) {
+        nobleCostUl.innerHTML = '';
+        Object.keys(neededBonuses).forEach(gemName => {
+            const amount = neededBonuses[gemName];
+            if (amount > 0) {
+                const gemObject = findGem(gemName);
+                if (gemObject && gemObject.cardId) {
+                    nobleCostUl.insertAdjacentHTML('beforeend', createLiElement(amount, gemObject.cardId));
+                }
+            }
+        });
+    }
+}
+
+function renderNoblePrestigePoints(nobleElement, prestigePoints) {
+    if (prestigePoints > 0) {
+        const prestigeHtml = `<p class="noble-prestige-points">${prestigePoints}</p>`;
+        nobleElement.insertAdjacentHTML('beforeend', prestigeHtml);
+    }
 }
 
 export {initNobles};
