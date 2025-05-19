@@ -53,4 +53,50 @@ function renderNoblePrestigePoints(nobleElement, prestigePoints) {
     }
 }
 
-export {initNobles};
+function renderNoble(noble, $section) {
+    const $template = document.querySelector("template#noble-template");
+    if (!$template) {
+        console.error("Noble template not found.");
+        return;
+    }
+
+    const nobleElement = $template.content.firstElementChild.cloneNode(true);
+
+    setNobleImage(nobleElement, noble.name);
+    renderNobleCosts(nobleElement, noble.neededBonuses);
+    renderNoblePrestigePoints(nobleElement, noble.prestigePoints);
+
+    $section.appendChild(nobleElement);
+}
+
+function findGem(gemName) {
+    return allGems.find(gem => gem.name.toLowerCase() === gemName.toLowerCase());
+}
+
+
+function checkAndClaimNobles() {
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+    const currentLocalGameId = StorageAbstractor.loadFromStorage("gameId");
+
+    CommunicationAbstractor.fetchFromServer(`/games/${currentLocalGameId}`)
+        .then(gameState => {
+            const player = gameState.players.find(p => p.name === playerName);
+            const playerBonuses = player.bonuses;
+            const latestUnclaimedNobles = gameState.unclaimedNobles || [];
+
+            for (const noble of latestUnclaimedNobles) {
+                if (canPlayerClaimNoble(noble, playerBonuses)) {
+                    attemptToClaimNoble(noble, playerName, currentLocalGameId);
+
+                    break;
+                }
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching game state for noble check:", error);
+        });
+}
+
+
+
+export {initNobles, checkAndClaimNobles};
