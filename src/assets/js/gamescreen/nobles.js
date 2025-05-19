@@ -97,6 +97,39 @@ function checkAndClaimNobles() {
         });
 }
 
+function canPlayerClaimNoble(noble, playerBonuses) {
+    for (const gemType in noble.neededBonuses) {
+        const requiredAmount = noble.neededBonuses[gemType];
+        if (requiredAmount > 0) {
+            const playerHasAmount = playerBonuses[gemType] || 0;
+            if (playerHasAmount < requiredAmount) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
+function attemptToClaimNoble(noble, playerName, gameIdToClaim) {
+    const nobleDataForApi = {
+        name: noble.name,
+        prestigePoints: noble.prestigePoints,
+        neededBonuses: noble.neededBonuses
+    };
+
+    CommunicationAbstractor.fetchFromServer(`/games/${gameIdToClaim}/players/${playerName}/nobles`, 'POST', nobleDataForApi)
+        .then(response => {
+            console.log(`Noble "${noble.name}" claimed successfully by ${playerName}:`, response);
+
+            fetchAndRenderUnclaimedNobles();
+            fetchPlayers();
+        })
+        .catch(error => {
+            console.error(`Error claiming noble "${noble.name}" for player ${playerName}:`, error);
+
+            fetchAndRenderUnclaimedNobles();
+            fetchPlayers();
+        });
+}
 
 export {initNobles, checkAndClaimNobles};
