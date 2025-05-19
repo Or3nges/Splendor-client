@@ -116,7 +116,11 @@ function searchGames() {
 
     games.forEach(game => {
         const gameName = game.querySelector("#gameName").innerText.toLowerCase();
-        game.classList.toggle("hidden", !gameName.includes(query));
+        if (gameName.includes(query)) {
+            game.classList.remove("hidden");
+        } else {
+            game.classList.add("hidden");
+        }
     });
 }
 
