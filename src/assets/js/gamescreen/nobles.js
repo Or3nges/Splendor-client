@@ -8,6 +8,7 @@ const gameId = StorageAbstractor.loadFromStorage("gameId");
 
 function initNobles() {
     fetchAndRenderUnclaimedNobles();
+    checkAndClaimNobles();
 }
 
 function fetchAndRenderUnclaimedNobles() {
@@ -132,4 +133,4 @@ function attemptToClaimNoble(noble, playerName, gameIdToClaim) {
         });
 }
 
-export {initNobles, checkAndClaimNobles};
+export {initNobles};
