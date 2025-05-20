@@ -67,7 +67,7 @@ function renderNoble(noble, $section) {
     renderNobleCosts(nobleElement, noble.neededBonuses);
     renderNoblePrestigePoints(nobleElement, noble.prestigePoints);
 
-    $section.appendChild(nobleElement);
+    $section.insertAdjacentHTML('beforeend', nobleElement.outerHTML);
 }
 
 function findGem(gemName) {
