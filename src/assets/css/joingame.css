@@ -5,7 +5,8 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: url(../../media/beforeGameBackground.png) center / cover;
+    background: url(../../media/beforeGameBackground.png);
+    background-size: 100%;
 }
 
 h1 {

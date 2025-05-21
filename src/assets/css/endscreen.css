@@ -1,56 +1,10 @@
-/* End screen
------------------------------------------
-.game-over {
-    background-color: #D2A741;
-    border-radius: 0.75rem;
-    padding: 2rem;
-    color: white;
-    font-size: 5rem;
-    margin-bottom: 2rem;
-}
-
-img {
-    margin-bottom: 2rem;
-    width: 6rem;
-    height: 6rem;
-}
-
-.score-board {
-    margin-bottom: 1rem;
-    padding: 1rem;
-    color: white;
-    font-size: 2.5rem;
-    background-color: #D2A741;
-    border-radius: 0.75rem;
-}
-
-button {
-    background-color: #D2A741;
-    border-radius: 0.75rem;
-    color: white;
-    padding: 1rem;
-    border: none;
-    margin-bottom: 1rem;
-}
-
-.play-again {
-    font-size: 4rem;
-}
-
-.return {
-    font-size: 1.5rem;
-}
-
-button:hover {
-    background-color: #5a5a5a;
-}*/
-
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: url(../../media/beforeGameBackground.png) center / cover;
+    background: url(../../media/beforeGameBackground.png);
+    background-size: 100%;
 }
 
 section {
