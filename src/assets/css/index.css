@@ -2,8 +2,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: url(../../media/beforeGameBackground.png);
     height: 100vh;
-    background: url(../../media/beforeGameBackground.png) center / cover;
+    background-size: 100%;
 }
 
 #startScreen {
