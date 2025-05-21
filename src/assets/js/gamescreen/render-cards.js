@@ -63,6 +63,7 @@ function renderDevelopmentCards(gameId) {
 
     fetchGame(gameId)
         .then(data => {
+            console.log("Game data:", data);
             data.market.forEach(tier => {
                 handleTier(tier);
             });
@@ -78,7 +79,7 @@ function renderDevelopmentCards(gameId) {
 }
 
 function handleTier(tier) {
-    tier.visibleCards.forEach(card => {
+    tier.forEach(card => {
         displayDevelopmentCards(card);
     });
 }
@@ -276,10 +277,6 @@ function processGameData(gameData, cardLevel, cardName, gameId, playerName) {
 
     const playerBonuses = calculateAllBonuses(currentPlayer);
     const payment = calculatePayment(cardToBuy.cost, currentPlayer.tokens, playerBonuses);
-
-    if (!payment) {
-        return;
-    }
 
     const requestBody = {
         development: { name: cardToBuy.name },

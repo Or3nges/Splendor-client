@@ -20,7 +20,7 @@ function handleGameConfigFormSubmit() {
 
             const lobbyData = {
                 gameName: formData.get('gameName'),
-                numberOfPlayers: parseInt(formData.get('playerAmount'), 10),
+                numberOfPlayers: parseInt(formData.get('playerAmount')),
                 playerName: StorageAbstractor.loadFromStorage("playerName")
 
             };
@@ -28,8 +28,7 @@ function handleGameConfigFormSubmit() {
 
             CommunicationAbstractor.fetchFromServer('/games', 'POST', lobbyData)
                 .then(responseData => {
-
-                    addDataToLocalStorage(responseData, formData);
+                    addDataToLocalStorage(responseData);
                     window.location.href = '../html/lobby.html';
                 })
                 .catch(error => {

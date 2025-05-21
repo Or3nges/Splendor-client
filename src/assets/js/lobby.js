@@ -33,6 +33,7 @@ function fetchGameLobby() {
 
 
 function displayLobby(game) {
+    console.log(game);
     const main = document.querySelector("main");
     main.innerHTML = "";
     const $lobby = document.querySelector("#lobby-template").content.firstElementChild.cloneNode(true);
@@ -43,7 +44,7 @@ function displayLobby(game) {
 
     game.players.forEach(player => {
         const li = document.createElement("li");
-        li.innerText = player;
+        li.innerText = player.name;
         $playersList.appendChild(li);
     });
     main.appendChild($lobby);

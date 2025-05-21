@@ -42,11 +42,10 @@ function getCurrentPlayerTokens(gameId, playerName) {
 function retrieveTokens(gameId) {
     fetchGame(gameId)
         .then(data => {
-            availableTokens = {...data.unclaimedTokens};
-
+            availableTokens = {...data};
+            console.log(availableTokens);
             isMyTurn = data.currentPlayer === loadFromStorage("playerName");
-
-            displayTokens(data.unclaimedTokens);
+            displayTokens(data.game.unclaimedTokens.tokensMap);
         });
 }
 
@@ -64,6 +63,7 @@ function displayTokens(tokens) {
 
 function renderTokensList(tokens, container) {
     Object.keys(tokens).forEach(tokenName => {
+        console.log(tokenName);
         const gem = findGemByName(tokenName);
         if (gem) {
             container.insertAdjacentHTML("beforeend", createLiElement(tokens[tokenName], gem.tokenId, tokenName));
@@ -127,7 +127,7 @@ function attemptTokenSelection(tokenName) {
     const differentSelectedTypes = getDifferentSelectedTypes();
     const selectionMade = trySpecialSelection(tokenName, initialCount, totalSelectedCount, differentSelectedTypes)
         || tryNormalSelection(tokenName, totalSelectedCount, differentSelectedTypes);
-
+    console.log("Selection made:", selectionMade);
     if (!selectionMade) {
         console.log("Selection conditions not met.");
     }

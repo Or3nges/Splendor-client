@@ -1,36 +1,36 @@
 const allGems = [
     {
-        "name": "Gold",
+        "name": "GOLD",
         "img": "assets/images/ambertoken.png",
         "cardId": "amberCard",
         "tokenId": "amberToken"
     },
     {
-        "name": "Emerald",
+        "name": "EMERALD",
         "img": "assets/images/emeraldtoken.png",
         "cardId": "emeraldCard",
         "tokenId": "emeraldToken"
     },
     {
-        "name": "Sapphire",
+        "name": "SAPPHIRE",
         "img": "assets/images/amethysttoken.png",
         "cardId": "amethystCard",
         "tokenId": "amethystToken"
     },
     {
-        "name": "Ruby",
+        "name": "RUBY",
         "img": "assets/images/rubytoken.png",
         "cardId": "rubyCard",
         "tokenId": "rubyToken"
     },
     {
-        "name": "Diamond",
+        "name": "DIAMOND",
         "img": "assets/images/diamanttoken.png",
         "cardId": "diamondCard",
         "tokenId": "diamondToken"
     },
     {
-        "name": "Onyx",
+        "name": "ONYX",
         "img": "assets/images/onyxtoken.png",
         "cardId": "onyxCard",
         "tokenId": "onyxToken"

@@ -19,7 +19,7 @@ function fetchPlayers(){
 }
 
 function renderPlayers(game){
-    const players = game.players;
+    const players = game.game.players;
     $playerList.innerHTML = "";
     for (const player of players) {
         if (player.name !== StorageAbstractor.loadFromStorage("playerName")) {
@@ -95,8 +95,7 @@ function createLiPreperation(player, $tokenOl, $cardOl){
     for (const gem of gems) {
         const tokenId = getGemId(gem, "token");
         const cardId = getGemId(gem, "card");
-
-        const tokenAmount = player.tokens[gem] || 0;
+        const tokenAmount = player.purse[gem] || 0;
         const cardAmount = player.bonuses[gem] || 0;
 
         $tokenOl.insertAdjacentHTML('beforeend', createLiElement(tokenAmount, tokenId));
