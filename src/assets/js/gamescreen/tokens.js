@@ -43,7 +43,6 @@ function retrieveTokens(gameId) {
     fetchGame(gameId)
         .then(data => {
             availableTokens = {...data};
-            console.log(availableTokens);
             isMyTurn = data.currentPlayer === loadFromStorage("playerName");
             displayTokens(data.game.unclaimedTokens.tokensMap);
         });
@@ -63,7 +62,6 @@ function displayTokens(tokens) {
 
 function renderTokensList(tokens, container) {
     Object.keys(tokens).forEach(tokenName => {
-        console.log(tokenName);
         const gem = findGemByName(tokenName);
         if (gem) {
             container.insertAdjacentHTML("beforeend", createLiElement(tokens[tokenName], gem.tokenId, tokenName));

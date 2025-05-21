@@ -63,7 +63,6 @@ function renderDevelopmentCards(gameId) {
 
     fetchGame(gameId)
         .then(data => {
-            console.log("Game data:", data);
             data.market.forEach(tier => {
                 handleTier(tier);
             });
