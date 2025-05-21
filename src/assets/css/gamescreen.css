@@ -143,6 +143,10 @@ body {
     top: 2%;
     width: 32.1%;
 }
+#gameScreen h2 {
+    text-align: center;
+    -webkit-text-stroke: 0.01rem black;
+}
 
 figure p {
     background: url("../../media/prestigestar.png") no-repeat;
