@@ -7,7 +7,7 @@ import { retrieveTokens } from "./tokens.js";
 import { fetchPlayers } from "./player.js";
 
 const MAX_RESERVED_CARDS = 3;
-
+//pas dit aan jitse
 function createCardTemplate(card) {
     const figure = document.createElement('figure');
 
@@ -50,7 +50,7 @@ function renderReservedCards(reservedCards) {
         $reservedCardsContainer.appendChild($template);
     });
 }
-
+//pas deze functie aan jitse
 function renderDevelopmentCards(gameId) {
     const $cardsContainer = document.querySelector("#cardsContainer");
     if (!$cardsContainer) {
@@ -62,10 +62,8 @@ function renderDevelopmentCards(gameId) {
 
     fetchGame(gameId)
         .then(data => {
-            console.log(data.game.market);
             for (const tierIndex in data.game.market) {
                 const tier = data.game.market[tierIndex];
-                console.log(tier);
                 handleTier(tier);
             }
             /*
@@ -485,14 +483,14 @@ function closeHandler($popup) {
     closePopup($popup);
     removeOldEventListeners($popup);
 }
-
+//pas dit aan jitse
 function populateCardDetails($template, card) {
     appendPrestigePoints($template, card);
     populateCostDetails($template, card);
     setCardTypeImage($template, card);
     setCardTokenImage($template, card);
 }
-
+//pas dit aan jitse
 function appendPrestigePoints($template, card) {
     if (card.prestigePoints !== 0) {
         const p = document.createElement('p');
@@ -538,7 +536,7 @@ function setCardTokenImage($template, card) {
         cardTokenImg.setAttribute('title', card.bonus + ' bonus');
     }
 }
-
+//pas dit aan jitse
 function displayDevelopmentCards(card) {
     const $cardsContainer = document.querySelector("#cardsContainer");
     if (!$cardsContainer) {

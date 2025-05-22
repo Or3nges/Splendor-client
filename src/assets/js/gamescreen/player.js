@@ -65,6 +65,9 @@ function changeNameAndPrestige(player, currentPlayer){
     if (player.name === currentPlayer) {
         $article.classList.remove("unhighlighted");
         $article.classList.add("highlighted");
+    }else {
+        $article.classList.remove("highlighted");
+        $article.classList.add("unhighlighted");
     }
     $article.querySelector("h1").innerText = player.name;
     $prestigePoints.innerText = player.totalPrestigePoints;
@@ -95,7 +98,7 @@ function createLiPreperation(player, $tokenOl, $cardOl){
     for (const gem of gems) {
         const tokenId = getGemId(gem, "token");
         const cardId = getGemId(gem, "card");
-        const tokenAmount = player.purse[gem] || 0;
+        const tokenAmount = player.purse.tokensMap[gem] || 0;
         const cardAmount = player.bonuses[gem] || 0;
 
         $tokenOl.insertAdjacentHTML('beforeend', createLiElement(tokenAmount, tokenId));

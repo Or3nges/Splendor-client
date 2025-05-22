@@ -9,7 +9,7 @@ import {renderDevelopmentCards} from "./render-cards.js";
 const gameId = storageAbstractor.loadFromStorage("gameId");
 
 function initGame() {
-   renderDevelopmentCards(gameId)
+   renderDevelopmentCards(gameId);
    initPopup();
    fetchGems();
    initTurnIndication();
