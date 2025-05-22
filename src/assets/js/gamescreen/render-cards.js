@@ -1,3 +1,4 @@
+
 import {allDevelopmentCards} from "../Objects/developmentCards.js";
 import {fetchGame, findGemByName} from "../util.js";
 import * as StorageAbstractor from "../data-connector/local-storage-abstractor.js";
@@ -57,19 +58,24 @@ function renderDevelopmentCards(gameId) {
         return;
     }
 
-    while ($cardsContainer.firstChild) {
-        $cardsContainer.removeChild($cardsContainer.firstChild);
-    }
+        $cardsContainer.innerHTML = "";
 
     fetchGame(gameId)
         .then(data => {
-            data.market.forEach(tier => {
+            console.log(data.game.market);
+            for (const tierIndex in data.game.market) {
+                const tier = data.game.market[tierIndex];
+                console.log(tier);
                 handleTier(tier);
-            });
-
-            const currentPlayer = data.players.find(player => player.name === StorageAbstractor.loadFromStorage("playerName"));
+            }
+            /*
+            data.game.market.forEach(tier => {
+                console.log(tier);
+                handleTier(tier);
+            });*/
+            const currentPlayer = data.game.players.find(player => player.name === StorageAbstractor.loadFromStorage("playerName"));
             if (currentPlayer) {
-                renderReservedCards(currentPlayer.reserve);
+                renderReservedCards(currentPlayer.reserved);
             }
         })
         .catch(error => {

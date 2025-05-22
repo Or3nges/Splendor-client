@@ -1,7 +1,9 @@
-import {fetchGame, createLiElement, findGemByName, findGemByTokenId} from "../util.js";
+import {createLiElement, fetchGame, findGemByName, findGemByTokenId} from "../util.js";
 import {fetchFromServer} from "../data-connector/api-communication-abstractor.js";
 import {loadFromStorage} from "../data-connector/local-storage-abstractor.js";
-import { fetchPlayers } from './player.js';
+import {fetchPlayers} from './player.js';
+
+document.querySelector('#confirm-token-selection').addEventListener('click', confirmTokenSelection);
 
 let selectedTokens = {};
 let availableTokens = {};
@@ -15,7 +17,7 @@ function isCurrentPlayerTurn() {
 
     return fetchGame(gameId)
         .then(game => {
-            return game.currentPlayer === playerName;
+            return game.game.currentPlayer === playerName;
         })
         .catch(() => {
             return false;
@@ -29,9 +31,9 @@ function getCurrentPlayerTokens(gameId, playerName) {
 
     return fetchGame(gameId)
         .then(gameData => {
-            const player = gameData.players.find(p => p.name === playerName);
-            if (player && player.tokens !== undefined) {
-                return player.tokens;
+            const player = gameData.game.players.find(p => p.name === playerName);
+            if (player && player.purse.tokensMap !== undefined) {
+                return player.purse.tokensMap;
             }
             return null;
         })
@@ -42,8 +44,8 @@ function getCurrentPlayerTokens(gameId, playerName) {
 function retrieveTokens(gameId) {
     fetchGame(gameId)
         .then(data => {
-            availableTokens = {...data};
-            isMyTurn = data.currentPlayer === loadFromStorage("playerName");
+            availableTokens = data.game.unclaimedTokens.tokensMap;
+            isMyTurn = data.game.currentPlayer === loadFromStorage("playerName");
             displayTokens(data.game.unclaimedTokens.tokensMap);
         });
 }
@@ -55,8 +57,6 @@ function displayTokens(tokens) {
     renderTokensList(tokens, $tokensContainer);
     setupTokenClickEvents();
 
-    selectedTokens = {};
-    updateSelectionVisuals();
     updateTakeTokensButton();
 }
 
@@ -78,7 +78,7 @@ function setupTokenClickEvents() {
             const tokenName = token.name;
             li.setAttribute("data-token", tokenName);
 
-            if (isMyTurn && tokenName !== "Gold") {
+            if (isMyTurn && tokenName !== "GOLD") {
                 li.addEventListener("click", selectToken);
                 li.classList.add('selectable-token');
             } else {
@@ -91,16 +91,11 @@ function setupTokenClickEvents() {
 function selectToken(e) {
     const li = e.currentTarget;
     const tokenName = li.getAttribute("data-token");
+    const $selectedTokenDiv = document.querySelector("div#bottomrow article div#selectedTokens");
 
     if (!isValidToken(tokenName)) return;
-
-    if (isTokenAlreadySelected(tokenName)) {
-        deselectToken(tokenName);
-    } else {
-        attemptTokenSelection(tokenName);
-    }
-
-    updateSelectionVisuals();
+    addTokenToSelection(tokenName);
+    renderSelectedTokens($selectedTokenDiv);
     updateTakeTokensButton();
 }
 
@@ -108,82 +103,62 @@ function isValidToken(tokenName) {
     return tokenName && tokenName !== "Gold";
 }
 
-function isTokenAlreadySelected(tokenName) {
-    return selectedTokens[tokenName] > 0;
-}
-
-function deselectToken(tokenName) {
-    selectedTokens[tokenName]--;
-    if (selectedTokens[tokenName] === 0) {
-        delete selectedTokens[tokenName];
-    }
-}
-
-function attemptTokenSelection(tokenName) {
-    const initialCount = availableTokens[tokenName] || 0;
-    const totalSelectedCount = getTotalSelectedCount();
-    const differentSelectedTypes = getDifferentSelectedTypes();
-    const selectionMade = trySpecialSelection(tokenName, initialCount, totalSelectedCount, differentSelectedTypes)
-        || tryNormalSelection(tokenName, totalSelectedCount, differentSelectedTypes);
-    console.log("Selection made:", selectionMade);
-    if (!selectionMade) {
-        console.log("Selection conditions not met.");
-    }
-}
-
-function trySpecialSelection(tokenName, initialCount, totalSelectedCount, differentSelectedTypes) {
-    if (initialCount >= 4) {
-        if (totalSelectedCount === 0) {
-            selectedTokens[tokenName] = 2;
-            return true;
-        } else if (totalSelectedCount === 1 && differentSelectedTypes === 1 && selectedTokens[tokenName] === 1) {
-            selectedTokens[tokenName]++;
-            return true;
-        } else {
-            console.log("Picked 2 tokens.");
+function addTokenToSelection(tokenName) {
+    const differentSelectedTypes = Object.keys(selectedTokens).length;
+    const totalSelectedCount = Object.values(selectedTokens).reduce((sum, count) => sum + count, 0);
+    if (totalSelectedCount < TOKEN_SELECTED_MAX) {
+        if (differentSelectedTypes <= 1 && totalSelectedCount !== 2) {
+            if ((differentSelectedTypes <= 1 && selectedTokens[tokenName] <= 1) || selectedTokens[tokenName] === undefined) {
+                selectedTokens[tokenName] = (selectedTokens[tokenName] || 0) + 1;
+            }
+        } else if (differentSelectedTypes !== 1) {
+            selectedTokens[tokenName] = 1;
         }
     }
-    return false;
 }
 
-function tryNormalSelection(tokenName, totalSelectedCount, differentSelectedTypes) {
-    let hasTwoSame = false;
+function prepareSelectedTokenImage(tokenName) {
+    const token = findGemByName(tokenName);
+    return `<img class="selectable-token" src=${token.img} alt=${token.name} height="306" width="306">`;
+}
 
-    for (const count of Object.values(selectedTokens)) {
-        if (count === 2) {
-            hasTwoSame = true;
-            break;
-        }
+function renderSelectedTokens($selectedTokenDiv) {
+    $selectedTokenDiv.innerHTML = '';
+    const totalSelectedCount = Object.values(selectedTokens).reduce((sum, count) => sum + count, 0);
+    for (const selectedToken in selectedTokens) {
+            for (let i = 0; i < selectedTokens[selectedToken]; i++) {
+                $selectedTokenDiv.insertAdjacentHTML('beforeend', prepareSelectedTokenImage(selectedToken));
+            }
     }
-
-    if (!hasTwoSame && totalSelectedCount < TOKEN_SELECTED_MAX && differentSelectedTypes < TOKEN_SELECTED_MAX) {
-        selectedTokens[tokenName] = 1;
-        return true;
+    for (let i = 0; i < TOKEN_SELECTED_MAX - totalSelectedCount; i++) {
+        $selectedTokenDiv.insertAdjacentHTML('beforeend', `<img src="media/grey_token.png" alt="grey token" height="306" width="306">`);
     }
-    return false;
+    addEventListenersToSelectedTokens($selectedTokenDiv);
 }
 
-function getTotalSelectedCount() {
-    return Object.values(selectedTokens).reduce((sum, count) => sum + count, 0);
-}
-
-function getDifferentSelectedTypes() {
-    return Object.keys(selectedTokens).length;
-}
-
-function updateSelectionVisuals() {
-    document.querySelectorAll("#tokens ul li").forEach(li => {
-        const tokenName = li.getAttribute("data-token");
-        const count = selectedTokens[tokenName] || 0;
-
-        if (count > 0) {
-            li.classList.add('selected');
-            li.setAttribute('data-selection-count', count);
-        } else {
-            li.classList.remove('selected');
-            li.removeAttribute('data-selection-count');
-        }
+function addEventListenersToSelectedTokens($selectedTokenDiv) {
+    const selectedTokensList = $selectedTokenDiv.querySelectorAll("img");
+    selectedTokensList.forEach(token => {
+        token.addEventListener("click", removeToken);
     });
+}
+
+function removeToken(e) {
+    e.preventDefault();
+    const tokenName = e.currentTarget.alt;
+    if (selectedTokens[tokenName] === 1) {
+        selectedTokens = Object.fromEntries(
+            Object.entries(selectedTokens).filter(([key]) => key !== tokenName));
+    }else if (selectedTokens[tokenName] > 1) {
+        selectedTokens[tokenName] -= 1;
+    }
+    /*
+    if (obj[key] === 1) {
+        delete obj[key];
+    } else if (obj[key] === 2) {
+        obj[key] = 1;
+    }*/
+    renderSelectedTokens(document.querySelector("div#bottomrow article div#selectedTokens"));
 }
 
 function updateTakeTokensButton() {
@@ -199,10 +174,10 @@ function updateTakeTokensButton() {
     const differentSelectedTypes = Object.keys(selectedTokens).length;
 
     let isValidSelection = false;
-    if (totalSelectedCount === TOKEN_SELECTED_MAX && differentSelectedTypes === TOKEN_SELECTED_MAX ) {
+    if (totalSelectedCount === TOKEN_SELECTED_MAX && differentSelectedTypes === TOKEN_SELECTED_MAX) {
         isValidSelection = true;
     }
-    if (totalSelectedCount === 2 && differentSelectedTypes === 1 && Object.values(selectedTokens)[0] === 2){
+    if (totalSelectedCount === 2 && differentSelectedTypes === 1 && Object.values(selectedTokens)[0] === 2) {
         isValidSelection = true;
     }
 
@@ -273,7 +248,7 @@ function validateTokenLimits(currentTokens, selectedTokensParam) {
 }
 
 function sendSelectedTokens(gameId, playerName) {
-    const requestBody = { take: selectedTokens };
+    const requestBody = {take: selectedTokens};
     fetchFromServer(`/games/${gameId}/players/${playerName}/tokens`, "PATCH", requestBody)
         .then(() => {
             retrieveTokens(gameId);
@@ -285,8 +260,5 @@ function sendSelectedTokens(gameId, playerName) {
         });
 }
 
-document.querySelector('#confirm-token-selection').addEventListener('click', confirmTokenSelection);
 
-
-
-export { retrieveTokens, updateTakeTokensButton };
+export {retrieveTokens, updateTakeTokensButton};

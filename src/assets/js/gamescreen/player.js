@@ -14,12 +14,12 @@ function fetchGems(){
 function fetchPlayers(){
     const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
-        .then(game => renderPlayers(game));
+        .then(game => renderPlayers(game.game));
 
 }
 
 function renderPlayers(game){
-    const players = game.game.players;
+    const players = game.players;
     $playerList.innerHTML = "";
     for (const player of players) {
         if (player.name !== StorageAbstractor.loadFromStorage("playerName")) {
