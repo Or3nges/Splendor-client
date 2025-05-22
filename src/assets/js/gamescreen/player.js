@@ -65,7 +65,7 @@ function changeNameAndPrestige(player, currentPlayer){
     if (player.name === currentPlayer) {
         $article.classList.remove("unhighlighted");
         $article.classList.add("highlighted");
-    }else {
+    } else {
         $article.classList.remove("highlighted");
         $article.classList.add("unhighlighted");
     }

@@ -33,7 +33,6 @@ function loadGames() {
     const apiPath = getApiPath(filter);
     CommunicationAbstractor.fetchFromServer(apiPath, 'GET')
         .then(data => {
-            console.log(data);
             document.querySelector('main').innerHTML = "";
             data.games.forEach(game => addGame(game));
             document.querySelectorAll("main ul").forEach(item => item.addEventListener('click', chooseGame));

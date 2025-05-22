@@ -33,7 +33,6 @@ function fetchGameLobby() {
 
 
 function displayLobby(game) {
-    console.log(game);
     const main = document.querySelector("main");
     main.innerHTML = "";
     const $lobby = document.querySelector("#lobby-template").content.firstElementChild.cloneNode(true);
