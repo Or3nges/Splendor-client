@@ -19,7 +19,7 @@ function findGemByTokenId(gemTokenId) {
 }
 
 function addDataToLocalStorage(data) {
-    StorageAbstractor.saveToStorage("gameId", data.gameId);
+    StorageAbstractor.saveToStorage("gameId", data.game.gameId);
     StorageAbstractor.saveToStorage("playerToken", data.playerToken);
 }
 

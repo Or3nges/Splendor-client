@@ -14,7 +14,7 @@ function initNobles() {
 function fetchAndRenderUnclaimedNobles() {
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}`)
         .then(data => {
-            const unclaimedNobles = data.unclaimedNobles || [];
+            const unclaimedNobles = data.game.nobles || [];
             const $section = document.querySelector("div#noblesContainer");
             $section.innerHTML = '';
             unclaimedNobles.forEach(noble => renderNoble(noble, $section));
@@ -81,7 +81,7 @@ function checkAndClaimNobles() {
 
     CommunicationAbstractor.fetchFromServer(`/games/${currentLocalGameId}`)
         .then(gameState => {
-            const player = gameState.players.find(p => p.name === playerName);
+            const player = gameState.game.players.find(p => p.name === playerName);
             const playerBonuses = player.bonuses;
             const latestUnclaimedNobles = gameState.unclaimedNobles || [];
 
