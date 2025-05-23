@@ -6,6 +6,7 @@ import {initNobles} from "./nobles.js";
 import {renderDevelopmentCards} from "./render-cards.js";
 
 const GameLoopDelay = 2000;
+const setupTime = 200;
 const playerName = StorageAbstractor.loadFromStorage("playerName");
 const gameId = StorageAbstractor.loadFromStorage("gameId");
 
@@ -17,7 +18,7 @@ function gameLoop(){
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}`).then(data => {
         fetchPlayers();
         if ( isCurrentPlayerTurn(data.game.currentPlayer)) {
-            setTimeout(setupTokenClickEvents, 200)
+            setTimeout(setupTokenClickEvents, setupTime);
             fetchPlayers();
             retrieveTokens();
             updateTakeTokensButton(isCurrentPlayerTurn(data.game.currentPlayer));
@@ -32,7 +33,6 @@ function gameLoop(){
 }
 
 function isCurrentPlayerTurn(currentplayer) {
-    console.log(currentplayer === playerName);
     return currentplayer === playerName;
 }
 

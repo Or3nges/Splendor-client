@@ -79,7 +79,7 @@ function addTokenToSelection(tokenName) {
             }
         } else if (differentSelectedTypes !== 1) {
             selectedTokens[tokenName] = 1;
-        }
+        } else {alert("cannot do this action");}
     }
 }
 
@@ -118,13 +118,13 @@ function removeToken(e) {
         delete selectedTokens[tokenName];
     } else if (selectedTokens[tokenName] === 2) {
         selectedTokens[tokenName] = 1;
-    }
+    } else{alert("You cannot remove more than 2 tokens of the same type");}
     renderSelectedTokens();
 }
 
-function updateTakeTokensButton(isMyTurn) {
+function updateTakeTokensButton(enableButton) {
     const button = document.querySelector('#confirm-token-selection');
-    if (isMyTurn) {
+    if (enableButton) {
         button.disabled = false;
     }else {
         button.disabled = true;
@@ -134,7 +134,6 @@ function updateTakeTokensButton(isMyTurn) {
 function confirmTokenSelection() {
     const gameId = loadFromStorage("gameId");
     const playerName = loadFromStorage("playerName");
-    console.log("Selected tokens:", selectedTokens);
 
     sendSelectedTokens(gameId, playerName);
 }

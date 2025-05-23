@@ -192,6 +192,13 @@ figure p {
     bottom: 8%;
 }
 
+img {
+    margin-bottom: 2rem;
+    width: 6rem;
+    height: 6rem;
+}
+
+
 #allNobles img {
     width: 80%;
     height: auto;
@@ -324,16 +331,6 @@ figure p {
 .amberToken {
     background: url("../images/ambertoken.png") no-repeat;
     background-size: contain;
-}
-
-/* End screen
------------------------------------------*/
-
-
-img {
-    margin-bottom: 2rem;
-    width: 6rem;
-    height: 6rem;
 }
 
 button {
