@@ -39,7 +39,7 @@ function loadGames() {
             searchGames();
             const selectedGameID = localStorage.getItem("selectedGame");
             if (selectedGameID) {
-                const $selectedGame = document.querySelector('#game-${selectedGameID}');
+                const $selectedGame = document.querySelector(`#game-${selectedGameID}`);
                 if ($selectedGame) {
                     $selectedGame.classList.add("selected");
                     document.querySelector("#join-game").classList.add("active");
@@ -104,9 +104,6 @@ function joinGame() {
             addDataToLocalStorage(data);
             window.location.href = "lobby.html";
             deleteFromStorage("selectedGame");
-        })
-        .catch(error => {
-            alert(error.cause);
         });
 }
 
