@@ -47,8 +47,8 @@ function displayPlayer(player, currentPlayer) {
 
 function displaySelf(player, currentPlayer) {
     const $owntokendiv = document.querySelector("div#yourcards");
-    const $playerTemplate = document.querySelector("template#self-template");
-    const playerClone = $playerTemplate.content.firstElementChild.cloneNode(true);
+    const $selfTemplate = document.querySelector("template#self-template");
+    const playerClone = $selfTemplate.content.firstElementChild.cloneNode(true);
     const $tokenOl = playerClone.querySelector("ol.tokens");
     const $cardOl = playerClone.querySelector("ol.cards");
 
