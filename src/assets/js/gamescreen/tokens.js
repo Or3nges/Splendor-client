@@ -1,7 +1,10 @@
-import {fetchGame, createLiElement, findGemByName, findGemByTokenId} from "../util.js";
+import {createLiElement, fetchGame, findGemByName, findGemByTokenId} from "../util.js";
 import {fetchFromServer} from "../data-connector/api-communication-abstractor.js";
 import {loadFromStorage} from "../data-connector/local-storage-abstractor.js";
-import { fetchPlayers } from './player.js';
+import {initTurnIndication} from "./turn-indication.js";
+import * as StorageAbstractor from "../data-connector/local-storage-abstractor.js";
+
+document.querySelector('#confirm-token-selection').addEventListener('click', confirmTokenSelection);
 
 let selectedTokens = {};
 let availableTokens = {};
@@ -9,57 +12,20 @@ let isMyTurn = false;
 
 const TOKEN_SELECTED_MAX = 3;
 
-function isCurrentPlayerTurn() {
-    const gameId = loadFromStorage("gameId");
-    const playerName = loadFromStorage("playerName");
-
-    return fetchGame(gameId)
-        .then(game => {
-            return game.currentPlayer === playerName;
-        })
-        .catch(() => {
-            return false;
-        });
-}
-
-function getCurrentPlayerTokens(gameId, playerName) {
-    if (!gameId || !playerName) {
-        return null;
-    }
-
-    return fetchGame(gameId)
-        .then(gameData => {
-            const player = gameData.players.find(p => p.name === playerName);
-            if (player && player.tokens !== undefined) {
-                return player.tokens;
-            }
-            return null;
-        })
-        .catch(() => null);
-}
-
-
-function retrieveTokens(gameId) {
+function retrieveTokens() {
+    const gameId = StorageAbstractor.loadFromStorage("gameId");
     fetchGame(gameId)
         .then(data => {
-            availableTokens = {...data.unclaimedTokens};
-
-            isMyTurn = data.currentPlayer === loadFromStorage("playerName");
-
-            displayTokens(data.unclaimedTokens);
+            availableTokens = data.game.unclaimedTokens.tokensMap;
+            isMyTurn = data.game.currentPlayer === loadFromStorage("playerName");
+            displayTokens(data.game.unclaimedTokens.tokensMap);
         });
 }
 
 function displayTokens(tokens) {
     const $tokensContainer = document.querySelector("#tokens ul");
     $tokensContainer.innerHTML = '';
-
     renderTokensList(tokens, $tokensContainer);
-    setupTokenClickEvents();
-
-    selectedTokens = {};
-    updateSelectionVisuals();
-    updateTakeTokensButton();
 }
 
 function renderTokensList(tokens, container) {
@@ -72,15 +38,15 @@ function renderTokensList(tokens, container) {
 }
 
 function setupTokenClickEvents() {
-    document.querySelectorAll("#tokens ul li").forEach(li => {
+    const $tokensContainer = document.querySelector("#tokens ul");
+    $tokensContainer.querySelectorAll("#tokens ul li").forEach(li => {
         const tokenId = li.classList[0];
         const token = findGemByTokenId(tokenId);
-
         if (token && token.name) {
             const tokenName = token.name;
             li.setAttribute("data-token", tokenName);
 
-            if (isMyTurn && tokenName !== "Gold") {
+            if (tokenName !== "GOLD") {
                 li.addEventListener("click", selectToken);
                 li.classList.add('selectable-token');
             } else {
@@ -95,200 +61,97 @@ function selectToken(e) {
     const tokenName = li.getAttribute("data-token");
 
     if (!isValidToken(tokenName)) return;
-
-    if (isTokenAlreadySelected(tokenName)) {
-        deselectToken(tokenName);
-    } else {
-        attemptTokenSelection(tokenName);
-    }
-
-    updateSelectionVisuals();
-    updateTakeTokensButton();
+    addTokenToSelection(tokenName);
+    renderSelectedTokens();
 }
 
 function isValidToken(tokenName) {
     return tokenName && tokenName !== "Gold";
 }
 
-function isTokenAlreadySelected(tokenName) {
-    return selectedTokens[tokenName] > 0;
-}
-
-function deselectToken(tokenName) {
-    selectedTokens[tokenName]--;
-    if (selectedTokens[tokenName] === 0) {
-        delete selectedTokens[tokenName];
-    }
-}
-
-function attemptTokenSelection(tokenName) {
-    const initialCount = availableTokens[tokenName] || 0;
-    const totalSelectedCount = getTotalSelectedCount();
-    const differentSelectedTypes = getDifferentSelectedTypes();
-    const selectionMade = trySpecialSelection(tokenName, initialCount, totalSelectedCount, differentSelectedTypes)
-        || tryNormalSelection(tokenName, totalSelectedCount, differentSelectedTypes);
-
-    if (!selectionMade) {
-        console.log("Selection conditions not met.");
-    }
-}
-
-function trySpecialSelection(tokenName, initialCount, totalSelectedCount, differentSelectedTypes) {
-    if (initialCount >= 4) {
-        if (totalSelectedCount === 0) {
-            selectedTokens[tokenName] = 2;
-            return true;
-        } else if (totalSelectedCount === 1 && differentSelectedTypes === 1 && selectedTokens[tokenName] === 1) {
-            selectedTokens[tokenName]++;
-            return true;
-        } else {
-            console.log("Picked 2 tokens.");
+function addTokenToSelection(tokenName) {
+    const differentSelectedTypes = Object.keys(selectedTokens).length;
+    const totalSelectedCount = Object.values(selectedTokens).reduce((sum, count) => sum + count, 0);
+    if (totalSelectedCount < TOKEN_SELECTED_MAX) {
+        if (differentSelectedTypes <= 1 && totalSelectedCount !== 2) {
+            if ((differentSelectedTypes <= 1 && selectedTokens[tokenName] <= 1) || selectedTokens[tokenName] === undefined) {
+                selectedTokens[tokenName] = (selectedTokens[tokenName] || 0) + 1;
+            }
+        } else if (differentSelectedTypes !== 1) {
+            selectedTokens[tokenName] = 1;
         }
     }
-    return false;
 }
 
-function tryNormalSelection(tokenName, totalSelectedCount, differentSelectedTypes) {
-    let hasTwoSame = false;
+function prepareSelectedTokenImage(tokenName) {
+    const token = findGemByName(tokenName);
+    return `<img class="selectable-token" src=${token.img} alt=${token.name} height="306" width="306">`;
+}
 
-    for (const count of Object.values(selectedTokens)) {
-        if (count === 2) {
-            hasTwoSame = true;
-            break;
-        }
+function renderSelectedTokens() {
+    const $selectedTokenDiv = document.querySelector("div#bottomrow article div#selectedTokens");
+    $selectedTokenDiv.innerHTML = '';
+    const totalSelectedCount = Object.values(selectedTokens).reduce((sum, count) => sum + count, 0);
+    for (const selectedToken in selectedTokens) {
+            for (let i = 0; i < selectedTokens[selectedToken]; i++) {
+                $selectedTokenDiv.insertAdjacentHTML('beforeend', prepareSelectedTokenImage(selectedToken));
+            }
     }
-
-    if (!hasTwoSame && totalSelectedCount < TOKEN_SELECTED_MAX && differentSelectedTypes < TOKEN_SELECTED_MAX) {
-        selectedTokens[tokenName] = 1;
-        return true;
+    for (let i = 0; i < TOKEN_SELECTED_MAX - totalSelectedCount; i++) {
+        $selectedTokenDiv.insertAdjacentHTML('beforeend', `<img src="media/grey_token.png" alt="grey token" height="306" width="306">`);
     }
-    return false;
+    addEventListenersToSelectedTokens($selectedTokenDiv);
 }
 
-function getTotalSelectedCount() {
-    return Object.values(selectedTokens).reduce((sum, count) => sum + count, 0);
-}
-
-function getDifferentSelectedTypes() {
-    return Object.keys(selectedTokens).length;
-}
-
-function updateSelectionVisuals() {
-    document.querySelectorAll("#tokens ul li").forEach(li => {
-        const tokenName = li.getAttribute("data-token");
-        const count = selectedTokens[tokenName] || 0;
-
-        if (count > 0) {
-            li.classList.add('selected');
-            li.setAttribute('data-selection-count', count);
-        } else {
-            li.classList.remove('selected');
-            li.removeAttribute('data-selection-count');
-        }
+function addEventListenersToSelectedTokens($selectedTokenDiv) {
+    const selectedTokensList = $selectedTokenDiv.querySelectorAll("img");
+    selectedTokensList.forEach(token => {
+        token.addEventListener("click", removeToken);
     });
 }
 
-function updateTakeTokensButton() {
+function removeToken(e) {
+    e.preventDefault();
+    const tokenName = e.currentTarget.alt;
+
+    if (selectedTokens[tokenName] === 1) {
+        delete selectedTokens[tokenName];
+    } else if (selectedTokens[tokenName] === 2) {
+        selectedTokens[tokenName] = 1;
+    }
+    renderSelectedTokens();
+}
+
+function updateTakeTokensButton(isMyTurn) {
     const button = document.querySelector('#confirm-token-selection');
-    if (!button) return;
-
-    if (!isMyTurn) {
+    if (isMyTurn) {
+        button.disabled = false;
+    }else {
         button.disabled = true;
-        return;
     }
-
-    const totalSelectedCount = Object.values(selectedTokens).reduce((sum, count) => sum + count, 0);
-    const differentSelectedTypes = Object.keys(selectedTokens).length;
-
-    let isValidSelection = false;
-    if (totalSelectedCount === TOKEN_SELECTED_MAX && differentSelectedTypes === TOKEN_SELECTED_MAX ) {
-        isValidSelection = true;
-    }
-    if (totalSelectedCount === 2 && differentSelectedTypes === 1 && Object.values(selectedTokens)[0] === 2){
-        isValidSelection = true;
-    }
-
-    button.disabled = !isValidSelection;
 }
 
 function confirmTokenSelection() {
-    const button = document.querySelector('#confirm-token-selection');
-    button.disabled = true;
-
     const gameId = loadFromStorage("gameId");
     const playerName = loadFromStorage("playerName");
+    console.log("Selected tokens:", selectedTokens);
 
-    if (!validatePlayerAndGameInfo(gameId, playerName)) return;
-
-    isCurrentPlayerTurn().then(stillMyTurn => {
-        if (!handleTurnValidation(stillMyTurn, gameId)) return;
-
-        getCurrentPlayerTokens(gameId, playerName)
-            .then(currentTokens => {
-                if (!handleCurrentTokensValidation(currentTokens)) return;
-
-                if (!validateTokenLimits(currentTokens, selectedTokens)) return;
-
-                sendSelectedTokens(gameId, playerName);
-            });
-    });
-}
-
-function validatePlayerAndGameInfo(gameId, playerName) {
-    if (!gameId || !playerName) {
-        alert("Error: Missing game or player information. Cannot take tokens.");
-        updateTakeTokensButton();
-        return false;
-    }
-    return true;
-}
-
-function handleTurnValidation(stillMyTurn, gameId) {
-    if (!stillMyTurn) {
-        alert("It's no longer your turn!");
-        retrieveTokens(gameId);
-        fetchPlayers();
-        return false;
-    }
-    return true;
-}
-
-function handleCurrentTokensValidation(currentTokens) {
-    if (currentTokens === null) {
-        alert("Error checking player tokens. Cannot proceed.");
-        updateTakeTokensButton();
-        return false;
-    }
-    return true;
-}
-
-function validateTokenLimits(currentTokens, selectedTokensParam) {
-    const currentTotal = Object.values(currentTokens).reduce((sum, count) => sum + count, 0);
-    const selectedTotal = Object.values(selectedTokensParam).reduce((sum, count) => sum + count, 0);
-
-    if (currentTotal + selectedTotal > 10) {
-        alert(`Cannot take tokens. You have ${currentTotal} and taking ${selectedTotal} would exceed the limit of 10.`);
-        updateTakeTokensButton();
-        return false;
-    }
-    return true;
+    sendSelectedTokens(gameId, playerName);
 }
 
 function sendSelectedTokens(gameId, playerName) {
-    const requestBody = { take: selectedTokens };
+    const requestBody = {take: selectedTokens};
     fetchFromServer(`/games/${gameId}/players/${playerName}/tokens`, "PATCH", requestBody)
         .then(() => {
-            retrieveTokens(gameId);
-            fetchPlayers();
+            initTurnIndication();
+            selectedTokens = {};
+            renderSelectedTokens();
+            retrieveTokens();
         })
-        .catch(() => {
-            alert('Could not take tokens. Please try again.');
-            updateTakeTokensButton();
+        .catch(error => {
+            alert("Error sending selected tokens");
         });
 }
 
-document.querySelector('#confirm-token-selection').addEventListener('click', confirmTokenSelection);
 
-
-
-export { retrieveTokens, updateTakeTokensButton };
+export {retrieveTokens, updateTakeTokensButton, setupTokenClickEvents};

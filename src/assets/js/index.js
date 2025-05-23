@@ -11,7 +11,7 @@ function deleteStorage(){
   StorageAbstractor.deleteMultipleKeysFromStorage( "gameId", "gameName", "numberOfPlayers", "selectedGame", "playerToken");
 }
 function testConnection(){
-  CommunicationAbstractor.fetchFromServer('/games', 'GET').then(gems => console.log(gems)).catch(ErrorHandler.handleError);
+  CommunicationAbstractor.fetchFromServer('/gems', 'GET').then(gems => console.log(gems)).catch(ErrorHandler.handleError);
 }
 
 function loadName(){

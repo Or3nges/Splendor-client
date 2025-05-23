@@ -116,3 +116,7 @@ select#filter option {
     justify-content: flex-start;
     margin-bottom: 1rem;
 }
+
+.hidden {
+    display: none;
+}

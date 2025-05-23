@@ -1,3 +1,4 @@
+
 import {allDevelopmentCards} from "../Objects/developmentCards.js";
 import {fetchGame, findGemByName} from "../util.js";
 import * as StorageAbstractor from "../data-connector/local-storage-abstractor.js";
@@ -6,7 +7,7 @@ import { retrieveTokens } from "./tokens.js";
 import { fetchPlayers } from "./player.js";
 
 const MAX_RESERVED_CARDS = 3;
-
+//pas dit aan jitse
 function createCardTemplate(card) {
     const figure = document.createElement('figure');
 
@@ -49,7 +50,7 @@ function renderReservedCards(reservedCards) {
         $reservedCardsContainer.appendChild($template);
     });
 }
-
+//pas deze functie aan jitse
 function renderDevelopmentCards(gameId) {
     const $cardsContainer = document.querySelector("#cardsContainer");
     if (!$cardsContainer) {
@@ -57,19 +58,22 @@ function renderDevelopmentCards(gameId) {
         return;
     }
 
-    while ($cardsContainer.firstChild) {
-        $cardsContainer.removeChild($cardsContainer.firstChild);
-    }
+        $cardsContainer.innerHTML = "";
 
     fetchGame(gameId)
         .then(data => {
-            data.market.forEach(tier => {
+            for (const tierIndex in data.game.market) {
+                const tier = data.game.market[tierIndex];
                 handleTier(tier);
-            });
-
-            const currentPlayer = data.players.find(player => player.name === StorageAbstractor.loadFromStorage("playerName"));
+            }
+            /*
+            data.game.market.forEach(tier => {
+                console.log(tier);
+                handleTier(tier);
+            });*/
+            const currentPlayer = data.game.players.find(player => player.name === StorageAbstractor.loadFromStorage("playerName"));
             if (currentPlayer) {
-                renderReservedCards(currentPlayer.reserve);
+                renderReservedCards(currentPlayer.reserved);
             }
         })
         .catch(error => {
@@ -78,7 +82,7 @@ function renderDevelopmentCards(gameId) {
 }
 
 function handleTier(tier) {
-    tier.visibleCards.forEach(card => {
+    tier.forEach(card => {
         displayDevelopmentCards(card);
     });
 }
@@ -276,10 +280,6 @@ function processGameData(gameData, cardLevel, cardName, gameId, playerName) {
 
     const playerBonuses = calculateAllBonuses(currentPlayer);
     const payment = calculatePayment(cardToBuy.cost, currentPlayer.tokens, playerBonuses);
-
-    if (!payment) {
-        return;
-    }
 
     const requestBody = {
         development: { name: cardToBuy.name },
@@ -483,14 +483,14 @@ function closeHandler($popup) {
     closePopup($popup);
     removeOldEventListeners($popup);
 }
-
+//pas dit aan jitse
 function populateCardDetails($template, card) {
     appendPrestigePoints($template, card);
     populateCostDetails($template, card);
     setCardTypeImage($template, card);
     setCardTokenImage($template, card);
 }
-
+//pas dit aan jitse
 function appendPrestigePoints($template, card) {
     if (card.prestigePoints !== 0) {
         const p = document.createElement('p');
@@ -536,7 +536,7 @@ function setCardTokenImage($template, card) {
         cardTokenImg.setAttribute('title', card.bonus + ' bonus');
     }
 }
-
+//pas dit aan jitse
 function displayDevelopmentCards(card) {
     const $cardsContainer = document.querySelector("#cardsContainer");
     if (!$cardsContainer) {
