@@ -101,7 +101,6 @@ function joinGame() {
     }
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}/players/${playerName}`, "POST")
         .then(data => {
-            console.log(data);
             addDataToLocalStorage(data);
             window.location.href = "lobby.html";
             deleteFromStorage("selectedGame");
