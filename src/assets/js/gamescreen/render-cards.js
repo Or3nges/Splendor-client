@@ -45,11 +45,27 @@ function renderReservedCards(reservedCards) {
         populateCardDetails($template, card);
 
         const $popup = document.querySelector("#buy-or-reserve-option");
-        addCardEventListeners($template, $popup);
-
+        addReserveCardEventListeners();
         $reservedCardsContainer.appendChild($template);
     });
 }
+
+function addReserveCardEventListeners() {
+    const $reservedCards = document.querySelectorAll("#reservedCardsContainer figure");
+    console.log($reservedCards)
+    const $popup = document.querySelector("#buy-or-reserve-option");
+
+    $reservedCards.forEach($figure => {
+        $figure.addEventListener('click', () => {
+            highlightSelectedCard($figure.getAttribute('data-card-name'));
+            attachReserveAndBuyHandlers($figure, $popup);
+            $popup.classList.remove('hidden');
+        });
+    });
+
+    attachCloseButtonListener($popup);
+}
+
 //pas deze functie aan jitse
 function renderDevelopmentCards(gameId) {
     const $cardsContainer = document.querySelector("#cardsContainer");
@@ -62,9 +78,9 @@ function renderDevelopmentCards(gameId) {
 
     fetchGame(gameId)
         .then(data => {
-            for (const tierIndex in data.game.market) {
-                const tier = data.game.market[tierIndex];
-                handleTier(tier);
+            for (const tierIndex in data.game.market.visibleCards) {
+                const tier = data.game.market.visibleCards[tierIndex];
+                handleTier(tier.cards);
             }
             /*
             data.game.market.forEach(tier => {
@@ -91,23 +107,8 @@ function findCard(tier) {
     return allDevelopmentCards.filter(tierLevel => tier === tierLevel.level)[0];
 }
 
-function isCurrentPlayerTurn() {
-    const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
-    const playerName = StorageAbstractor.loadFromStorage("playerName");
-
-    return CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
-        .then(game => {
-            const currentPlayer = game.currentPlayer;
-            return playerName === currentPlayer;
-        })
-        .catch(error => {
-            console.error("Error fetching current player:", error);
-            return false;
-        });
-}
-
 function handleReserveButtonClick($template, $popup) {
-    const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
+    const gameId = StorageAbstractor.loadFromStorage("gameId");
     const playerName = StorageAbstractor.loadFromStorage("playerName");
 
     fetchGameData(gameId, playerName)
@@ -115,56 +116,20 @@ function handleReserveButtonClick($template, $popup) {
         .catch(error => handleReserveError(error, $popup));
 }
 
-function processReserve(gameData, $template, $popup, gameId, playerName) {
+function processReserve(gameData, $figure, $popup, gameId, playerName) {
     const { game, currentPlayer } = gameData;
-
-    if (!canReserveCard(currentPlayer)) {
-        alert("You cannot reserve more than 3 cards.");
-        return null;
-    }
-
-    const cardDetails = getCardDetails($template);
-
-    if (isAlreadyReserved(currentPlayer, cardDetails)) {
-        alert("You have already reserved this card.");
-        return null;
-    }
-
+    const cardDetails = getCardDetails($figure);
     const cardToReserve = findCardInMarket(game, cardDetails.level, cardDetails.name);
-    if (!cardToReserve) {
-        console.error("Card not found in market to reserve:", cardDetails.name);
-        alert("Error: Could not find the selected card in the market.");
-        return null;
-    }
-
     const takeGold = determineGoldAvailability(currentPlayer, game);
 
     return sendReserveRequest(gameId, playerName, cardToReserve, takeGold)
         .then(result => handleReserveResult(result, $popup, gameId));
 }
 
-function canReserveCard(currentPlayer) {
-    return !(currentPlayer.reserve && currentPlayer.reserve.length >= MAX_RESERVED_CARDS);
-}
-
 function getCardDetails($template) {
     const cardLevel = parseInt($template.getAttribute('data-card-level'));
     const cardName = $template.getAttribute('data-card-name');
     return { level: cardLevel, name: cardName };
-}
-
-function isAlreadyReserved(currentPlayer, cardDetails) {
-    if (!currentPlayer.reserve) {
-        return false;
-    }
-
-    for (const element of currentPlayer.reserve) {
-        const reservedCard = element;
-        if (reservedCard.name === cardDetails.name && reservedCard.level === cardDetails.level) {
-            return true;
-        }
-    }
-    return false;
 }
 
 function determineGoldAvailability(currentPlayer, game) {
@@ -257,7 +222,7 @@ function validatePaymentTokens(payment, playerTokens) {
 }
 
 function handleBuyButtonClick($template, $popup) {
-    const gameId = parseInt(StorageAbstractor.loadFromStorage("gameId"));
+    const gameId = StorageAbstractor.loadFromStorage("gameId");
     const playerName = StorageAbstractor.loadFromStorage("playerName");
     const cardLevel = parseInt($template.getAttribute('data-card-level'));
     const cardName = $template.getAttribute('data-card-name');
@@ -356,13 +321,7 @@ function handleBuyError(error, $popup) {
 function fetchGameData(gameId, playerName) {
     return CommunicationAbstractor.fetchFromServer(`/games/${gameId}`, 'GET')
         .then(game => {
-            const currentPlayer = game.players.find(player => player.name === playerName);
-            if (!currentPlayer) {
-                console.error(`Could not find player with name ${playerName} in game data!`);
-            }
-            if (!currentPlayer.tokens) {
-                console.warn(`currentPlayer object for ${playerName} is missing the 'tokens' property!`, JSON.parse(JSON.stringify(currentPlayer)));
-            }
+            const currentPlayer = game.game.players.find(player => player.name === playerName);
             return { game, currentPlayer };
         })
         .catch(error => {
@@ -372,12 +331,8 @@ function fetchGameData(gameId, playerName) {
 }
 
 function findCardInMarket(game, cardLevel, cardName) {
-    const marketTier = game.market.find(tier => tier.level === cardLevel);
-    if (!marketTier) {
-        console.warn("Market tier not found for level:", cardLevel);
-        return null;
-    }
-    return marketTier.visibleCards.find(card => card.name === cardName);
+    const marketTier = game.game.market.visibleCards[cardLevel - 1];
+    return marketTier.cards.find(card => card.name === cardName);
 }
 
 function sendReserveRequest(gameId, playerName, cardToReserve, takeGold) {
@@ -402,67 +357,52 @@ function closePopup($popup) {
     document.querySelectorAll("#gameScreen div figure, #reservedCards figure").forEach(cardElement => {
         cardElement.classList.remove("selected");
     });
-    $popup.style.display = "none";
+    $popup.classList.add('hidden');
 }
 
-function selectCard($template, $popup) {
-    document.querySelectorAll("#gameScreen div figure").forEach(cardElement => {
-        cardElement.classList.remove("selected");
+function addCardEventListeners($template) {
+    const $popup = document.querySelector("#buy-or-reserve-option");
+    const allCards = document.querySelectorAll("#gameScreen div#cardsContainer figure");
+
+    allCards.forEach(card => {
+        card.addEventListener('click', () => {cardClickHandler($template, card.getAttribute('data-card-name'), $popup);});
     });
-    $template.classList.add("selected");
-    $popup.style.display = "block";
-}
 
-function addCardEventListeners($template, $popup) {
-    const cardName = $template.dataset.cardName;
-
-    attachCardClickListener($template, cardName, $popup);
     attachCloseButtonListener($popup);
 }
 
-function attachCardClickListener($template, cardName, $popup) {
-    if (!$template.cardClickHandlerAttached) {
-        $template.addEventListener('click', () => cardClickHandler($template, cardName, $popup));
-        $template.cardClickHandlerAttached = true;
-    }
-}
-
 function cardClickHandler($template, cardName, $popup) {
-    isCurrentPlayerTurn()
-        .then(isTurn => {
-            if (!isTurn) {
-                return;
-            }
-
-            removeOldEventListeners($popup);
-            selectCard($template, $popup);
-            attachReserveAndBuyHandlers($template, $popup);
-        })
-        .catch(error => {
-            console.error(`[${cardName}] Error checking player turn:`, error);
-        });
+    highlightSelectedCard(cardName)
+    attachReserveAndBuyHandlers(getCardByName(cardName), $popup);
+    $popup.classList.remove('hidden');
 }
+function getCardByName(cardName) {
+    const allCards = document.querySelectorAll("#gameScreen div#cardsContainer figure");
 
-function removeOldEventListeners($popup) {
-    const oldReserveButton = $popup.querySelector('#reserve-button');
-    const oldBuyButton = $popup.querySelector('#buy-button');
-
-    if (oldReserveButton && oldReserveButton.clickHandler) {
-        oldReserveButton.removeEventListener('click', oldReserveButton.clickHandler);
-        oldReserveButton.clickHandler = null;
-    }
-    if (oldBuyButton && oldBuyButton.clickHandler) {
-        oldBuyButton.removeEventListener('click', oldBuyButton.clickHandler);
-        oldBuyButton.clickHandler = null;
+    for (const card of allCards) {
+        if (card.getAttribute('data-card-name') === cardName) {
+            return card;
+        }
     }
 }
 
-function attachReserveAndBuyHandlers($template, $popup) {
-    const $reserveButton = $popup.querySelector('#reserve-button');
-    const $buyButton = $popup.querySelector('#buy-button');
+function highlightSelectedCard(cardName) {
+    const allCards = document.querySelectorAll("#gameScreen div#cardsContainer figure");
+    allCards.forEach(card => {
+        if (card.getAttribute('data-card-name') === cardName) {
+            card.classList.add("selected");
+        } else {
+            card.classList.remove("selected");
+        }
+    });
+}
 
-    const reserveHandler = () => handleReserveButtonClick($template, $popup);
-    const buyHandler = () => handleBuyButtonClick($template, $popup);
+function attachReserveAndBuyHandlers($figure, $popup) {
+    const $reserveButton = document.querySelector('#reserve-button');
+    const $buyButton = document.querySelector('#buy-button');
+
+    const reserveHandler = () => handleReserveButtonClick($figure, $popup);
+    const buyHandler = () => handleBuyButtonClick($figure, $popup);
 
     $reserveButton.addEventListener('click', reserveHandler);
     $buyButton.addEventListener('click', buyHandler);
@@ -473,15 +413,11 @@ function attachReserveAndBuyHandlers($template, $popup) {
 
 function attachCloseButtonListener($popup) {
     const $closeButton = $popup.querySelector('.close');
-    if (!$closeButton.closeHandlerAttached) {
         $closeButton.addEventListener('click', () => closeHandler($popup));
-        $closeButton.closeHandlerAttached = true;
-    }
 }
 
 function closeHandler($popup) {
     closePopup($popup);
-    removeOldEventListeners($popup);
 }
 //pas dit aan jitse
 function populateCardDetails($template, card) {
@@ -544,17 +480,10 @@ function displayDevelopmentCards(card) {
         return;
     }
 
-    const $popup = document.querySelector("#buy-or-reserve-option");
-    if (!$popup) {
-        console.error("Cannot find popup (#buy-or-reserve-option)!");
-        return;
-    }
-
     const $template = createCardTemplate(card);
     populateCardDetails($template, card);
-    addCardEventListeners($template, $popup);
 
     $cardsContainer.appendChild($template);
 }
 
-export {renderDevelopmentCards};
+export {renderDevelopmentCards, addCardEventListeners, addReserveCardEventListeners};
