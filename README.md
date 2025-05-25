@@ -32,3 +32,8 @@ https://learncssgrid.com/
 
 And for your convenience, yet use with caution
 https://grid.layoutit.com/ 
+
+| Bug behaviour                                                                                                                                | How to reproduce                                             | Why it hasn't been fixed |
+|----------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|-----------------------|
+| De popup "Do you want to buy or reserve a card?" gaat niet weg wanneer je op "reserve" klikt, dus je moet handmatig op het kruisje klikken | In het gamescherm, klik op een development card en reserveer | Te weinig tijd        |
+| De development cards flikkeren bij elke gameloop fetch | Start een game                                               | Geen manier gevonden om de fetch te verbergen |
