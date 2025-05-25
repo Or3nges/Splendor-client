@@ -147,12 +147,9 @@ function determineGoldAvailability(currentPlayer, game) {
 }
 
 function handleReserveResult(result, $popup, gameId) {
-    if (result) {
-        closePopup($popup);
-        retrieveTokens(gameId);
-        renderDevelopmentCards(gameId);
-        fetchPlayers();
-    }
+    initTurnIndication();
+    const $buychoice = document.querySelector("#buy-cards-option");
+    $buychoice.classList.add('hidden');
 }
 
 function handleReserveError(error, $popup) {
