@@ -17,17 +17,16 @@ function initTurnIndication(){
 function gameLoop(){
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}`).then(data => {
         fetchPlayers();
+        renderDevelopmentCards(gameId);
         if ( isCurrentPlayerTurn(data.game.currentPlayer)) {
             setTimeout(setupTokenClickEvents, setupTime);
-            fetchPlayers();
             retrieveTokens();
             updateTakeTokensButton(isCurrentPlayerTurn(data.game.currentPlayer));
             setTimeout(addCardEventListeners, setupTime);
             setTimeout(addReserveCardEventListeners, setupTime);
         } else {
-            retrieveTokens(gameId);
+            retrieveTokens();
             initNobles();
-            renderDevelopmentCards(gameId);
             updateTakeTokensButton(isCurrentPlayerTurn(data.game.currentPlayer));
             setTimeout(gameLoop, GameLoopDelay);
         }

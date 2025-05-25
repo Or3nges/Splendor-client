@@ -1,12 +1,17 @@
-
 import {allDevelopmentCards} from "../Objects/developmentCards.js";
 import {fetchGame, findGemByName} from "../util.js";
 import * as StorageAbstractor from "../data-connector/local-storage-abstractor.js";
 import * as CommunicationAbstractor from "../data-connector/api-communication-abstractor.js";
 import { retrieveTokens } from "./tokens.js";
 import { fetchPlayers } from "./player.js";
+import {initTurnIndication} from "./turn-indication.js";
 
 const MAX_RESERVED_CARDS = 3;
+let boughtFromReserve = false;
+let currentCard;
+document.querySelector("#buy-cards-option #with").addEventListener('click', handleBuyChoice);
+document.querySelector("#buy-cards-option #without").addEventListener('click', handleBuyChoice);
+
 //pas dit aan jitse
 function createCardTemplate(card) {
     const figure = document.createElement('figure');
@@ -44,26 +49,28 @@ function renderReservedCards(reservedCards) {
         const $template = createCardTemplate(card);
         populateCardDetails($template, card);
 
-        const $popup = document.querySelector("#buy-or-reserve-option");
-        addReserveCardEventListeners();
         $reservedCardsContainer.appendChild($template);
     });
 }
 
 function addReserveCardEventListeners() {
     const $reservedCards = document.querySelectorAll("#reservedCardsContainer figure");
-    console.log($reservedCards)
     const $popup = document.querySelector("#buy-or-reserve-option");
 
     $reservedCards.forEach($figure => {
         $figure.addEventListener('click', () => {
-            highlightSelectedCard($figure.getAttribute('data-card-name'));
-            attachReserveAndBuyHandlers($figure, $popup);
+            reservedClickHandler($figure, $popup, true);
             $popup.classList.remove('hidden');
         });
     });
 
     attachCloseButtonListener($popup);
+}
+
+function reservedClickHandler($template, $popup, reserved) {
+    boughtFromReserve = reserved;
+    currentCard = $template;
+    attachReserveAndBuyHandlers($template, $popup);
 }
 
 //pas deze functie aan jitse
@@ -74,7 +81,7 @@ function renderDevelopmentCards(gameId) {
         return;
     }
 
-        $cardsContainer.innerHTML = "";
+    $cardsContainer.innerHTML = "";
 
     fetchGame(gameId)
         .then(data => {
@@ -157,118 +164,98 @@ function calculatePayment(cardCost, playerTokens, playerBonuses) {
     const payment = {};
     const neededGold = calculateNeededGold(cardCost, playerTokens, playerBonuses, payment);
 
-    if (!validateGoldTokens(neededGold, playerTokens)) {
-        return null;
-    }
-
     if (neededGold > 0) {
-        payment['Gold'] = neededGold;
-    }
-
-    if (!validatePaymentTokens(payment, playerTokens)) {
-        return null;
+        payment['GOLD'] = neededGold;
     }
 
     return payment;
 }
 
-function calculateNeededGold(cardCost, playerTokens, playerBonuses, payment) {
+function calculateNeededGold(cardCost, playerTokens, playerBonuses) {
+    console.log(playerBonuses);
+    console.log(cardCost);
+    console.log(playerTokens);
     let neededGold = 0;
+    const payment = {};
 
     for (const gemType in cardCost) {
         const cost = cardCost[gemType];
         const bonus = playerBonuses[gemType] || 0;
-        let needed = cost - bonus;
+        const availableTokens = playerTokens[gemType] || 0;
 
-        if (needed > 0) {
-            const availableTokens = playerTokens[gemType] || 0;
-            const tokensToUse = Math.min(needed, availableTokens);
-
-            if (tokensToUse > 0) {
-                payment[gemType] = tokensToUse;
-                needed -= tokensToUse;
+        let shortage = cost - (bonus + availableTokens);
+        if (shortage > 0) {
+                neededGold += shortage;
             }
-
-            if (needed > 0) {
-                neededGold += needed;
-            }
-        }
+        payment[gemType] = availableTokens;
     }
-
-    return neededGold;
+    payment['GOLD'] = neededGold;
+    return payment;
 }
 
-function validateGoldTokens(neededGold, playerTokens) {
-    const availableGold = playerTokens['Gold'] || 0;
-    if (neededGold > availableGold) {
-        console.error("Insufficient funds: Not enough gold tokens.");
-        alert("Insufficient funds to buy this card (not enough gold).");
-        return false;
-    }
-    return true;
+function handleBuyButtonClick() {
+    const $buyChoice = document.querySelector("#buy-cards-option");
+    $buyChoice.classList.remove('hidden');
 }
 
-function validatePaymentTokens(payment, playerTokens) {
-    for (const gemType in payment) {
-        const required = payment[gemType];
-        const available = playerTokens[gemType] || 0;
-        if (available < required) {
-            console.error(`Insufficient funds: Not enough ${gemType} tokens. Required: ${required}, Available: ${available}`);
-            alert(`Insufficient funds to buy this card (not enough ${gemType} tokens).`);
-            return false;
-        }
-    }
-    return true;
-}
-
-function handleBuyButtonClick($template, $popup) {
+function handleBuyChoice(e) {
+    e.preventDefault();
     const gameId = StorageAbstractor.loadFromStorage("gameId");
     const playerName = StorageAbstractor.loadFromStorage("playerName");
-    const cardLevel = parseInt($template.getAttribute('data-card-level'));
-    const cardName = $template.getAttribute('data-card-name');
-
+    const cardLevel = parseInt(currentCard.getAttribute('data-card-level'));
+    const cardName = currentCard.getAttribute('data-card-name');
+    let buyChoice = e.currentTarget.id;
     fetchGameData(gameId, playerName)
-        .then(gameData => processGameData(gameData, cardLevel, cardName, gameId, playerName))
-        .then(buyResult => handleBuyResult(buyResult, $popup, gameId))
-        .catch(error => handleBuyError(error, $popup));
+        .then(gameData => processGameData(gameData.game, cardLevel, cardName, gameId, playerName, buyChoice === 'with'))
+        .then(result => handleBuyResult(result))
 }
 
-function processGameData(gameData, cardLevel, cardName, gameId, playerName) {
-    const { game, currentPlayer } = gameData;
-    const cardToBuy = findCardToBuy(game, currentPlayer, cardLevel, cardName);
-
-    if (!cardToBuy) {
-        console.error("Card details not found for:", cardName, "Level:", cardLevel);
-        alert("Could not find the card details.");
-        return;
+function processGameData(gameData, cardLevel, cardName, gameId, playerName, withGoldBoolean) {
+    let currentPlayer = gameData.game.players.find(player => player.name === gameData.game.currentPlayer);
+    const cardToBuy = findCardToBuy(gameData, currentPlayer, cardLevel, cardName);
+    const playerBonuses = calculateAllBonuses(currentPlayer);
+    let payment;
+    if (withGoldBoolean) {
+        payment = calculateNeededGold(cardToBuy.cost, currentPlayer.purse.tokensMap, playerBonuses);
+        console.log(payment);
+    } else {
+        payment = cardToBuy.cost;
     }
 
-    const playerBonuses = calculateAllBonuses(currentPlayer);
-    const payment = calculatePayment(cardToBuy.cost, currentPlayer.tokens, playerBonuses);
 
     const requestBody = {
-        development: { name: cardToBuy.name },
+        development: {name: cardToBuy.name},
         payment: payment,
-        fromReserve: cardToBuy.boughtFromReserve
     };
-
-    return CommunicationAbstractor.fetchFromServer(
-        `/games/${gameId}/players/${playerName}/developments`,
-        'POST',
-        requestBody
-    );
+    console.log(requestBody)
+    try {
+    if (!boughtFromReserve) {
+        return CommunicationAbstractor.fetchFromServer(
+            `/games/${gameId}/players/${playerName}/developments`,
+            'POST',
+            requestBody
+        );
+    } else {
+        return CommunicationAbstractor.fetchFromServer(
+            `/games/${gameId}/players/${playerName}/reserve/${cardToBuy.name}`,
+            'DELETE',
+            requestBody
+        );
+    }} catch (error) {
+        alert(`Error buying card: ${error.message || error}`);
+        throw error;
+    }
 }
 
 function findCardToBuy(game, currentPlayer, cardLevel, cardName) {
-    let cardToBuy = findCardInMarket(game, cardLevel, cardName);
-    let boughtFromReserve = false;
+    let cardToBuy;
 
-    if (!cardToBuy) {
-        cardToBuy = currentPlayer.reserve && currentPlayer.reserve.find(card => card.name === cardName && card.level === cardLevel);
-        if (cardToBuy) {
-            boughtFromReserve = true;
-        }
+    if (!boughtFromReserve) {
+        cardToBuy = findCardInMarket(game, cardLevel, cardName);
+    } else {
+        cardToBuy = currentPlayer.reserved.find(card => card.name === cardName);
     }
+
 
     if (cardToBuy) {
         cardToBuy.boughtFromReserve = boughtFromReserve;
@@ -291,7 +278,6 @@ function calculateAllBonuses(currentPlayer) {
                 bonuses[card.bonus] = (bonuses[card.bonus] || 0) + 1;
             }
         });
-        console.log("Bonuses from built cards:", bonuses);
     }
 
     if (currentPlayer.developments && Array.isArray(currentPlayer.developments)) {
@@ -304,17 +290,10 @@ function calculateAllBonuses(currentPlayer) {
 
     return bonuses;
 }
-function handleBuyResult(buyResult, $popup, gameId) {
-    closePopup($popup);
-    retrieveTokens(gameId);
-    fetchPlayers();
-    renderDevelopmentCards(gameId);
-}
-
-function handleBuyError(error, $popup) {
-    console.error("Error buying card:", error);
-    alert(`Failed to buy card: ${error.message || error}`);
-    closePopup($popup);
+function handleBuyResult() {
+    const $popup = document.querySelector("#buy-cards-option");
+    $popup.classList.add('hidden');
+    initTurnIndication();
 }
 
 
@@ -356,8 +335,9 @@ function sendReserveRequest(gameId, playerName, cardToReserve, takeGold) {
 function closePopup($popup) {
     document.querySelectorAll("#gameScreen div figure, #reservedCards figure").forEach(cardElement => {
         cardElement.classList.remove("selected");
-    });
+    });/*
     $popup.classList.add('hidden');
+    */
 }
 
 function addCardEventListeners($template) {
@@ -365,14 +345,16 @@ function addCardEventListeners($template) {
     const allCards = document.querySelectorAll("#gameScreen div#cardsContainer figure");
 
     allCards.forEach(card => {
-        card.addEventListener('click', () => {cardClickHandler($template, card.getAttribute('data-card-name'), $popup);});
+        card.addEventListener('click', () => {cardClickHandler($template, card.getAttribute('data-card-name'), $popup, false);});
     });
 
     attachCloseButtonListener($popup);
 }
 
-function cardClickHandler($template, cardName, $popup) {
+function cardClickHandler($template, cardName, $popup, reserved) {
+    boughtFromReserve = reserved;
     highlightSelectedCard(cardName)
+    currentCard = getCardByName(cardName);
     attachReserveAndBuyHandlers(getCardByName(cardName), $popup);
     $popup.classList.remove('hidden');
 }
@@ -387,6 +369,7 @@ function getCardByName(cardName) {
 }
 
 function highlightSelectedCard(cardName) {
+    boughtFromReserve = false;
     const allCards = document.querySelectorAll("#gameScreen div#cardsContainer figure");
     allCards.forEach(card => {
         if (card.getAttribute('data-card-name') === cardName) {
@@ -402,18 +385,16 @@ function attachReserveAndBuyHandlers($figure, $popup) {
     const $buyButton = document.querySelector('#buy-button');
 
     const reserveHandler = () => handleReserveButtonClick($figure, $popup);
-    const buyHandler = () => handleBuyButtonClick($figure, $popup);
 
     $reserveButton.addEventListener('click', reserveHandler);
-    $buyButton.addEventListener('click', buyHandler);
+    $buyButton.addEventListener('click', handleBuyButtonClick);
 
     $reserveButton.clickHandler = reserveHandler;
-    $buyButton.clickHandler = buyHandler;
 }
 
 function attachCloseButtonListener($popup) {
     const $closeButton = $popup.querySelector('.close');
-        $closeButton.addEventListener('click', () => closeHandler($popup));
+    $closeButton.addEventListener('click', () => closeHandler($popup));
 }
 
 function closeHandler($popup) {
