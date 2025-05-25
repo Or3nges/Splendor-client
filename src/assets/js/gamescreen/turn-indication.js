@@ -3,7 +3,7 @@ import * as StorageAbstractor from "../data-connector/local-storage-abstractor.j
 import {fetchPlayers} from "./player.js";
 import {retrieveTokens, updateTakeTokensButton, setupTokenClickEvents} from "./tokens.js";
 import {initNobles} from "./nobles.js";
-import {renderDevelopmentCards} from "./render-cards.js";
+import {addCardEventListeners, addReserveCardEventListeners, renderDevelopmentCards} from "./render-cards.js";
 
 const GameLoopDelay = 2000;
 const setupTime = 200;
@@ -22,6 +22,8 @@ function gameLoop(){
             fetchPlayers();
             retrieveTokens();
             updateTakeTokensButton(isCurrentPlayerTurn(data.game.currentPlayer));
+            setTimeout(addCardEventListeners, setupTime);
+            setTimeout(addReserveCardEventListeners, setupTime);
         } else {
             retrieveTokens(gameId);
             initNobles();
