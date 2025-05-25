@@ -77,7 +77,6 @@ function checkPrestigePoints(player) {
     const MAX_PRESTIGE_POINTS = 15;
     if (player.totalPrestigePoints >= MAX_PRESTIGE_POINTS) {
         alert(`${player.name} has reached ${MAX_PRESTIGE_POINTS} prestige points!`);
-        window.location.href = "../html/endscreen.html";
     }
 }
 

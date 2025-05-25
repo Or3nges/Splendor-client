@@ -17,6 +17,9 @@ function initTurnIndication(){
 function gameLoop(){
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}`).then(data => {
         fetchPlayers();
+        if (data.game.state === "COMPLETED") {
+            initializeEndScreen();
+        }
         renderDevelopmentCards(gameId);
         if ( isCurrentPlayerTurn(data.game.currentPlayer)) {
             setTimeout(setupTokenClickEvents, setupTime);
@@ -35,6 +38,10 @@ function gameLoop(){
 
 function isCurrentPlayerTurn(currentplayer) {
     return currentplayer === playerName;
+}
+
+function initializeEndScreen() {
+    window.location.href = "./html/endscreen.html";
 }
 
 export {initTurnIndication};
