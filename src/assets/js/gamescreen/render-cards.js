@@ -148,4 +148,90 @@ function addReserveCardEventListeners() {
     }
 }
 
+function setupPopupButtons() {
+    const reserveButton = document.querySelector('#reserve-button');
+    const buyButton = document.querySelector('#buy-button');
+
+    reserveButton.addEventListener('click', handleReserveClick);
+    buyButton.addEventListener('click', function() {
+        document.querySelector("#buy-or-reserve-option").classList.add('hidden');
+        document.querySelector("#buy-cards-option").classList.remove('hidden');
+    });
+}
+
+function handleReserveClick() {
+    const gameId = StorageAbstractor.loadFromStorage("gameId");
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+    const cardLevel = parseInt(currentCard.getAttribute('data-card-level'));
+    const cardName = currentCard.getAttribute('data-card-name');
+
+    fetchGame(gameId).then(data => {
+        const card = findCardInGame(data.game, cardLevel, cardName);
+        const hasGold = data.game.unclaimedTokens.GOLD > 0;
+
+        const requestBody = {
+            development: { name: card.name },
+            takeGold: hasGold
+        };
+
+        return CommunicationAbstractor.fetchFromServer(
+            `/games/${gameId}/players/${playerName}/reserve`,
+            'POST',
+            requestBody
+        );
+    }).then(() => {
+        document.querySelector("#buy-or-reserve-option").classList.add('hidden');
+        initTurnIndication();
+    });
+}
+
+function handleBuyChoice(e) {
+    const { gameId, playerName, cardLevel, cardName, useGold } = buildBuyRequestData(e);
+
+    fetchGame(gameId)
+        .then(data => prepareBuyRequest(data.game, cardLevel, cardName, playerName, useGold))
+        .then(({ requestBody, card, boughtFromReserve: boughtFromReserveFlag }) =>
+            sendBuyRequest(gameId, playerName, card, requestBody, boughtFromReserveFlag)
+        )
+        .then(() => {
+            document.querySelector("#buy-cards-option").classList.add('hidden');
+            initTurnIndication();
+        });
+}
+
+function buildBuyRequestData(e) {
+    const gameId = StorageAbstractor.loadFromStorage("gameId");
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
+    const cardLevel = parseInt(currentCard.getAttribute('data-card-level'));
+    const cardName = currentCard.getAttribute('data-card-name');
+    const useGold = e.currentTarget.id === 'with';
+    return { gameId, playerName, cardLevel, cardName, useGold };
+}
+
+function prepareBuyRequest(game, cardLevel, cardName, playerName, useGold) {
+    const card = findCardInGame(game, cardLevel, cardName);
+    const player = findPlayerInGame(game, playerName);
+    const payment = useGold ? calculatePaymentWithGold(card, player) : card.cost;
+    const requestBody = {
+        development: { name: card.name },
+        payment: payment
+    };
+    return { requestBody, card, boughtFromReserve };
+}
+
+function sendBuyRequest(gameId, playerName, card, requestBody, boughtFromReserveFlag) {
+    if (boughtFromReserveFlag) {
+        return CommunicationAbstractor.fetchFromServer(
+            `/games/${gameId}/players/${playerName}/reserve/${card.name}`,
+            'DELETE',
+            requestBody
+        );
+    } else {
+        return CommunicationAbstractor.fetchFromServer(
+            `/games/${gameId}/players/${playerName}/developments`,
+            'POST',
+            requestBody
+        );
+    }
+}
 
