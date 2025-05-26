@@ -1,123 +1,92 @@
 import {allDevelopmentCards} from "../Objects/developmentCards.js";
-import {fetchGame, findGemByName} from "../util.js";
+import {createLiElement, fetchGame, findGemByName} from "../util.js";
 import * as StorageAbstractor from "../data-connector/local-storage-abstractor.js";
 import * as CommunicationAbstractor from "../data-connector/api-communication-abstractor.js";
 import {initTurnIndication} from "./turn-indication.js";
+import * as communicationAbstractor from "../data-connector/api-communication-abstractor.js";
+import {allGems} from "../Objects/gems.js";
 
 let boughtFromReserve = false;
 let currentCard;
 
 document.querySelector("#buy-cards-option #with").addEventListener('click', handleBuyChoice);
 document.querySelector("#buy-cards-option #without").addEventListener('click', handleBuyChoice);
+const $gamescreenArticle = document.querySelector("#gameScreen #cardsContainer");
 
-function createCardTemplate(card) {
-    const figure = document.createElement('figure');
-    const cardTypeImg = document.createElement('img');
-    const cardTokenImg = document.createElement('img');
-    const costUl = document.createElement('ul');
-
-    cardTypeImg.id = 'cardType';
-    cardTokenImg.id = 'cardToken';
-    costUl.id = 'cost';
-
-    figure.appendChild(cardTypeImg);
-    figure.appendChild(cardTokenImg);
-    figure.appendChild(costUl);
-    figure.setAttribute('data-card-level', card.level);
-    figure.setAttribute('data-card-name', card.name);
-
-    return figure;
+function fetchDevelopmentCards(gameId) {
+    $gamescreenArticle.innerHTML = "";
+    communicationAbstractor.fetchFromServer(`/games/${gameId}`, "GET")
+        .then(data =>
+            renderDevelopmentCards(data.game.market.visibleCards));
 }
 
-function renderDevelopmentCards(gameId) {
-    const cardsContainer = document.querySelector("#cardsContainer");
-    cardsContainer.innerHTML = "";
+function fetchReservedCards(gameId) {
+    const playerName = StorageAbstractor.loadFromStorage("playerName");
 
     fetchGame(gameId).then(data => {
-        for (const tier of data.game.market.visibleCards) {
-            for (const card of tier.cards) {
-                displayCard(card);
-            }
+        const player = data.game.players.find(player => player.name === playerName);
+        if (player) {
+            renderReservedCards(player.reserved);
         }
-
-        const playerName = StorageAbstractor.loadFromStorage("playerName");
-        let playerFound = false;
-        for (let k = 0; k < data.game.players.length && !playerFound; k++) {
-            if (data.game.players[k].name === playerName) {
-                renderReservedCards(data.game.players[k].reserved);
-                playerFound = true;
-            }
-        }
+    }).catch(error => {
+        console.error("Error fetching game data:", error);
     });
 }
 
-function displayCard(card) {
-    const cardsContainer = document.querySelector("#cardsContainer");
-    const template = createCardTemplate(card);
-    setCardImages(template, card);
-    addPrestigePoints(template, card);
-    addCostToCard(template, card);
-    cardsContainer.appendChild(template);
+function renderDevelopmentCards(tiers) {
+    tiers.forEach(tier => {
+        handleTier(tier);
+    });
 }
 
-function setCardImages(template, card) {
-    const cardTypeImg = template.querySelector('#cardType');
-    const cardTokenImg = template.querySelector('#cardToken');
-
-    for (const element of allDevelopmentCards) {
-        if (element.level === card.level) {
-            cardTypeImg.src = element.img;
-        }
-    }
-
-    const bonusGem = findGemByName(card.bonus);
-    if (bonusGem) {
-        cardTokenImg.src = bonusGem.img;
-    }
+function handleTier(tier) {
+    tier.cards.forEach(card => {
+        displayDevelopmentCards(card, $gamescreenArticle);
+    });
 }
 
-function addPrestigePoints(template, card) {
-    if (card.prestigePoints > 0) {
-        const p = document.createElement('p');
-        p.textContent = card.prestigePoints;
-        template.appendChild(p);
-    }
+function findGem(gemName) {
+    return allGems.filter(gem => gem.name === gemName)[0];
 }
 
-function addCostToCard(template, card) {
-    const costList = template.querySelector('#cost');
-    const costKeys = Object.keys(card.cost);
+function findCard(tier) {
+    return allDevelopmentCards.filter(tierLevel => tier === tierLevel.level)[0];
+}
 
-    for (const element of costKeys) {
-        const gemName = element;
-        const amount = card.cost[gemName];
-        const gem = findGemByName(gemName);
+function displayDevelopmentCards(card, container) {
+    const $template = document.querySelector('#developmentCardContainer').content.firstElementChild.cloneNode(true);
+    const $cost = $template.querySelector('#cost');
 
-        if (gem) {
-            const li = document.createElement('li');
-            li.className = gem.tokenId;
-            li.textContent = amount;
-            costList.appendChild(li);
-        }
+    if (card.prestigePoints !== 0) {
+        const p = `<p>${card.prestigePoints}</p>`;
+        $template.insertAdjacentHTML('beforeend', p);
     }
+
+    Object.keys(card.cost).forEach(bonusCost => {
+        $cost.insertAdjacentHTML('beforeend', createLiElement(card.cost[bonusCost], findGem(bonusCost).tokenId));
+    });
+    $template.querySelector('#cardType').setAttribute('src', findCard(card.level).img);
+    $template.querySelector('#cardToken').setAttribute('src', findGem(card.bonus).img);
+
+    $template.setAttribute('data-card-name', card.name);
+    $template.setAttribute('data-card-level', card.level);
+    $template.setAttribute('data-use-gold', false);
+
+    container.insertAdjacentHTML('beforeend', $template.outerHTML);
 }
 
 function renderReservedCards(reservedCards) {
     const container = document.querySelector("#reservedCardsContainer");
     container.innerHTML = "";
 
-    for (const element of reservedCards) {
-        const template = createCardTemplate(element);
-        setCardImages(template, element);
-        addPrestigePoints(template, element);
-        addCostToCard(template, element);
-        container.appendChild(template);
-    }
+    reservedCards.forEach(card => {
+        displayDevelopmentCards(card, container);
+    });
 }
 
 function addCardEventListeners() {
     const popup = document.querySelector("#buy-or-reserve-option");
-    const allCards = document.querySelectorAll("#gameScreen div#cardsContainer figure");
+    const allCards = document.querySelectorAll("#gameScreen #cardsContainer li");
 
     for (const element of allCards) {
         element.addEventListener('click', function () {
@@ -137,7 +106,7 @@ function addCardEventListeners() {
 
 function addReserveCardEventListeners() {
     const popup = document.querySelector("#buy-or-reserve-option");
-    const reservedCards = document.querySelectorAll("#reservedCardsContainer figure");
+    const reservedCards = document.querySelectorAll("#reservedCardsContainer li");
 
     for (const element of reservedCards) {
         element.addEventListener('click', function () {
@@ -265,31 +234,22 @@ function findPlayerInGame(game, playerName) {
 }
 
 function calculatePaymentWithGold(card, player) {
+    let neededGold = 0;
     const payment = {};
-    const costKeys = Object.keys(card.cost);
-    let goldNeeded = 0;
+    const cardCost = card.cost;
 
-    for (const element of costKeys) {
-        const gemType = element;
-        const cost = card.cost[gemType];
-        const playerTokens = player.purse.tokensMap[gemType] || 0;
-        const playerBonuses = player.bonuses[gemType] || 0;
-        const available = playerTokens + playerBonuses;
-
-        if (available >= cost) {
-            payment[gemType] = playerTokens;
-        } else {
-            payment[gemType] = playerTokens;
-            goldNeeded = goldNeeded + (cost - available);
+    for (const gemType in cardCost) {
+        const cost = cardCost[gemType];
+        const bonus = player.bonuses[gemType] || 0;
+        const availableTokens = player.purse.tokensMap[gemType] || 0;
+        let shortage = cost - (bonus + availableTokens);
+        if (shortage > 0) {
+            neededGold += shortage;
         }
+        payment[gemType] = cost - shortage;
     }
-
-    if (goldNeeded > 0) {
-        payment.GOLD = goldNeeded;
-    }
-
+    payment['GOLD'] = neededGold;
     return payment;
 }
 
-export {renderDevelopmentCards, addCardEventListeners, addReserveCardEventListeners};
-
+export {addCardEventListeners, addReserveCardEventListeners, fetchDevelopmentCards, fetchReservedCards};
