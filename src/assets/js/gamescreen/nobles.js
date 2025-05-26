@@ -5,6 +5,7 @@ import {allGems} from "../Objects/gems.js";
 import { fetchPlayers } from "./player.js";
 
 const gameId = StorageAbstractor.loadFromStorage("gameId");
+const $template = document.querySelector("template#noble-template");
 
 function initNobles() {
     fetchAndRenderUnclaimedNobles();
@@ -15,7 +16,7 @@ function fetchAndRenderUnclaimedNobles() {
     CommunicationAbstractor.fetchFromServer(`/games/${gameId}`)
         .then(data => {
             const unclaimedNobles = data.game.nobles || [];
-            const $section = document.querySelector("div#noblesContainer");
+            const $section = document.querySelector("ul#noblesContainer");
             $section.innerHTML = '';
             unclaimedNobles.forEach(noble => renderNoble(noble, $section));
         })
@@ -55,7 +56,6 @@ function renderNoblePrestigePoints(nobleElement, prestigePoints) {
 }
 
 function renderNoble(noble, $section) {
-    const $template = document.querySelector("template#noble-template");
     if (!$template) {
         console.error("Noble template not found.");
         return;
