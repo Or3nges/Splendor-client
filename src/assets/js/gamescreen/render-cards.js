@@ -184,7 +184,7 @@ function calculateNeededGold(cardCost, playerTokens, playerBonuses) {
         if (shortage > 0) {
                 neededGold += shortage;
             }
-        payment[gemType] = cost - shortage;
+        payment[gemType] = availableTokens;
     }
     payment['GOLD'] = neededGold;
     return payment;
