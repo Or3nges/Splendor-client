@@ -265,29 +265,21 @@ function findPlayerInGame(game, playerName) {
 }
 
 function calculatePaymentWithGold(card, player) {
+    let neededGold = 0;
     const payment = {};
-    const costKeys = Object.keys(card.cost);
-    let goldNeeded = 0;
+    const cardCost = card.cost;
 
-    for (const element of costKeys) {
-        const gemType = element;
-        const cost = card.cost[gemType];
-        const playerTokens = player.purse.tokensMap[gemType] || 0;
-        const playerBonuses = player.bonuses[gemType] || 0;
-        const available = playerTokens + playerBonuses;
-
-        if (available >= cost) {
-            payment[gemType] = playerTokens;
-        } else {
-            payment[gemType] = playerTokens;
-            goldNeeded = goldNeeded + (cost - available);
+    for (const gemType in cardCost) {
+        const cost = cardCost[gemType];
+        const bonus = player.bonuses[gemType] || 0;
+        const availableTokens = player.purse.tokensMap[gemType] || 0;
+        let shortage = cost - (bonus + availableTokens);
+        if (shortage > 0) {
+            neededGold += shortage;
         }
+        payment[gemType] = cost - shortage;
     }
-
-    if (goldNeeded > 0) {
-        payment.GOLD = goldNeeded;
-    }
-
+    payment['GOLD'] = neededGold;
     return payment;
 }
 
