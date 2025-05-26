@@ -102,3 +102,50 @@ function addCostToCard(template, card) {
     }
 }
 
+function renderReservedCards(reservedCards) {
+    const container = document.querySelector("#reservedCardsContainer");
+    container.innerHTML = "";
+
+    for (const element of reservedCards) {
+        const template = createCardTemplate(element);
+        setCardImages(template, element);
+        addPrestigePoints(template, element);
+        addCostToCard(template, element);
+        container.appendChild(template);
+    }
+}
+
+function addCardEventListeners() {
+    const popup = document.querySelector("#buy-or-reserve-option");
+    const allCards = document.querySelectorAll("#gameScreen div#cardsContainer figure");
+
+    for (const element of allCards) {
+        element.addEventListener('click', function () {
+            currentCard = element;
+            boughtFromReserve = false;
+            popup.classList.remove('hidden');
+        });
+    }
+
+    const closeButton = popup.querySelector('.close');
+    closeButton.addEventListener('click', function() {
+        popup.classList.add('hidden');
+    });
+
+    setupPopupButtons();
+}
+
+function addReserveCardEventListeners() {
+    const popup = document.querySelector("#buy-or-reserve-option");
+    const reservedCards = document.querySelectorAll("#reservedCardsContainer figure");
+
+    for (const element of reservedCards) {
+        element.addEventListener('click', function () {
+            currentCard = element;
+            boughtFromReserve = true;
+            popup.classList.remove('hidden');
+        });
+    }
+}
+
+
