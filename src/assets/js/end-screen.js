@@ -1,6 +1,8 @@
 import * as StorageAbstractor from "./data-connector/local-storage-abstractor.js";
 import { fetchGame } from "./util.js";
 
+const FOURTH_PLACE = 3;
+
 function goToIndex() {
   window.location.href = "../index.html";
 }
@@ -26,10 +28,10 @@ function updateLeaderboard() {
       if (sortedPlayers[2]) {
         thirdPlace.textContent = `3rd: ${sortedPlayers[2].name}: ${sortedPlayers[2].totalPrestigePoints}`;
       }
-      if (sortedPlayers[3]) {
-        fourthPlace.textContent = `4th: ${sortedPlayers[3].name}: ${sortedPlayers[3].totalPrestigePoints}`;
+      if (sortedPlayers[FOURTH_PLACE]) {
+        fourthPlace.textContent = `4th: ${sortedPlayers[FOURTH_PLACE].name}: ${sortedPlayers[FOURTH_PLACE].totalPrestigePoints}`;
       }
-    })
+    });
 }
 
 updateLeaderboard();
