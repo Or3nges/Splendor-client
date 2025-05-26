@@ -57,7 +57,6 @@ function displayDevelopmentCards(card, container) {
     const $template = document.querySelector('#developmentCardContainer').content.firstElementChild.cloneNode(true);
     const $cost = $template.querySelector('#cost');
 
-    // Add prestige points if applicable
     if (card.prestigePoints !== 0) {
         const p = `<p>${card.prestigePoints}</p>`;
         $template.insertAdjacentHTML('beforeend', p);
