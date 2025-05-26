@@ -58,17 +58,19 @@
 </div>
 
 
-<template id="noble-template">
-    <figure>
-        <img id="noble" src="" alt="alt" title="title">
-        <ul id="cost">
-        </ul>
-    </figure>
-</template>
+
 
 <section id="allNobles">
     <h2>unclaimed nobles</h2>
-    <div id="noblesContainer"></div>
+    <ul id="noblesContainer">
+        <template id="noble-template">
+            <li>
+                <img id="noble" src="" alt="alt" title="title">
+                <ul class="cost">
+                </ul>
+            </li>
+        </template>
+    </ul>
 </section>
 <div class="container" id="bottomrow">
     <article class="you unhighlighted" id="tokenSelection">
@@ -83,10 +85,10 @@
         </div>
     </article>
     <template id="self-template">
-        <figure>
+        <div>
             <ol class="container cards"></ol>
             <ol class="container tokens"></ol>
-        </figure>
+        </div>
     </template>
     <div class="you" id="yourcards">
 

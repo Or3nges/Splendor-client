@@ -181,15 +181,42 @@ figure p, #cardsContainer li p, #reservedCardsContainer li p {
     height: auto;
 }
 
-#allNobles figure {
+#allNobles li {
     position: relative;
     display: inline-block;
     width: fit-content;
     height: auto;
 }
 
-#allNobles ul {
-    bottom: 8%;
+#allNobles li ul.cost {
+    display: flex;
+    width: 70%;
+    height: 15%;
+    position: relative;
+    bottom: 23%;
+    left: 8%;
+}
+#allNobles li ul li {
+    padding-right: 1rem;
+    padding-left: 0.2rem;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#allNobles p {
+    background: url("../../media/prestigestar.png") no-repeat;
+    background-size: contain;
+    font-size: 1.2rem;
+    text-align: center;
+    -webkit-text-stroke: 0.03rem black;
+    align-content: center;
+    position: absolute;
+    width: 1.8rem;
+    height: 1.8rem;
+    top: 0.4%;
+    left: 0.4%;
 }
 
 img {
