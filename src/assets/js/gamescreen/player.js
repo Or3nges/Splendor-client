@@ -3,6 +3,7 @@ import * as CommunicationAbstractor from "../data-connector/api-communication-ab
 import {allGems} from "../Objects/gems.js";
 
 let gems;
+let alertShown = false;
 const $playerList = document.querySelector("div.players ul");
 const $playerTemplate = document.querySelector("template#player-template");
 
@@ -75,8 +76,9 @@ function changeNameAndPrestige(player, currentPlayer){
 
 function checkPrestigePoints(player) {
     const MAX_PRESTIGE_POINTS = 15;
-    if (player.totalPrestigePoints >= MAX_PRESTIGE_POINTS) {
+    if (player.totalPrestigePoints >= MAX_PRESTIGE_POINTS && !alertShown) {
         alert(`${player.name} has reached ${MAX_PRESTIGE_POINTS} prestige points!`);
+        alertShown = true;
     }
 }
 
