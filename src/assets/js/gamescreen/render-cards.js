@@ -235,3 +235,61 @@ function sendBuyRequest(gameId, playerName, card, requestBody, boughtFromReserve
     }
 }
 
+function findCardInGame(game, level, name) {
+    if (boughtFromReserve) {
+        const playerName = StorageAbstractor.loadFromStorage("playerName");
+        const player = findPlayerInGame(game, playerName);
+        for (const element of player.reserved) {
+            if (element.name === name) {
+                return element;
+            }
+        }
+    } else {
+        const tier = game.market.visibleCards[level - 1];
+        for (const element of tier.cards) {
+            if (element.name === name) {
+                return element;
+            }
+        }
+    }
+    return null;
+}
+
+function findPlayerInGame(game, playerName) {
+    for (const element of game.players) {
+        if (element.name === playerName) {
+            return element;
+        }
+    }
+    return null;
+}
+
+function calculatePaymentWithGold(card, player) {
+    const payment = {};
+    const costKeys = Object.keys(card.cost);
+    let goldNeeded = 0;
+
+    for (const element of costKeys) {
+        const gemType = element;
+        const cost = card.cost[gemType];
+        const playerTokens = player.purse.tokensMap[gemType] || 0;
+        const playerBonuses = player.bonuses[gemType] || 0;
+        const available = playerTokens + playerBonuses;
+
+        if (available >= cost) {
+            payment[gemType] = playerTokens;
+        } else {
+            payment[gemType] = playerTokens;
+            goldNeeded = goldNeeded + (cost - available);
+        }
+    }
+
+    if (goldNeeded > 0) {
+        payment.GOLD = goldNeeded;
+    }
+
+    return payment;
+}
+
+export {renderDevelopmentCards, addCardEventListeners, addReserveCardEventListeners};
+
