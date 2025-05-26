@@ -85,11 +85,11 @@ function checkAndClaimNobles() {
             const playerBonuses = player.bonuses;
             const latestUnclaimedNobles = gameState.unclaimedNobles || [];
 
+            let nobleClaimed = false;
             for (const noble of latestUnclaimedNobles) {
-                if (canPlayerClaimNoble(noble, playerBonuses)) {
+                if (!nobleClaimed && canPlayerClaimNoble(noble, playerBonuses)) {
                     attemptToClaimNoble(noble, playerName, currentLocalGameId);
-
-                    break;
+                    nobleClaimed = true;
                 }
             }
         })
