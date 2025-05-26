@@ -13,6 +13,13 @@ body {
 
 /* DEVELOPMENT CARDS */
 
+#cardsContainer li, #reservedCardsContainer li {
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+    height: auto;
+    cursor: pointer;
+}
 
 #cardType {
     height: auto;
@@ -28,7 +35,16 @@ body {
     top: 0.5%;
     right: 0.5%
 }
-
+#tokens ul li {
+    cursor: pointer;
+    text-align: center;
+    align-content: center;
+    font-size: 3rem;
+    width: 4rem;
+    height: 4rem;
+    position: relative;
+    margin-bottom: 0.75rem;
+}
 #cardsContainer #cost li, #noblesContainer #cost li, #reservedCardsContainer #cost li {
     -webkit-text-stroke: 0.03rem black;
     font-size: 1.2rem;
@@ -53,16 +69,7 @@ body {
     top: 9%;
 }
 
-#tokens ul li {
-    cursor: pointer;
-    text-align: center;
-    align-content: center;
-    font-size: 3rem;
-    width: 4rem;
-    height: 4rem;
-    position: relative;
-    margin-bottom: 0.75rem;
-}
+
 
 #tokens ul li::after {
     content: attr(data-selection-count);
@@ -119,13 +126,6 @@ body {
     width: 35%;
 }
 
-#cardsContainer li, #reservedCardsContainer li {
-    position: relative;
-    display: inline-block;
-    width: fit-content;
-    height: auto;
-    cursor: pointer;
-}
 
 .selected {
     box-shadow: 0 0 0.9375rem 0.625rem blueviolet;
@@ -147,7 +147,14 @@ body {
     text-align: center;
     -webkit-text-stroke: 0.01rem black;
 }
-
+#allNobles li ul li {
+    padding-right: 1rem;
+    padding-left: 0.2rem;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 figure p, #cardsContainer li p, #reservedCardsContainer li p {
     background: url("../../media/prestigestar.png") no-repeat;
     background-size: contain;
@@ -162,49 +169,17 @@ figure p, #cardsContainer li p, #reservedCardsContainer li p {
     left: 0.4%;
 }
 
-#allNobles {
-    position: fixed;
-    top: 2%;
-    left: 80%;
-}
-
-#allNobles h2 {
-    text-align: center;
-    -webkit-text-stroke: 0.01rem black;
-}
-
-#noblesContainer {
-    display: grid;
-    grid-gap: 0.5rem;
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    height: auto;
-}
-
 #allNobles li {
     position: relative;
     display: inline-block;
     width: fit-content;
     height: auto;
 }
-
-#allNobles li ul.cost {
-    display: flex;
-    width: 70%;
-    height: 15%;
-    position: relative;
-    bottom: 23%;
-    left: 8%;
+#allNobles {
+    position: fixed;
+    top: 2%;
+    left: 80%;
 }
-#allNobles li ul li {
-    padding-right: 1rem;
-    padding-left: 0.2rem;
-    font-size: 1.2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 #allNobles p {
     background: url("../../media/prestigestar.png") no-repeat;
     background-size: contain;
@@ -218,6 +193,31 @@ figure p, #cardsContainer li p, #reservedCardsContainer li p {
     top: 0.4%;
     left: 0.4%;
 }
+#allNobles h2 {
+    text-align: center;
+    -webkit-text-stroke: 0.01rem black;
+}
+
+#noblesContainer {
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    height: auto;
+}
+
+
+#allNobles li ul.cost {
+    display: flex;
+    width: 70%;
+    height: 15%;
+    position: relative;
+    bottom: 23%;
+    left: 8%;
+}
+
+
+
 
 img {
     margin-bottom: 2rem;

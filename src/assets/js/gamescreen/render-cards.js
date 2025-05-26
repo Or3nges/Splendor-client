@@ -1,9 +1,8 @@
 import {allDevelopmentCards} from "../Objects/developmentCards.js";
-import {createLiElement, fetchGame, findGemByName} from "../util.js";
+import {createLiElement, fetchGame} from "../util.js";
 import * as StorageAbstractor from "../data-connector/local-storage-abstractor.js";
 import * as CommunicationAbstractor from "../data-connector/api-communication-abstractor.js";
 import {initTurnIndication} from "./turn-indication.js";
-import * as communicationAbstractor from "../data-connector/api-communication-abstractor.js";
 import {allGems} from "../Objects/gems.js";
 
 let boughtFromReserve = false;
@@ -242,7 +241,7 @@ function calculatePaymentWithGold(card, player) {
         const cost = cardCost[gemType];
         const bonus = player.bonuses[gemType] || 0;
         const availableTokens = player.purse.tokensMap[gemType] || 0;
-        let shortage = cost - (bonus + availableTokens);
+        const shortage = cost - (bonus + availableTokens);
         if (shortage > 0) {
             neededGold += shortage;
         }
