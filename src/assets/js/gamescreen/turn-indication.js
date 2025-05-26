@@ -3,7 +3,11 @@ import * as StorageAbstractor from "../data-connector/local-storage-abstractor.j
 import {fetchPlayers} from "./player.js";
 import {retrieveTokens, updateTakeTokensButton, setupTokenClickEvents} from "./tokens.js";
 import {initNobles} from "./nobles.js";
-import {addCardEventListeners, addReserveCardEventListeners, renderDevelopmentCards} from "./render-cards.js";
+import {
+    addCardEventListeners,
+    addReserveCardEventListeners,
+    fetchDevelopmentCards, fetchReservedCards,
+} from "./render-cards.js";
 
 const GameLoopDelay = 2000;
 const setupTime = 200;
@@ -20,16 +24,16 @@ function gameLoop(){
         if (data.game.state === "COMPLETED") {
             initializeEndScreen();
         }
-        renderDevelopmentCards(gameId);
+        retrieveTokens();
+        initNobles();
+        fetchDevelopmentCards(gameId);
+        fetchReservedCards(gameId);
         if ( isCurrentPlayerTurn(data.game.currentPlayer)) {
             setTimeout(setupTokenClickEvents, setupTime);
-            retrieveTokens();
             updateTakeTokensButton(isCurrentPlayerTurn(data.game.currentPlayer));
             setTimeout(addCardEventListeners, setupTime);
             setTimeout(addReserveCardEventListeners, setupTime);
         } else {
-            retrieveTokens();
-            initNobles();
             updateTakeTokensButton(isCurrentPlayerTurn(data.game.currentPlayer));
             setTimeout(gameLoop, GameLoopDelay);
         }

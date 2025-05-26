@@ -29,7 +29,7 @@ body {
     right: 0.5%
 }
 
-#cost li {
+#cardsContainer #cost li, #noblesContainer #cost li, #reservedCardsContainer #cost li {
     -webkit-text-stroke: 0.03rem black;
     font-size: 1.2rem;
     color: white;
@@ -119,7 +119,7 @@ body {
     width: 35%;
 }
 
-#gameScreen figure {
+#cardsContainer li, #reservedCardsContainer li {
     position: relative;
     display: inline-block;
     width: fit-content;
@@ -148,7 +148,7 @@ body {
     -webkit-text-stroke: 0.01rem black;
 }
 
-figure p {
+figure p, #cardsContainer li p, #reservedCardsContainer li p {
     background: url("../../media/prestigestar.png") no-repeat;
     background-size: contain;
     font-size: 1.2rem;
