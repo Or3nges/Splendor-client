@@ -24,7 +24,6 @@ function fetchReservedCards(gameId) {
     const playerName = StorageAbstractor.loadFromStorage("playerName");
 
     fetchGame(gameId).then(data => {
-        console.log(data.game.players)
         const player = data.game.players.find(player => player.name === playerName);
         if (player) {
             renderReservedCards(player.reserved);
@@ -35,7 +34,6 @@ function fetchReservedCards(gameId) {
 }
 
 function renderDevelopmentCards(tiers) {
-    console.log(tiers);
     tiers.forEach(tier => {
         handleTier(tier);
     });
